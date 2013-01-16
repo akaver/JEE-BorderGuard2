@@ -1,0 +1,10 @@
+/build
+/dist
+/WebContent/WEB-INF/classes
+bin
+.metadata 
+.DS_Store
+*.lock
+*.DS_Store
+*.swp
+*.out
