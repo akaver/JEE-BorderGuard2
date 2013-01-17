@@ -10,8 +10,12 @@
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
 
-	<context:component-scan base-package="border" />
-
+	<context:component-scan base-package="border">
+		<context:include-filter type="aspectj"
+			expression="border.*" />
+	</context:component-scan>
+	
+	
 	<mvc:annotation-driven />
 
 	<bean id="viewResolver"

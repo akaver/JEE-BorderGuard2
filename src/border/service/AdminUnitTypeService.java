@@ -1,19 +1,19 @@
 package border.service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-/*
- * Service for manipulating AdminUnitType's 
- */
+import border.model.AdminUnitType;
+import border.repository.*;
 
 @Repository
 public class AdminUnitTypeService {
-
-    @PersistenceContext
-    private EntityManager em;
+	@Autowired
+	private AdminUnitTypeRepository adminUnitTypeRepository;
 	
-	
+    @Transactional
+	public void create(AdminUnitType adminUnitType){
+		adminUnitTypeRepository.save(adminUnitType);
+	}
 }
