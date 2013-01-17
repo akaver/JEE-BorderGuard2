@@ -19,16 +19,17 @@ public class HomeController {
 	@Resource
 	private MessageSource resources;
 
-	@RequestMapping(value="/home")
+	@RequestMapping(value = "/home")
 	public String home(ModelMap model) {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 		model.addAttribute("username", authentication.getName());
 
 		return "home";
 	}
 
-	@RequestMapping(value="/loginfailed")
+	@RequestMapping(value = "/loginfailed")
 	public String loginerror(ModelMap model) {
 
 		model.addAttribute("error", "message.loginError");
@@ -36,15 +37,17 @@ public class HomeController {
 		return "login";
 	}
 
-	@RequestMapping(value="/login")
+	@RequestMapping(value = "/login")
 	public String login() {
- 		return "login";
- 	}
+		System.out.println("Login");
+		return "login";
+	}
 
-	@RequestMapping(value="/info")
+	@RequestMapping(value = "/info")
 	public String authenticationInfoExample(HttpSession session) {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
 
 		for (GrantedAuthority authority : authentication.getAuthorities()) {
 			if (authority.getAuthority().equals("ROLE_ADMIN")) {
@@ -57,11 +60,12 @@ public class HomeController {
 		return "home";
 	}
 
-	@RequestMapping(value="/message")
+	@RequestMapping(value = "/message")
 	public String messageExample(Locale locale) {
 
 		String[] params = { "p1", "p2" };
-		System.out.println(resources.getMessage("message.paramExample", params, locale));
+		System.out.println(resources.getMessage("message.paramExample", params,
+				locale));
 
 		return "home";
 	}
