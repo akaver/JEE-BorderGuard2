@@ -82,6 +82,7 @@ public class AdminUnit {
 		this.adminUnitTypeID = adminUnitTypeID;
 		
 		this.fromDate = DateHelper.getNow();
+		this.toDate = DateHelper.getFutureDate();
 		this.openedBy = "admin";
 		this.openedDate = DateHelper.getNow();
 		this.changedBy = "admin";

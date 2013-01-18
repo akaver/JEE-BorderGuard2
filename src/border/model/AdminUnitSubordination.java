@@ -26,6 +26,12 @@ public class AdminUnitSubordination {
 	
 	@Column(nullable = false)
 	private String comment;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	private Date fromDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	private Date toDate;
 	@Column(nullable = false)
 	private String openedBy;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -50,6 +56,11 @@ public class AdminUnitSubordination {
 		this.adminUnitMaster = adminUnitMaster;
 		this.adminUnitSubordinate = adminUnitSubordinate;
     	this.comment = comment;
+    	this.fromDate = DateHelper.getNow();
+    	this.toDate = DateHelper.getFutureDate();
+    	this.openedDate = DateHelper.getNow();
+    	this.openedBy = "admin";
+    	this.closedDate = DateHelper.getFutureDate();    	
 	}
 	
 	@PreUpdate

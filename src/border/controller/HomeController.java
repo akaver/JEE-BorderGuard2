@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import border.repository.AdminUnitTypeRepositoryImpl;
 import border.service.AdminUnitTypeService;
+import border.service.AdminUnitService;
 
 @Controller
 public class HomeController {
@@ -20,6 +21,8 @@ public class HomeController {
 
 	@Autowired
 	AdminUnitTypeService adminUnitTypeService;
+	@Autowired
+	AdminUnitService adminUnitService;
 	
 	@Resource
 	private MessageSource resources;
@@ -36,6 +39,8 @@ public class HomeController {
 	public String populate(Model model) {
 		LOGGER.debug("Populating data");
 		adminUnitTypeService.populateData();
+		//adminUnitService.deleteAll();
+		adminUnitService.populateData();
 		
 		return "home";
 	}
