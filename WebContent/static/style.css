@@ -1,0 +1,52 @@
+table {
+	border-collapse: collapse;
+}
+
+table td {
+	padding: 3px;
+}
+
+table div {
+	float: left;
+}
+
+table div+div {
+	float: right;
+	overflow: hidden;
+}
+
+table.borderedTable {
+	position: absolute;
+	top: 0px;
+	width: 100%;	
+}
+
+.allBorders {
+	border: 1px solid #CCCCCC;
+}
+
+body {
+	font-size: 14px;
+}
+
+body, input, select, textarea, button {
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+.milContent {
+	background-color: #C3B091; /*#ADA96E; #C9BE62;*/
+	border-radius: 5px;
+	padding: 15px;
+	margin: 15px;
+	width: 500px;
+}
+
+.milHeading, .withMargin {
+	margin-left: 15px;
+}
+
+.milHeading {
+	color: #354E76; /*#5D759D; #6F73AD;*/
+	font-weight: bolder;
+	font-size: 24px;
+}

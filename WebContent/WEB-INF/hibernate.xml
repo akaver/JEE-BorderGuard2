@@ -28,6 +28,11 @@
 			</bean>
 		</property>
 		<property name="packagesToScan" value="border" />
+		<!-- what shall hibernate do, when there are entity changes -->
+		<!-- validate | update | create | create-drop -->
+		<!-- something is wrong
+		<property name="hibernate.hbm2ddl.auto" value="update"/>
+		-->
 	</bean>
 
 

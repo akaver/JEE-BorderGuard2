@@ -8,7 +8,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 /*
- * JavaBean is this
+ * JavaBean is this, says the Yoda!
  */
 @Entity
 @Table(name = "AdminUnitType")
