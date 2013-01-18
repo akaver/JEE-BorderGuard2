@@ -18,7 +18,7 @@ public class AdminUnitType {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id; // this has to be named id, otherwise spring jpa cant work
-						// its magic
+						// its magic (or the field in db should be named id)
 	private String code;
 	private String name;
 	private String comment;
@@ -41,15 +41,14 @@ public class AdminUnitType {
 	@Column(nullable = false)
 	private Date closedDate;
 	
-	// TODO one-to-many definitions into AdminUnitTypeSubordination
+	// one-to-many definitions into AdminUnitTypeSubordination
+	// masters of this unit
 	@OneToMany(mappedBy="adminUnitTypeMaster")
     private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationMasters;
+	// subordinates of this unit
+	@OneToMany(mappedBy="adminUnitTypeSubordinate")
+    private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationSubordinates;
 
-/*	
-	// TODO one-to-many definitions into AdminUnitTypeSubordination
-	@OneToMany(mappedBy="AdminUnitType")
-    private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationSlaves;
-*/
 	
 	public AdminUnitType() {
 	}
@@ -78,6 +77,7 @@ public class AdminUnitType {
 		this.comment = comment;
 
 		this.fromDate = DateHelper.getNow();
+		this.toDate = DateHelper.getFutureDate();
 
 		this.openedBy = "admin";
 		this.openedDate = DateHelper.getNow();
@@ -195,10 +195,30 @@ public class AdminUnitType {
 	public void setClosedDate(Date closedDate) {
 		this.closedDate = closedDate;
 	}
+	
+	public Set<AdminUnitTypeSubordination> getAdminUnitTypeSubordinationMasters() {
+		return adminUnitTypeSubordinationMasters;
+	}
+
+	public void setAdminUnitTypeSubordinationMasters(
+			Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationMasters) {
+		this.adminUnitTypeSubordinationMasters = adminUnitTypeSubordinationMasters;
+	}
+
+	public Set<AdminUnitTypeSubordination> getAdminUnitTypeSubordinationSubordinates() {
+		return adminUnitTypeSubordinationSubordinates;
+	}
+
+	public void setAdminUnitTypeSubordinationSubordinates(
+			Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationSubordinates) {
+		this.adminUnitTypeSubordinationSubordinates = adminUnitTypeSubordinationSubordinates;
+	}
 
 	@Override
 	public String toString() {
 		return "Person [id=" + id + ", name=" + name + ", code=" + code + "]";
 	}
+
+
 
 }
