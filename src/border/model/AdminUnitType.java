@@ -2,6 +2,7 @@ package border.model;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -39,7 +40,17 @@ public class AdminUnitType {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date closedDate;
+	
+	// TODO one-to-many definitions into AdminUnitTypeSubordination
+	@OneToMany(mappedBy="adminUnitTypeMaster")
+    private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationMasters;
 
+/*	
+	// TODO one-to-many definitions into AdminUnitTypeSubordination
+	@OneToMany(mappedBy="AdminUnitType")
+    private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationSlaves;
+*/
+	
 	public AdminUnitType() {
 	}
 
