@@ -1,5 +1,8 @@
 package border.model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.*;
@@ -12,25 +15,95 @@ import javax.persistence.*;
 public class AdminUnitType {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id; // this has to be named id, otherwise spring jpa cant work its magic
 	private String code;
 	private String name;
 	private String comment;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private Date fromDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private Date toDate;
 	private String openedBy;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private Date openedDate;
 	private String changedBy;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private Date changedDate;
 	private String closedBy;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private Date closedDate;
+	
+	public AdminUnitType(){
+	}
 
-	public Integer getAdminUnitTypeID() {
+	public AdminUnitType(String code, String name, String comment, String fromDate, String toDate, String openedBy, String openedDate, String changedBy, String changedDate,  String closedBy, String closedDate) throws ParseException{
+		DateFormat formatter;
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		this.code = code;
+		this.name = name;
+		this.comment = comment;   
+		this.fromDate = (Date) formatter.parse(fromDate); 
+		this.toDate = (Date) formatter.parse(toDate);   
+		this.openedBy = openedBy;
+		this.openedDate = (Date) formatter.parse(openedDate);   
+		this.changedBy = changedBy; 
+		this.changedDate = (Date) formatter.parse(changedDate);    
+		this.closedBy = closedBy;   
+		this.closedDate = (Date) formatter.parse(closedDate); 
+	}
+
+	public AdminUnitType(String code, String name, String comment){
+		DateFormat formatter;
+		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		this.code = code;
+		this.name = name;
+		this.comment = comment;   
+		
+		this.fromDate = new Date(); 
+		try {
+			this.toDate = (Date) formatter.parse("9999-12-31 23:59:59");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   
+		this.openedBy = "admin";
+		this.openedDate = new Date();  
+		this.changedBy = "admin";
+		this.changedDate = new Date();    
+		this.closedBy = "admin";
+		try {
+			this.closedDate = (Date) formatter.parse("9999-12-31 23:59:59");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   
+	}
+
+	  @PreUpdate
+	    public void preUpdate() {
+		  changedDate = new Date();
+	    }
+	    
+	    @PrePersist
+	    public void prePersist() {
+	        Date now = new Date();
+	        openedDate = now;
+	        changedDate = now;
+	    }
+	
+	public Long getId() {
 		return id;
 	}
 
-	public void setAdminUnitTypeID(Integer adminUnitTypeID) {
+	public void setId(Long adminUnitTypeID) {
 		this.id = adminUnitTypeID;
 	}
 
