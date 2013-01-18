@@ -13,7 +13,7 @@ public class AdminUnitType {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer adminUnitTypeID;
+	private Integer id;
 	private String code;
 	private String name;
 	private String comment;
@@ -27,11 +27,11 @@ public class AdminUnitType {
 	private Date closedDate;
 
 	public Integer getAdminUnitTypeID() {
-		return adminUnitTypeID;
+		return id;
 	}
 
 	public void setAdminUnitTypeID(Integer adminUnitTypeID) {
-		this.adminUnitTypeID = adminUnitTypeID;
+		this.id = adminUnitTypeID;
 	}
 
 	public String getCode() {
@@ -124,7 +124,7 @@ public class AdminUnitType {
 	
     @Override
     public String toString() {
-        return "Person [adminUnitTypeID=" + adminUnitTypeID + ", name=" + name + ", code="+code+"]";
+        return "Person [id=" + id + ", name=" + name + ", code="+code+"]";
     }
 
 }
