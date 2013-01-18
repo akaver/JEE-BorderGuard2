@@ -51,4 +51,19 @@ public class AdminUnitTypeService {
 		sub1_sub12=adminUnitTypeSubordinationRepository.save(sub1_sub12);
 				
 	}
+
+    @Transactional
+	public AdminUnitType getByID(Long adminUnitTypeID) {
+		LOGGER.debug("getByID:{0}",adminUnitTypeID);
+		LOGGER.info("getByID:{0}",adminUnitTypeID);
+		
+		System.out.println("getByID: "+adminUnitTypeID);
+		AdminUnitType res = adminUnitTypeRepository.findById(adminUnitTypeID);
+		LOGGER.debug("getByID:{0}",adminUnitTypeID);
+		LOGGER.info("getByID:{0}",adminUnitTypeID);
+		
+		System.out.println("getByID: "+adminUnitTypeID);
+		
+    	return res; 
+	}
 }

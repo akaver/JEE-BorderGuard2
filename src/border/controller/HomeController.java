@@ -26,7 +26,11 @@ public class HomeController {
 
 	@RequestMapping(value = "/")
 	public String home(Model model) {
-		LOGGER.debug("homepage");
+		LOGGER.debug("homepage debug");
+		LOGGER.info("homepage info");
+		LOGGER.error("homepage error");
+		System.out.println("homepage");
+		
 		model.addAttribute("adminUnitTypeList", adminUnitTypeService.findAll());
 
 		return "home";

@@ -19,7 +19,7 @@ public class AdminUnitTypeRepositoryImpl implements AdminUnitTypeRepositoryCusto
 
 	@Override
 	public AdminUnitType findById(Long id) {
-		LOGGER.debug("findById");
+		LOGGER.info("findById");
 		return repository.findOne(id);
 	}
 
