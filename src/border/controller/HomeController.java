@@ -11,8 +11,8 @@ import border.service.AdminUnitTypeService;
 
 @Controller
 public class HomeController {
-	@Autowired
-	AdminUnitTypeService adminUnitTypeService;
+//	@Autowired
+//	AdminUnitTypeService adminUnitTypeService;
 	
 	@Resource
 	private MessageSource resources;

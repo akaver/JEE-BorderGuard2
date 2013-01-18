@@ -9,15 +9,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-
-	<context:component-scan base-package="border">
-		<context:include-filter type="aspectj"
-			expression="border.*" />
-	</context:component-scan>
-	
-	
-	<mvc:annotation-driven />
-
+	<!-- spring mvc conf for finding views -->
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
@@ -34,6 +26,7 @@
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
+	<!-- internationalization support -->
 	<mvc:interceptors>
 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 			<property name="paramName" value="lang"></property>

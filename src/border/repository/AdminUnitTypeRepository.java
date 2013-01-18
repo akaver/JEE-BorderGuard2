@@ -1,9 +1,6 @@
 package border.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional;
-import javax.annotation.Resource;
-
 import border.model.AdminUnitType;
 
 /*
@@ -14,8 +11,7 @@ import border.model.AdminUnitType;
  * including custom finder methods, and Spring will provide the implementation automatically. 
  * Source: http://www.springsource.org/spring-data/jpa
  */
-@Resource
-@Transactional(readOnly = true)
+
 public interface AdminUnitTypeRepository extends
 		JpaRepository<AdminUnitType, Long> {
 	

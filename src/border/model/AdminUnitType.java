@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class AdminUnitType {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer adminUnitTypeID;
 	private String code;
 	private String name;
