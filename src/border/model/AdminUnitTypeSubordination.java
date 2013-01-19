@@ -20,17 +20,19 @@ import border.helper.DateHelper;
 @Entity
 @Table(name = "AdminUnitTypeSubordination")
 public class AdminUnitTypeSubordination {
+
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Long AdminUnitTypeSubordinationID;
 
 	
 	@ManyToOne
-    @JoinColumn(name="masterAdminUnitTypeId")
+    @JoinColumn(name="masterAdminUnitTypeID")
     private AdminUnitType adminUnitTypeMaster;
 	
 	@ManyToOne
-    @JoinColumn(name="subordinateAdminUnitTypeId")
+    @JoinColumn(name="subordinateAdminUnitTypeID")
     private AdminUnitType adminUnitTypeSubordinate;
 	
 	
@@ -79,13 +81,7 @@ public class AdminUnitTypeSubordination {
 		closedDate = DateHelper.getFutureDate();
 	}
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 //	public Long getAdminUnitTypeID() {
 //		return adminUnitTypeId;
@@ -180,7 +176,15 @@ public class AdminUnitTypeSubordination {
 		// return "Person [id=" + id + ", master adminUnitTypeID=" +
 		// adminUnitTypeID +
 		// ", slave subordinateAdminUnitTypeID="+subordinateAdminUnitTypeID+", comment="+comment+"]";
-		return "Person [id=" + id + ", comment=" + comment + "]";
+		return "Person [id=" + AdminUnitTypeSubordinationID + ", comment=" + comment + "]";
+	}
+
+	public Long getAdminUnitTypeSubordinationID() {
+		return AdminUnitTypeSubordinationID;
+	}
+
+	public void setAdminUnitTypeSubordinationID(Long adminUnitTypeSubordinationID) {
+		AdminUnitTypeSubordinationID = adminUnitTypeSubordinationID;
 	}
 	
 }

@@ -5,6 +5,7 @@ import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.QueryDslJpaRepository;
 
 import border.model.AdminUnit;
@@ -15,8 +16,10 @@ private static final Logger LOGGER = LoggerFactory.getLogger(AdminUnitRepository
 	@PersistenceContext
     private EntityManager entityManager;
 	
-	private QueryDslJpaRepository<AdminUnit, Long> repository;
-
+//	private QueryDslJpaRepository<AdminUnit, Long> repository;
+	private JpaRepository<AdminUnit, Long> repository;
+	
+	
 	@Override
 	public AdminUnit findById(Long id) {
 		LOGGER.debug("findById");

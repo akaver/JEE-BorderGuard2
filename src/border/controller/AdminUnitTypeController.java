@@ -24,10 +24,9 @@ public class AdminUnitTypeController {
 	AdminUnitTypeService adminUnitTypeService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model,
-			@ModelAttribute AdminUnitTypeVM adminUnitTypeVM) {
-		LOGGER.debug("/");
-		adminUnitTypeVM = populateViewModelWithData(2L);
+	public String home(Model model) {
+		LOGGER.info("/");
+		model.addAttribute("formData", populateViewModelWithData(2L));
 		return "AdminUnitType";
 	}
 

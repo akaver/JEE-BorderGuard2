@@ -31,7 +31,8 @@
 						</c:if>
 						<tr>
 							<td width="100px">Code</td>
-							<td><input name="AdminUnitTypeCode" type="text" size="10"
+							<td>
+							<input name="AdminUnitTypeCode" type="text" size="10"
 								value="${formData.adminUnitType.code}"></td>
 						</tr>
 						<tr>

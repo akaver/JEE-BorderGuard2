@@ -58,7 +58,7 @@ public class AdminUnitTypeService {
 		LOGGER.info("getByID:{0}",adminUnitTypeID);
 		
 		System.out.println("getByID: "+adminUnitTypeID);
-		AdminUnitType res = adminUnitTypeRepository.findById(adminUnitTypeID);
+		AdminUnitType res = adminUnitTypeRepository.findOne(adminUnitTypeID);
 		LOGGER.debug("getByID:{0}",adminUnitTypeID);
 		LOGGER.info("getByID:{0}",adminUnitTypeID);
 		

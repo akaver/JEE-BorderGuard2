@@ -16,9 +16,10 @@ import border.helper.DateHelper;
 public class AdminUnitType {
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id; // this has to be named id, otherwise spring jpa cant work
-						// its magic (or the field in db should be named id)
+	private Long adminUnitTypeID; 
+	
 	private String code;
 	private String name;
 	private String comment;
@@ -100,13 +101,6 @@ public class AdminUnitType {
 		changedDate = now;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long adminUnitTypeID) {
-		this.id = adminUnitTypeID;
-	}
 
 	public String getCode() {
 		return code;
@@ -216,7 +210,15 @@ public class AdminUnitType {
 
 	@Override
 	public String toString() {
-		return "Person [id=" + id + ", name=" + name + ", code=" + code + "]";
+		return "Person [id=" + adminUnitTypeID + ", name=" + name + ", code=" + code + "]";
+	}
+
+	public Long getAdminUnitTypeID() {
+		return adminUnitTypeID;
+	}
+
+	public void setAdminUnitTypeID(Long adminUnitTypeID) {
+		this.adminUnitTypeID = adminUnitTypeID;
 	}
 
 
