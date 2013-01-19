@@ -20,22 +20,31 @@
 		</property>
 	</bean>
 
+
+	<!-- internationalization support -->
+	<!-- where to load strings from -->
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="classpath:messages" />
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
-	<!-- internationalization support -->
+	<!-- interceptor for changing the language and what param to wait for -->
 	<mvc:interceptors>
-		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<bean id="localeChangeInterceptor"
+			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 			<property name="paramName" value="lang"></property>
 		</bean>
 	</mvc:interceptors>
 
+	<!-- where to keep currently active language setting (CookieLocaleResolver 
+		or SessionLocaleResolver or AcceptHeaderLocaleResolver) -->
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 		<property name="defaultLocale" value="et" />
+		<property name="cookieName" value="clientlanguage" />
+		<!-- in seconds. If set to -1, the cookie is not persisted (deleted when 
+			browser shuts down) -->
+		<property name="cookieMaxAge" value="100000" />
 	</bean>
-
 </beans>

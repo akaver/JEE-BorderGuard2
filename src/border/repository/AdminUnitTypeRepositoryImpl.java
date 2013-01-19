@@ -17,10 +17,5 @@ public class AdminUnitTypeRepositoryImpl implements AdminUnitTypeRepositoryCusto
 	
 	private QueryDslJpaRepository<AdminUnitType, Long> repository;
 
-	@Override
-	public AdminUnitType findById(Long id) {
-		LOGGER.info("findById");
-		return repository.findOne(id);
-	}
 
 }

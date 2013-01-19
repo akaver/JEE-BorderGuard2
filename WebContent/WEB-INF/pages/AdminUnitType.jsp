@@ -10,6 +10,7 @@
 <link href="<c:url value='/static/style.css' />" type="text/css" rel="stylesheet">
 </head>
 <body>
+	<jsp:include page="header.jsp" />
 	<form method="post" action="" name="AdminUnitTypeForm">
 		<table width="800">
 			<tr>
@@ -45,6 +46,7 @@
 							<td><textarea name="AdminUnitTypeComment" cols="35"
 									rows="10">${formData.adminUnitType.comment}</textarea></td>
 						</tr>
+  						
 						<c:if test="${formData.adminUnitType.adminUnitTypeID!=1}">
 							<tr>
 								<td>Subordinate of</td>
@@ -64,8 +66,11 @@
 								</select></td>
 							</tr>
 						</c:if>
+
 					</table></td>
-				<td style="position: relative"><table width="100%"
+				<td style="position: relative">
+  				
+				<table width="100%"
 						class="borderedTable">
 						<tr>
 							<td class="allBorders" bgcolor="#CCCCCC">Subordinates</td>
@@ -105,7 +110,57 @@
 								</td>
 							</tr>
 						</c:if>
-					</table></td>
+					</table>
+			
+					
+					
+					<!-- adminUnitType.adminUnitTypeSubordinationMasters - ie here this unit acts as master, so we get the list of children on it -->
+					<!-- we could use it, if the form would be saved immeditaly. since its not, the list from entity does not represent viewstate after some editing on it  -->
+					<!--
+					<table width="100%"
+						class="borderedTable">
+						<tr>
+							<td class="allBorders" bgcolor="#CCCCCC">Subordinates</td>
+						</tr>
+
+						<c:set var="counter" value="0" />
+						<c:forEach var="entry"
+							items="${formData.adminUnitType.adminUnitTypeSubordinationMasters}">
+							<tr>
+								<td class="allBorders">
+									<div>${entry.adminUnitTypeSubordinate.name}</div>
+									<div>
+										<input name="RemoveButton_${counter}" type="submit"
+											value="Remove">
+									</div>
+								</td>
+							</tr>
+							<c:set var="counter" value="${counter+1}" />
+						</c:forEach>
+						<c:if
+							test="${formData.adminUnitTypesSubordinateListPossible.size()!=0}">
+							<tr>
+								<td class="allBorders">
+									<div>
+										<c:set var="counter" value="0" />
+										<select name="AdminUnitType_NewSubordinateNo">
+											<c:forEach var="entry"
+												items="${formData.adminUnitTypesSubordinateListPossible}">
+												<option value="${counter}" ${selected}>${entry.name}</option>
+												<c:set var="counter" value="${counter+1}" />
+											</c:forEach>
+										</select>
+									</div>
+									<div>
+										<input name="AddSubordinateButton" type="submit" value="Add">
+									</div>
+								</td>
+							</tr>
+						</c:if>
+					</table>					
+					-->
+					
+					</td>
 			</tr>
 			<tr>
 				<td colspan="2" align="right"><input name="SubmitButton"

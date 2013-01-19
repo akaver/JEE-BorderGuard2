@@ -1,5 +1,7 @@
 package border.service;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ public class AdminUnitTypeService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AdminUnitTypeRepositoryImpl.class);
 
+	// here are our database repos
 	@Autowired
 	private AdminUnitTypeRepository adminUnitTypeRepository;
 	@Autowired
@@ -25,13 +28,21 @@ public class AdminUnitTypeService {
     @Transactional
 	public List<AdminUnitType> findAll() {
 		LOGGER.debug("findAll");
-
 		return adminUnitTypeRepository.findAll();
 	}
 
     @Transactional
+    public void deleteAll() {
+    	LOGGER.debug("deleteAll");
+    	adminUnitTypeSubordinationRepository.deleteAll();
+    	adminUnitTypeRepository.deleteAll();
+    }
+    
+    @Transactional
 	public void populateData() {
 		LOGGER.debug("populateData");
+		
+
 		
 		AdminUnitType master = new AdminUnitType("0","Riik","0");
 		AdminUnitType sub1 = new AdminUnitType("1","Maakond","1");
@@ -54,16 +65,90 @@ public class AdminUnitTypeService {
 
     @Transactional
 	public AdminUnitType getByID(Long adminUnitTypeID) {
-		LOGGER.debug("getByID:{0}",adminUnitTypeID);
-		LOGGER.info("getByID:{0}",adminUnitTypeID);
-		
-		System.out.println("getByID: "+adminUnitTypeID);
+		LOGGER.debug("getByID:",adminUnitTypeID);
 		AdminUnitType res = adminUnitTypeRepository.findOne(adminUnitTypeID);
-		LOGGER.debug("getByID:{0}",adminUnitTypeID);
-		LOGGER.info("getByID:{0}",adminUnitTypeID);
-		
-		System.out.println("getByID: "+adminUnitTypeID);
-		
     	return res; 
 	}
+
+    
+/*    
+    public List<AdminUnitType> getSubordinates(Integer adminUnitTypeID,
+			String dateTimeString) {
+		System.out.println("Finding subordinates for adminUnitType with ID:"
+				+ adminUnitTypeID);
+
+		if (adminUnitTypeID == null) {
+			return null;
+		}
+		List<AdminUnitType> res = new ArrayList<AdminUnitType>();
+
+		String dateLimits = "";
+
+		// if we search for NOW, entry must opened and valid
+		if (dateTimeString.equals("NOW()")) {
+			dateLimits = " and AdminUnitTypeSubordination.OpenedDate < "
+					+ dateTimeString
+					+ " and AdminUnitTypeSubordination.ClosedDate > "
+					+ dateTimeString;
+		} else if (dateTimeString.equals("")) {
+			dateLimits = "";
+		}
+
+		// get the list of subordinate ID's
+		String sql = "select * from AdminUnitTypeSubordination where AdminUnitTypeID=?"
+				+ dateLimits;
+		try {
+			PreparedStatement preparedStatement = super.getConnection()
+					.prepareStatement(sql);
+			preparedStatement.setInt(1, adminUnitTypeID);
+			ResultSet resultSet = preparedStatement.executeQuery();
+			// find the record from AdminUnitType and insert into result
+			while (resultSet.next()) {
+				Integer subid = resultSet.getInt("SubordinateAdminUnitTypeID");
+				System.out.println("Fetching subordinate with ID:" + subid);
+				AdminUnitType tempAdminUnitType = getByID(subid);
+				res.add(tempAdminUnitType);
+			}
+
+			DbUtils.closeQuietly(resultSet);
+			DbUtils.closeQuietly(preparedStatement);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		} finally {
+		}
+
+		return res;
+	}
+*/    
+	public List<AdminUnitType> getSubordinates(AdminUnitType adminUnitType,
+			String dateTimeString) {
+		LOGGER.debug("getSubordinates for: "+adminUnitType.getAdminUnitTypeID()+" Time: "+dateTimeString);		
+
+		if (adminUnitType.getAdminUnitTypeID() == 0L) {
+			return null;
+		}
+		
+		// get the subordination structrure
+		List<AdminUnitTypeSubordination> subordination = adminUnitTypeSubordinationRepository.findSubordinatesActiveNow(adminUnitType.getAdminUnitTypeID());
+		// get the subordinate items
+		List<AdminUnitType> res = new ArrayList<AdminUnitType>();
+		for (AdminUnitTypeSubordination item : subordination){
+			res.add(item.getAdminUnitTypeSubordinate());
+		}
+		
+		return res;
+	}
+
+	public List<AdminUnitType> getPossibleSubordinates(
+			AdminUnitType adminUnitType, String dateTimeString) {
+		LOGGER.debug("getPossibleSubordinates for: "+adminUnitType.getAdminUnitTypeID()+" Time: "+dateTimeString);	
+		if (adminUnitType.getAdminUnitTypeID() == 0L) {
+			return null;
+		}
+
+	
+		return adminUnitTypeRepository.findSubordinatesPossibleActiveNow(adminUnitType.getAdminUnitTypeID());
+	}
+
+    
 }

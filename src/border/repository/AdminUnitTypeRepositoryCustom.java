@@ -7,5 +7,4 @@ import border.model.AdminUnitType;
  * then implement them on some class
  */
 public interface AdminUnitTypeRepositoryCustom {
-	public AdminUnitType findById(Long id);
 }
