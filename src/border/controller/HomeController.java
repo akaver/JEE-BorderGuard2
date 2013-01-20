@@ -34,7 +34,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/")
 	public String home(Model model) {
-		LOGGER.debug("homepage");
+		LOGGER.info("homepage");
 
 		HomeVM formData = new HomeVM();
 		formData.setAdminUnitList(adminUnitService.findAll());
@@ -46,7 +46,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/populate")
 	public String populate(Model model) {
-		LOGGER.debug("Populating data");
+		LOGGER.info("Populating data");
 
 		//adminUnitService.deleteAll();
 		//adminUnitTypeService.deleteAll();
@@ -70,7 +70,7 @@ public class HomeController {
 			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID
 			
 			) {
-		LOGGER.debug("redirectView");
+		LOGGER.info("redirectView");
 		String viewToLoad = "/";
 		if (_ViewAdminUnitTypeFlag != null) {
 			viewToLoad = "/AdminUnitType/?AdminUnitID="+_AdminUnitTypeID;

@@ -63,7 +63,7 @@ public class AdminUnitTypeController {
 			// get the copy of viewmodel stored in the session
 			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData, BindingResult bindingResult){
-		LOGGER.debug("/AdminUnitTypeForm (bindingresult: "+bindingResult+")");
+		LOGGER.info("/AdminUnitTypeForm (bindingresult: "+bindingResult+")");
 
 		System.out.println("admin id: "+formData.getAdminUnitTypeMasterID());
 		if (bindingResult.hasErrors()) {
@@ -84,21 +84,21 @@ public class AdminUnitTypeController {
 	// only when cancel button is pressed on the jsp
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "CancelButton")
 	public String cancelChanges(ModelMap model){
-		LOGGER.debug("/cancelChanges - no save, return to root view ");
+		LOGGER.info("/cancelChanges - no save, return to root view ");
 		// jump back to root view
 		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params="AddSubordinateButton")
 	public String addSubordinates(ModelMap model){
-		LOGGER.debug("/addSubordinates");
+		LOGGER.info("/addSubordinates");
 		// jump back to root view
 		return "redirect:/AdminUnitType/";
 	}
 	
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
 	public String removeSubordinates(ModelMap model){
-		LOGGER.debug("/removeSubordinates");
+		LOGGER.info("/removeSubordinates");
 		// jump back to root view
 		return "redirect:/AdminUnitType/";
 	}
