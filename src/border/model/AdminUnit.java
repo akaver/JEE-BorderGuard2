@@ -50,10 +50,10 @@ public class AdminUnit {
 	
 	// one-to-many definitions into AdminUnitSubordination
 	// masters of this unit
-	@OneToMany(mappedBy="adminUnitMaster")
+	@OneToMany(mappedBy="adminUnitMaster", fetch = FetchType.EAGER)
 	private Set<AdminUnitSubordination> adminUnitSubordinationMasters;
 	// subordinates of this unit
-	@OneToMany(mappedBy="adminUnitSubordinate")
+	@OneToMany(mappedBy="adminUnitSubordinate", fetch = FetchType.EAGER)
 	private Set<AdminUnitSubordination> adminUnitSubordinationSubordinates;
 	
 	public AdminUnit() {

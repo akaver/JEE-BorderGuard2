@@ -37,6 +37,12 @@ public class AdminUnitService {
     	adminUnitSubordinationRepository.deleteAll();
     	adminUnitRepository.deleteAll();
     }
+    
+    @Transactional
+    public AdminUnit getByID(Long adminUnitID) {
+    	AdminUnit adminUnit = adminUnitRepository.findOne(adminUnitID);
+    	return adminUnit;
+    }
 
     @Transactional
 	public void populateData() {

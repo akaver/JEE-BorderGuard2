@@ -83,13 +83,13 @@ public class HomeController {
 		}
 		// TODO: Make forwards
 		if (_ViewAdminUnitFlag != null) {
-			viewToLoad = "/";
+			viewToLoad = "/AdminUnit/?AdminUnitID="+_AdminUnitID;
 		}
 		if (_AddAdminUnitFlag != null) {
-			viewToLoad = "/";
+			viewToLoad = "/AdminUnit/?AdminUnitID=0";
 		}
 		if (_ReportAdminUnitFlag != null) {
-			viewToLoad = "/";
+			viewToLoad = "/AdminUnitReport";
 		}
 
 		return "redirect:"+viewToLoad;
