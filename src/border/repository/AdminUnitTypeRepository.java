@@ -63,9 +63,10 @@ public interface AdminUnitTypeRepository extends
 			+ "                                       AdminUnitTypeSubordinationTemp "
 			+ "                                    ON adminunittype.id = "
 			+ "             AdminUnitTypeSubordinationTemp.subordinateadminunittypeid "
-			// this here should be id of first adminunittype id in db (ie id of state)
+			// this here should be id of first adminunittype id in db (ie id of
+			// state)
 			// state can not be subunit of anything
-			+ "             WHERE  adminunittype.id not in (select id from adminunittype order by id asc limit 1) " 
+			+ "             WHERE  adminunittype.id not in (select id from adminunittype order by id asc limit 1) "
 			+ "             AND adminunittype.id <> (:adminUnitTypeID)  "
 			+ "             AND adminunittype.closeddate > Now() "
 			+ "             AND adminunittype.todate > Now()) AS templist "
@@ -73,4 +74,20 @@ public interface AdminUnitTypeRepository extends
 	List<AdminUnitType> findSubordinatesPossibleActiveNow(
 			@Param("adminUnitTypeID") Long adminUnitTypeID);
 
+	// TODO: return only list of these units, where current unit can be attached
+	// as subbunit
+	// ie exclude itself and all childrens of itself to avoid circular reference
+	@Query(value = "select * from adminunittype where id not in ( "
+			+ "with recursive link_tree as ( "
+			+ "select MASTERADMINUNITTYPEID, SUBORDINATEADMINUNITTYPEID "
+			+ "from adminunittypesubordination "
+			+ "where MASTERADMINUNITTYPEID = (:adminUnitTypeID) "
+			+ "union all  "
+			+ "select c.MASTERADMINUNITTYPEID, c.SUBORDINATEADMINUNITTYPEID "
+			+ "from adminunittypesubordination c "
+			+ "join link_tree p on p.SUBORDINATEADMINUNITTYPEID = c.MASTERADMINUNITTYPEID) "
+			+ "select SUBORDINATEADMINUNITTYPEID " + "from link_tree) "
+			+ "and " + "id<>(:adminUnitTypeID)", nativeQuery = true)
+	List<AdminUnitType> findAllExcludingOne(
+			@Param("adminUnitTypeID") Long adminUnitTypeID);
 }

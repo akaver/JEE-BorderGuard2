@@ -31,6 +31,17 @@ public class AdminUnitTypeService {
 	}
 
 	@Transactional
+	public List<AdminUnitType> findAllExcludingOne(AdminUnitType adminUnitType) {
+		LOGGER.info("findAllExcludingOne ("+adminUnitType+")");
+		
+		if (adminUnitType==null){
+			return adminUnitTypeRepository.findAll();
+		}
+		return adminUnitTypeRepository.findAllExcludingOne(adminUnitType.getAdminUnitTypeID());
+	}
+	
+	
+	@Transactional
 	public void deleteAll() {
 		LOGGER.debug("deleteAll");
 		adminUnitTypeSubordinationRepository.deleteAll();

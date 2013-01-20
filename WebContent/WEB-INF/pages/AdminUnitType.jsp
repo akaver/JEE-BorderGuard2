@@ -65,11 +65,7 @@
 												test="${entry.adminUnitTypeID == formData.adminUnitTypeMasterID}">
 												<c:set var="selected" value="selected=\"selected\"" />
 											</c:if>
-											<!-- cant be child of itself -->
-											<c:if
-												test="${entry.adminUnitTypeID!=formData.adminUnitType.adminUnitTypeID}">
-												<option value="${entry.adminUnitTypeID}" ${selected}>${entry.name}</option>
-											</c:if>
+											<option value="${entry.adminUnitTypeID}" ${selected}>${entry.name}</option>
 										</c:forEach>
 								</select></td>
 							</tr>
