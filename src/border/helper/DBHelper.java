@@ -13,6 +13,6 @@ public class DBHelper {
 		DataSource ds = (DataSource) ApplicationContextProvider.getContext().getBean("dataSource");
 		JdbcTemplate jt = new JdbcTemplate(ds);
 		// kill all the data and restart autoincrements
-		jt.execute(" TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
+		jt.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
 	}
 }

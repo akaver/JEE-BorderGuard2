@@ -35,8 +35,11 @@ public class AdminUnitTypeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(
 			Model model,
-			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID) {
+			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID
+			) {
 		LOGGER.info("/");
+		
+		
 		
 		// set up the amdminUnitID
 		Long adminUnitID;
@@ -54,7 +57,8 @@ public class AdminUnitTypeController {
 		return "AdminUnitType";
 	}
 	
-	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
+	// only when save button is pressed on the jsp
+	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "SubmitButton")
 	public String saveChanges(ModelMap model,
 			// get the copy of viewmodel stored in the session
 			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
@@ -75,7 +79,30 @@ public class AdminUnitTypeController {
 		model.addAttribute("message", "message.ok");
 		return "redirect:/AdminUnitType/";
 	}
+	
+	
+	// only when cancel button is pressed on the jsp
+	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "CancelButton")
+	public String cancelChanges(ModelMap model){
+		LOGGER.debug("/cancelChanges - no save, return to root view ");
+		// jump back to root view
+		return "redirect:/";
+	}
 
+	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params="AddSubordinateButton")
+	public String addSubordinates(ModelMap model){
+		LOGGER.debug("/addSubordinates");
+		// jump back to root view
+		return "redirect:/AdminUnitType/";
+	}
+	
+	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
+	public String removeSubordinates(ModelMap model){
+		LOGGER.debug("/removeSubordinates");
+		// jump back to root view
+		return "redirect:/AdminUnitType/";
+	}
+	
 	private AdminUnitTypeVM populateViewModelWithData(Long adminUnitTypeID) {
 		// create the view model object and populate it with some data, get
 		// it through service
