@@ -23,10 +23,7 @@
 
 	<!-- this scans all your java source directories and generates beans out 
 		of them -->
-	<context:component-scan base-package="border">
-		<context:include-filter type="aspectj"
-			expression="border.*" />
-	</context:component-scan>
+	<context:component-scan base-package="border"/>
 
 	<!-- Registers a RequestMappingHandlerMapping, a RequestMappingHandlerAdapter, 
 		and an ExceptionHandlerExceptionResolver (among others) in support of processing 
@@ -63,5 +60,14 @@
 			browser shuts down) -->
 		<property name="cookieMaxAge" value="100000" />
 	</bean>	
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:application.properties</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>
