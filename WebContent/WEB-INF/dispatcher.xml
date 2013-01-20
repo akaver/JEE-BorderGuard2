@@ -47,4 +47,5 @@
 			browser shuts down) -->
 		<property name="cookieMaxAge" value="100000" />
 	</bean>
+
 </beans>
