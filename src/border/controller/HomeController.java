@@ -6,12 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import border.helper.DBHelper;
 import border.repository.AdminUnitTypeRepositoryImpl;
 import border.service.AdminUnitTypeService;
 import border.service.AdminUnitService;
@@ -46,13 +48,14 @@ public class HomeController {
 	public String populate(Model model) {
 		LOGGER.debug("Populating data");
 
-		adminUnitService.deleteAll();
-		adminUnitTypeService.deleteAll();
-
+		//adminUnitService.deleteAll();
+		//adminUnitTypeService.deleteAll();
+		DBHelper.TruncateDB();
+		
 		adminUnitTypeService.populateData();
 		adminUnitService.populateData();
 
-		return "home";
+		return "redirect:/";
 	}
 
 	@RequestMapping(value = "/homeActivityForm", method = RequestMethod.POST)

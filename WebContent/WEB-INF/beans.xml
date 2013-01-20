@@ -33,5 +33,9 @@
 		@ExceptionHandler, and others. -->
 	<mvc:annotation-driven />
 	
+	
+	<!-- invoke our custom helper class, to get the appcontext (to get datasource from it) -->
+	<bean id="applicationContextProvider" class="border.helper.ApplicationContextProvider"></bean>
+	
 
 </beans>

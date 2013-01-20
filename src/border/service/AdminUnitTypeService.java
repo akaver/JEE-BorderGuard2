@@ -44,6 +44,7 @@ public class AdminUnitTypeService {
 	@Transactional
 	public void deleteAll() {
 		LOGGER.debug("deleteAll");
+		// TODO reset autoincrement back to 1
 		adminUnitTypeSubordinationRepository.deleteAll();
 		adminUnitTypeRepository.deleteAll();
 	}
@@ -51,15 +52,19 @@ public class AdminUnitTypeService {
 	@Transactional
 	public void populateData() {
 		LOGGER.debug("populateData");
-
+		
 		AdminUnitType master = new AdminUnitType("0", "Riik", "0");
 		AdminUnitType sub1 = new AdminUnitType("1", "Maakond", "1");
 		AdminUnitType sub11 = new AdminUnitType("11", "Maakonna linn", "11");
 		AdminUnitType sub12 = new AdminUnitType("12", "Vald", "12");
+		AdminUnitType sub2 = new AdminUnitType("2", "Küla", "2");
+		AdminUnitType sub3 = new AdminUnitType("2", "Talu", "2");
 		adminUnitTypeRepository.save(master);
 		adminUnitTypeRepository.save(sub1);
 		adminUnitTypeRepository.save(sub11);
 		adminUnitTypeRepository.save(sub12);
+		adminUnitTypeRepository.save(sub2);
+		adminUnitTypeRepository.save(sub3);
 
 		AdminUnitTypeSubordination master_sub1 = new AdminUnitTypeSubordination(
 				master, sub1, "riik->maakond");
