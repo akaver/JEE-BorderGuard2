@@ -56,14 +56,16 @@
 						<c:if test="${formData.adminUnitType.adminUnitTypeID!=1}">
 							<tr>
 								<td>Subordinate of</td>
-								<td><select name="AdminUnitTypeMaster_adminUnitTypeID">
+								<!-- <select name="AdminUnitTypeMaster_adminUnitTypeID">  -->
+								<td><select name="adminUnitTypeMasterID">
 										<c:forEach var="entry"
 											items="${formData.adminUnitTypeMasterListWithZero}">
 											<c:set var="selected" value="" />
 											<c:if
-												test="${entry.adminUnitTypeID == formData.adminUnitTypeMaster.adminUnitTypeID}">
+												test="${entry.adminUnitTypeID == formData.adminUnitTypeMasterID}">
 												<c:set var="selected" value="selected=\"selected\"" />
 											</c:if>
+											<!-- cant be child of itself -->
 											<c:if
 												test="${entry.adminUnitTypeID!=formData.adminUnitType.adminUnitTypeID}">
 												<option value="${entry.adminUnitTypeID}" ${selected}>${entry.name}</option>

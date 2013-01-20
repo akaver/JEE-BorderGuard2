@@ -9,14 +9,17 @@ import border.model.AdminUnitType;
 
 public class AdminUnitTypeVM {
 	// adminunittype we are editing
-	// force validation on refernced object
+	// force validation on referenced object
 	@Valid
 	private AdminUnitType adminUnitType;
 	
 	// adminunittype wich is master for adminUnitType
 	private  AdminUnitType adminUnitTypeMaster;
+
+	// ID of adminunittype wich is master for current adminUnitType
+	private Long adminUnitTypeMasterID;
+	
 	// list of adminUnitTypes, for dropdown
-	private  List<AdminUnitType> adminUnitTypeMasterList;
 	private  List<AdminUnitType> adminUnitTypeMasterListWithZero;
 	
 	// list of adminunitypes which are subordinates to adminUnitType
@@ -41,19 +44,16 @@ public class AdminUnitTypeVM {
 		this.adminUnitTypeMaster = adminUnitTypeMaster;
 	}
 
-	public List<AdminUnitType> getAdminUnitTypeMasterList() {
-		return adminUnitTypeMasterList;
-	}
-
-	public void setAdminUnitTypeMasterList(
-			List<AdminUnitType> adminUnitTypeMasterList) {
-		this.adminUnitTypeMasterList = adminUnitTypeMasterList;
-	}
-
 	public List<AdminUnitType> getAdminUnitTypeMasterListWithZero() {
 		return adminUnitTypeMasterListWithZero;
 	}
-
+	
+	// do not add "---" in front
+	public void setAdminUnitTypeMasterList(List<AdminUnitType> adminUnitTypeMasterListWithZero){
+		this.adminUnitTypeMasterListWithZero = adminUnitTypeMasterListWithZero;
+	}
+	
+	// do add "---" in front
 	public void setAdminUnitTypeMasterListWithZero(
 			List<AdminUnitType> adminUnitTypeMasterListWithZero) {
 		// add default row into first position
@@ -98,6 +98,14 @@ public class AdminUnitTypeVM {
 	public void setAdminUnitTypesSubordinateListPossible(
 			List<AdminUnitType> adminUnitTypesSubordinateListPossible) {
 		this.adminUnitTypesSubordinateListPossible = adminUnitTypesSubordinateListPossible;
+	}
+
+	public Long getAdminUnitTypeMasterID() {
+		return adminUnitTypeMasterID;
+	}
+
+	public void setAdminUnitTypeMasterID(Long adminUnitTypeMasterID) {
+		this.adminUnitTypeMasterID = adminUnitTypeMasterID;
 	}
 
 	

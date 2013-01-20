@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import border.model.AdminUnitType;
 import border.model.AdminUnitTypeSubordination;
@@ -22,6 +23,8 @@ import border.viewmodel.AdminUnitTypeVM;
 
 @Controller
 @RequestMapping("/AdminUnitType")
+// create session
+@SessionAttributes("modelLists")
 public class AdminUnitTypeController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AdminUnitTypeRepositoryImpl.class);
@@ -43,22 +46,27 @@ public class AdminUnitTypeController {
 			adminUnitID = 0L;
 		}
 		// set up viewmodel for rendering, lets name it formData (its based on HomeVM)
-		model.addAttribute("formData", populateViewModelWithData(adminUnitID));
+		AdminUnitTypeVM adminUnitTypeVM = populateViewModelWithData(adminUnitID);
+		model.addAttribute("formData", adminUnitTypeVM);
+		// save the viewmodel aslo into session, so we can get the lists from it later
+		model.addAttribute("modelLists",adminUnitTypeVM);
 		
 		return "AdminUnitType";
 	}
 	
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
 	public String saveChanges(ModelMap model,
+			// get the copy of viewmodel stored in the session
+			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData, BindingResult bindingResult){
-		LOGGER.debug("/AdminUnitTypeForm");
-		
-		System.out.println("unit name: "+formData.getAdminUnitType().getName());
-		System.out.println("unit code: "+formData.getAdminUnitType().getCode());
-		System.out.println("unit comment: "+formData.getAdminUnitType().getComment());
-		System.out.println("bindingresult: "+bindingResult);
-		
+		LOGGER.debug("/AdminUnitTypeForm (bindingresult: "+bindingResult+")");
+
+		System.out.println("admin id: "+formData.getAdminUnitTypeMasterID());
 		if (bindingResult.hasErrors()) {
+			formData.setAdminUnitTypeMasterList(modelLists.getAdminUnitTypeMasterListWithZero());
+			formData.setAdminUnitTypesSubordinateList(modelLists.getAdminUnitTypesSubordinateList());
+			formData.setAdminUnitTypesSubordinateListPossible(modelLists.getAdminUnitTypesSubordinateListPossible());
+			model.addAttribute("formData", formData);
 			return "AdminUnitType";
 		}
 		
@@ -116,6 +124,8 @@ public class AdminUnitTypeController {
 								+ foo.getAdminUnitTypeSubordinate().getName());
 				// so we hope, that this was the one!
 				formData.setAdminUnitTypeMaster(foo.getAdminUnitTypeMaster());
+				// save the id
+				formData.setAdminUnitTypeMasterID(foo.getAdminUnitTypeMaster().getAdminUnitTypeID());
 			}
 		}
 

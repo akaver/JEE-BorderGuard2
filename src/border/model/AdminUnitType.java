@@ -22,10 +22,10 @@ public class AdminUnitType {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long adminUnitTypeID; 
 	@NotEmpty(message="Code must not be empty")
-	@Size(min = 2, max = 16)
+	@Size(min = 1, max = 16)
 	private String code;
 	@NotEmpty(message="Name must not be empty")
-	@Size(min = 2, max = 64)
+	@Size(min = 1, max = 64)
 	private String name;
 	
 	private String comment;
