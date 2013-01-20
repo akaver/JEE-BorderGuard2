@@ -22,10 +22,7 @@
 
 	<!-- this scans all your java source directories and generates beans out 
 		of them -->
-	<context:component-scan base-package="border">
-		<context:include-filter type="aspectj"
-			expression="border.*" />
-	</context:component-scan>
+	<context:component-scan base-package="border"/>
 
 	<!-- Registers a RequestMappingHandlerMapping, a RequestMappingHandlerAdapter, 
 		and an ExceptionHandlerExceptionResolver (among others) in support of processing 
@@ -37,5 +34,22 @@
 	<!-- invoke our custom helper class, to get the appcontext (to get datasource from it) -->
 	<bean id="applicationContextProvider" class="border.helper.ApplicationContextProvider"></bean>
 	
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+		<property name="driverClassName" value="${jdbcDriver}" />
+		<property name="url" value="${jdbcUrl}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:application.properties</value>
+			</list>
+		</property>
+	</bean>
 
 </beans>

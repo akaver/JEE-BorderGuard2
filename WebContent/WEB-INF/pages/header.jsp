@@ -4,4 +4,5 @@
 	<spring:message code="header.appName"/> - Anu Kuusmaa <spring:message code="header.and"/> Andres Käver (<a href="?lang=en"><img
 		src="<c:url value='/static/en.gif' />" /></a> | <a href="?lang=et"><img
 		src="<c:url value='/static/et.gif' />" /></a>)
+		<br>
 </div>
