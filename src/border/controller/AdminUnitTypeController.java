@@ -1,5 +1,6 @@
 package border.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -17,9 +18,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import border.model.AdminUnitType;
 import border.model.AdminUnitTypeSubordination;
-import border.repository.AdminUnitTypeRepositoryImpl;
 import border.service.AdminUnitTypeService;
 import border.viewmodel.AdminUnitTypeVM;
+import java.util.*;
 
 @Controller
 @RequestMapping("/AdminUnitType")
@@ -27,7 +28,7 @@ import border.viewmodel.AdminUnitTypeVM;
 @SessionAttributes("modelLists")
 public class AdminUnitTypeController {
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AdminUnitTypeRepositoryImpl.class);
+			.getLogger(AdminUnitTypeController.class);
 
 	@Autowired
 	AdminUnitTypeService adminUnitTypeService;
@@ -35,76 +36,131 @@ public class AdminUnitTypeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(
 			Model model,
-			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID
-			) {
+			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID) {
 		LOGGER.info("/");
-		
-		
-		
+
 		// set up the amdminUnitID
 		Long adminUnitID;
-		try{
+		try {
 			adminUnitID = Long.decode(_AdminUnitID);
-		} catch( Exception e) {
+		} catch (Exception e) {
 			adminUnitID = 0L;
 		}
-		// set up viewmodel for rendering, lets name it formData (its based on HomeVM)
+		// set up viewmodel for rendering, lets name it formData (its based on
+		// HomeVM)
 		AdminUnitTypeVM adminUnitTypeVM = populateViewModelWithData(adminUnitID);
 		model.addAttribute("formData", adminUnitTypeVM);
-		// save the viewmodel aslo into session, so we can get the lists from it later
-		model.addAttribute("modelLists",adminUnitTypeVM);
-		
+		// save the viewmodel aslo into session, so we can get the lists from it
+		// later
+		model.addAttribute("modelLists", adminUnitTypeVM);
+
 		return "AdminUnitType";
 	}
-	
+
 	// only when save button is pressed on the jsp
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "SubmitButton")
-	public String saveChanges(ModelMap model,
+	public String saveChanges(
+			ModelMap model,
 			// get the copy of viewmodel stored in the session
 			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
-			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData, BindingResult bindingResult){
-		LOGGER.info("/AdminUnitTypeForm (bindingresult: "+bindingResult+")");
+			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
+			BindingResult bindingResult) {
+		LOGGER.info("/AdminUnitTypeForm (bindingresult: " + bindingResult + ")");
+		LOGGER.info("admin id: {0}", formData.getAdminUnitTypeMasterID());
 
-		System.out.println("admin id: "+formData.getAdminUnitTypeMasterID());
 		if (bindingResult.hasErrors()) {
-			formData.setAdminUnitTypeMasterList(modelLists.getAdminUnitTypeMasterListWithZero());
-			formData.setAdminUnitTypesSubordinateList(modelLists.getAdminUnitTypesSubordinateList());
-			formData.setAdminUnitTypesSubordinateListPossible(modelLists.getAdminUnitTypesSubordinateListPossible());
+			RestoreViewModelData(formData, modelLists);
 			model.addAttribute("formData", formData);
 			return "AdminUnitType";
 		}
-		
-		//there was no errors, so save everything
+
+		// there was no errors, so save everything
 		// TODO: save changes
 		model.addAttribute("message", "message.ok");
 		return "redirect:/AdminUnitType/";
 	}
-	
-	
+
 	// only when cancel button is pressed on the jsp
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "CancelButton")
-	public String cancelChanges(ModelMap model){
+	public String cancelChanges(ModelMap model) {
 		LOGGER.info("/cancelChanges - no save, return to root view ");
 		// jump back to root view
 		return "redirect:/";
 	}
 
 	// when AddSubordinate is pressed
-	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params="AddSubordinateButton")
-	public String addSubordinates(ModelMap model){
-		LOGGER.info("/addSubordinates");
-		// jump back to root view
+	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "AddSubordinateButton")
+	public String addSubordinates(
+			ModelMap model,
+			// get the copy of viewmodel stored in the session
+			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
+			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
+			BindingResult bindingResult,
+			@RequestParam(value = "AdminUnitType_NewSubordinateNo") Integer adminUnitType_NewSubordinateNo) {
+		LOGGER.info("/addSubordinates (AdminUnitType_NewSubordinateNo: "
+				+ adminUnitType_NewSubordinateNo + ")");
+
+		RestoreViewModelData(formData, modelLists);
+
+		// add the select possible candidate to the subordinate list
+		// get the list of exsisting subordinates
+		List<AdminUnitType> adminUnitTypesSubordinateList = formData
+				.getAdminUnitTypesSubordinateList();
+		// if list is null, create it
+		if (adminUnitTypesSubordinateList == null) {
+			adminUnitTypesSubordinateList = new ArrayList<AdminUnitType>();
+		}
+		// put the new item into the list
+		adminUnitTypesSubordinateList.add(formData
+				.getAdminUnitTypesSubordinateListPossible().get(
+						adminUnitType_NewSubordinateNo));
+		// put the list back
+		formData.setAdminUnitTypesSubordinateList(adminUnitTypesSubordinateList);
+		// remove the item from list of possible candidates
+		List<AdminUnitType> adminUnitTypesSubordinateListPossible = formData
+				.getAdminUnitTypesSubordinateListPossible();
+		adminUnitTypesSubordinateListPossible.remove(formData
+				.getAdminUnitTypesSubordinateListPossible().get(
+						adminUnitType_NewSubordinateNo));
+		// and but it back
+		formData.setAdminUnitTypesSubordinateListPossible(adminUnitTypesSubordinateListPossible);
+
+		model.addAttribute("formData", formData);
+
+		if (bindingResult.hasErrors()) {
+			return "AdminUnitType";
+		}
+
+		// there was no errors, so return to form
 		return "redirect:/AdminUnitType/";
 	}
-	
-	// all other posts will end up here
+
+	private void RestoreViewModelData(AdminUnitTypeVM formData,
+			AdminUnitTypeVM modelLists) {
+		// restore data from session to viewmodel
+		formData.setAdminUnitTypeMasterList(modelLists
+				.getAdminUnitTypeMasterListWithZero());
+		formData.setAdminUnitTypesSubordinateList(modelLists
+				.getAdminUnitTypesSubordinateList());
+		formData.setAdminUnitTypesSubordinateListPossible(modelLists
+				.getAdminUnitTypesSubordinateListPossible());
+	}
+
+	// all other posts will end up here - this can only be remove subordinate
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
-	public String removeSubordinates(ModelMap model){
+	public String removeSubordinates(
+			ModelMap model, // get the copy of viewmodel stored in the session
+			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
+			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
+			BindingResult bindingResult, 
+			HttpServletRequest request)
+	{
 		LOGGER.info("/removeSubordinates");
+
 		// jump back to root view
 		return "redirect:/AdminUnitType/";
 	}
-	
+
 	private AdminUnitTypeVM populateViewModelWithData(Long adminUnitTypeID) {
 		// create the view model object and populate it with some data, get
 		// it through service
@@ -154,12 +210,14 @@ public class AdminUnitTypeController {
 				// so we hope, that this was the one!
 				formData.setAdminUnitTypeMaster(foo.getAdminUnitTypeMaster());
 				// save the id
-				formData.setAdminUnitTypeMasterID(foo.getAdminUnitTypeMaster().getAdminUnitTypeID());
+				formData.setAdminUnitTypeMasterID(foo.getAdminUnitTypeMaster()
+						.getAdminUnitTypeID());
 			}
 		}
 
 		// load the full list of AdminUnitType
-		formData.setAdminUnitTypeMasterListWithZero(adminUnitTypeService.findAllExcludingOne(formData.getAdminUnitType()));
+		formData.setAdminUnitTypeMasterListWithZero(adminUnitTypeService
+				.findAllExcludingOne(formData.getAdminUnitType()));
 
 		// load the list of subordinates, if it isnt new entity
 		if (adminUnitTypeID != 0) {
