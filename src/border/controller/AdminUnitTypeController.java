@@ -130,8 +130,6 @@ public class AdminUnitTypeController {
 		}
 
 		// load the full list of AdminUnitType
-		// TODO - remove all the subordinates of itself, otherwise user can
-		// cause circular reference (its taken care in jsp render for now)
 		formData.setAdminUnitTypeMasterListWithZero(adminUnitTypeService.findAllExcludingOne(formData.getAdminUnitType()));
 
 		// load the list of subordinates, if it isnt new entity

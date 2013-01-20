@@ -74,7 +74,7 @@ public interface AdminUnitTypeRepository extends
 	List<AdminUnitType> findSubordinatesPossibleActiveNow(
 			@Param("adminUnitTypeID") Long adminUnitTypeID);
 
-	// TODO: return only list of these units, where current unit can be attached
+	// return only list of these units, where current unit can be attached
 	// as subbunit
 	// ie exclude itself and all childrens of itself to avoid circular reference
 	@Query(value = "select * from adminunittype where id not in ( "

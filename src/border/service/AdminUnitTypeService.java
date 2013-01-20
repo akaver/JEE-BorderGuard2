@@ -32,19 +32,20 @@ public class AdminUnitTypeService {
 
 	@Transactional
 	public List<AdminUnitType> findAllExcludingOne(AdminUnitType adminUnitType) {
-		LOGGER.info("findAllExcludingOne ("+adminUnitType+")");
-		
-		if (adminUnitType==null){
+		LOGGER.info("findAllExcludingOne (" + adminUnitType + ")");
+
+		if (adminUnitType == null) {
 			return adminUnitTypeRepository.findAll();
 		}
-		return adminUnitTypeRepository.findAllExcludingOne(adminUnitType.getAdminUnitTypeID());
+		return adminUnitTypeRepository.findAllExcludingOne(adminUnitType
+				.getAdminUnitTypeID());
 	}
-	
-	
+
 	@Transactional
 	public void deleteAll() {
 		LOGGER.debug("deleteAll");
-		// TODO reset autoincrement back to 1
+		// this will not reset the autoincrement fields, use DBHelper truncate
+		// functionality
 		adminUnitTypeSubordinationRepository.deleteAll();
 		adminUnitTypeRepository.deleteAll();
 	}
@@ -52,7 +53,7 @@ public class AdminUnitTypeService {
 	@Transactional
 	public void populateData() {
 		LOGGER.debug("populateData");
-		
+
 		AdminUnitType master = new AdminUnitType("0", "Riik", "0");
 		AdminUnitType sub1 = new AdminUnitType("1", "Maakond", "1");
 		AdminUnitType sub11 = new AdminUnitType("11", "Maakonna linn", "11");

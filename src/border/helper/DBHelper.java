@@ -8,7 +8,7 @@ public class DBHelper {
 	JdbcTemplate jt;
 	
 	public static void TruncateDB(){
-		// TODO, dataSource should not be fixed string, it should be stored somewhere in config files
+		// TODO: dataSource should not be fixed string, it should be stored somewhere in config files
 		// get the datasource bean
 		DataSource ds = (DataSource) ApplicationContextProvider.getContext().getBean("dataSource");
 		JdbcTemplate jt = new JdbcTemplate(ds);
