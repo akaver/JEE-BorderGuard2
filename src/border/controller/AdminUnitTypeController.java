@@ -89,6 +89,7 @@ public class AdminUnitTypeController {
 		return "redirect:/";
 	}
 
+	// when AddSubordinate is pressed
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params="AddSubordinateButton")
 	public String addSubordinates(ModelMap model){
 		LOGGER.info("/addSubordinates");
@@ -96,6 +97,7 @@ public class AdminUnitTypeController {
 		return "redirect:/AdminUnitType/";
 	}
 	
+	// all other posts will end up here
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
 	public String removeSubordinates(ModelMap model){
 		LOGGER.info("/removeSubordinates");

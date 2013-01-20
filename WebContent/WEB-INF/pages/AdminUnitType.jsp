@@ -52,22 +52,14 @@
 							<td><form:textarea path="adminUnitType.comment"
 									value="${adminUnitType.comment}" cols="35" rows="10"></form:textarea></td>
 						</tr>
-						<!-- TODO see here:  http://static.springsource.org/spring/docs/3.0.5.RELEASE/reference/view.html#view-jsp-formtaglib-errorstag  -->
 						<c:if test="${formData.adminUnitType.adminUnitTypeID!=1}">
 							<tr>
 								<td>Subordinate of</td>
-								<!-- <select name="AdminUnitTypeMaster_adminUnitTypeID">  -->
-								<td><select name="adminUnitTypeMasterID">
-										<c:forEach var="entry"
-											items="${formData.adminUnitTypeMasterListWithZero}">
-											<c:set var="selected" value="" />
-											<c:if
-												test="${entry.adminUnitTypeID == formData.adminUnitTypeMasterID}">
-												<c:set var="selected" value="selected=\"selected\"" />
-											</c:if>
-											<option value="${entry.adminUnitTypeID}" ${selected}>${entry.name}</option>
-										</c:forEach>
-								</select></td>
+								<td><form:select path="adminUnitTypeMasterID">
+										<form:options
+											items="${formData.adminUnitTypeMasterListWithZero}"
+											itemValue="adminUnitTypeID" itemLabel="name" />
+									</form:select>
 							</tr>
 						</c:if>
 					</table></td>
