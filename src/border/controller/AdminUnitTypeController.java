@@ -146,7 +146,7 @@ public class AdminUnitTypeController {
 				.getAdminUnitTypesSubordinateListPossible());
 	}
 
-	// all other posts will end up here - this can only be remove subordinate
+	// all other posts will end up here - this can only be to remove subordinate
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
 	public String removeSubordinates(
 			ModelMap model, // get the copy of viewmodel stored in the session
@@ -156,9 +156,46 @@ public class AdminUnitTypeController {
 			HttpServletRequest request)
 	{
 		LOGGER.info("/removeSubordinates");
+		
+		RestoreViewModelData(formData, modelLists);
 
-		// jump back to root view
+
+		Enumeration<String> paramNames = request.getParameterNames();
+		while (paramNames.hasMoreElements()) {
+			String paramName = paramNames.nextElement();
+			if (paramName.startsWith("RemoveButton_")) {
+				// found the button from the list, get the id
+				Integer removeSubLineNo = Integer.parseInt(paramName.substring(13));
+				LOGGER.info("Item no to remove: "+removeSubLineNo);
+				
+				// get the list
+				List<AdminUnitType> adminUnitTypesSubordinateList = formData
+						.getAdminUnitTypesSubordinateList();
+				
+				
+				// get the item about to be removed, and insert it into
+				// possible sublist
+				formData.getAdminUnitTypesSubordinateListPossible().add(
+						adminUnitTypesSubordinateList.get((int) removeSubLineNo
+								.intValue()));
+
+				// remove the item
+				adminUnitTypesSubordinateList.remove((int) removeSubLineNo
+						.intValue());
+				// put the list back
+				formData.setAdminUnitTypesSubordinateList(adminUnitTypesSubordinateList);
+			}
+		}
+
+		model.addAttribute("formData", formData);
+
+		if (bindingResult.hasErrors()) {
+			return "AdminUnitType";
+		}
+
+		// there was no errors, so return to form
 		return "redirect:/AdminUnitType/";
+
 	}
 
 	private AdminUnitTypeVM populateViewModelWithData(Long adminUnitTypeID) {
