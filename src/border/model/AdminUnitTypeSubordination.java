@@ -14,6 +14,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import border.helper.DateHelper;
 
@@ -42,14 +43,17 @@ public class AdminUnitTypeSubordination {
 	//private Long subordinateAdminUnitTypeId;
 
 	private String comment;
+	@NotNull
 	private String openedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date openedDate;
+	@NotNull
 	private String changedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date changedDate;
+	@NotNull
 	private String closedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)

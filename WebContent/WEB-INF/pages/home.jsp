@@ -15,9 +15,8 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-
-	<form:form method="post" action="homeActivityForm">
-
+	<!-- plain old form, no model connected with it -->
+	<form method="post" action="homeActivityForm">
 		<div>
 			<div class="withMargin">
 				<spring:message code="home.chooseAction" />
@@ -45,6 +44,6 @@
 					type="submit" name="ReportAdminUnit" value="Aruanne">
 			</div>
 		</div>
-	</form:form>
+	</form>
 </body>
 </html>

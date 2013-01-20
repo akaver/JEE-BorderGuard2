@@ -50,3 +50,24 @@ body, input, select, textarea, button {
 	font-weight: bolder;
 	font-size: 24px;
 }
+
+
+.error {
+    color: #ff0000;
+}
+ 
+.errorblock {
+    color: #000;
+    background-color: #ffEEEE;
+    border: 3px solid #ff0000;
+    padding: 8px;
+    margin: 16px;
+}
+
+.messageblock {
+    color: #000;
+    background-color: #EEffEE;
+    border: 3px solid #00ff00;
+    padding: 8px;
+    margin: 16px;
+}

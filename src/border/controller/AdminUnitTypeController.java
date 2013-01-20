@@ -1,10 +1,15 @@
 package border.controller;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,14 +35,31 @@ public class AdminUnitTypeController {
 			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID) {
 		LOGGER.info("/");
 		
+		// set up the amdminUnitID
 		Long adminUnitID;
 		try{
 			adminUnitID = Long.decode(_AdminUnitID);
 		} catch( Exception e) {
 			adminUnitID = 0L;
 		}
-		
+		// set up viewmodel for rendering, lets name it formData (its based on HomeVM)
 		model.addAttribute("formData", populateViewModelWithData(adminUnitID));
+		
+		return "AdminUnitType";
+	}
+	
+	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
+	public String saveChanges(ModelMap model,
+			@ModelAttribute @Valid AdminUnitTypeVM formData, BindingResult result){
+		LOGGER.debug("/AdminUnitTypeForm");
+		
+		System.out.println("unit name: "+formData.getAdminUnitType().getName());
+		
+		if (!result.hasErrors()) {
+			model.addAttribute("message", "message.ok");
+			return "redirect:/AdminUnitType/";
+		}
+		
 		return "AdminUnitType";
 	}
 
@@ -98,9 +120,12 @@ public class AdminUnitTypeController {
 		formData.setAdminUnitTypeMasterListWithZero(adminUnitTypeService
 				.findAll());
 
-		// load the list of subordinates
-		formData.setAdminUnitTypesSubordinateList(adminUnitTypeService
-				.getSubordinates(formData.getAdminUnitType(), "NOW"));
+		// load the list of subordinates, if it isnt new entity
+		if (adminUnitTypeID != 0) {
+			formData.setAdminUnitTypesSubordinateList(adminUnitTypeService
+					.getSubordinates(formData.getAdminUnitType(), "NOW"));
+		}
+
 		// load the list of possible new subordinates
 		formData.setAdminUnitTypesSubordinateListPossible(adminUnitTypeService
 				.getPossibleSubordinates(formData.getAdminUnitType(), "NOW"));

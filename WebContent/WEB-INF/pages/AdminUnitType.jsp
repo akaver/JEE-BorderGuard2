@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,7 +12,8 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<form method="post" action="" name="AdminUnitTypeForm">
+	<form:errors path="*" cssClass="errorblock" element="div" />
+	<form:form method="post" modelAttribute="formData" action="AdminUnitTypeForm" name="AdminUnitTypeForm">
 		<table width="800">
 			<tr>
 				<td colspan="2"><h3>Admin Unit Type Editor</h3></td>
@@ -33,18 +35,18 @@
 						<tr>
 							<td width="100px">Code</td>
 							<td>
-							<input name="AdminUnitTypeCode" type="text" size="10"
-								value="${formData.adminUnitType.code}"></td>
+							<form:input path="adminUnitType.code" type="text" size="10"
+								value="${formData.adminUnitType.code}" /></td>
 						</tr>
 						<tr>
 							<td>Name</td>
-							<td><input name="AdminUnitTypeName" type="text" size="30"
-								value="${formData.adminUnitType.name}"></td>
+							<td><form:input path="adminUnitType.name" type="text" size="30"
+								value="${formData.adminUnitType.name}" /></td>
 						</tr>
 						<tr>
 							<td valign="top">Comment</td>
-							<td><textarea name="AdminUnitTypeComment" cols="35"
-									rows="10">${formData.adminUnitType.comment}</textarea></td>
+							<td><form:textarea path="adminUnitType.comment" value="${adminUnitType.comment}" cols="35"
+									rows="10"></form:textarea></td>
 						</tr>
   						
 						<c:if test="${formData.adminUnitType.adminUnitTypeID!=1}">
@@ -168,6 +170,6 @@
 					type="submit" value="Cancel"></td>
 			</tr>
 		</table>
-	</form>
+	</form:form>
 </body>
 </html>

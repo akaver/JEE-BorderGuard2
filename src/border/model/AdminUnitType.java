@@ -1,10 +1,10 @@
 package border.model;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import border.helper.DateHelper;
 
@@ -19,8 +19,11 @@ public class AdminUnitType {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long adminUnitTypeID; 
-	
+	@NotNull
+	@Size(min = 2, max = 16)
 	private String code;
+	@NotNull
+	@Size(min = 2, max = 64)
 	private String name;
 	private String comment;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -29,14 +32,17 @@ public class AdminUnitType {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date toDate;
+	@NotNull
 	private String openedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date openedDate;
+	@NotNull
 	private String changedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date changedDate;
+	@NotNull
 	private String closedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)

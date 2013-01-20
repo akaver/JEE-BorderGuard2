@@ -47,9 +47,29 @@ public interface AdminUnitTypeRepository extends
 	// KEY(MASTERADMINUNITTYPEID) REFERENCES PUBLIC.ADMINUNITTYPE(ID),
 	// CONSTRAINT FK1B31BB02F3E6AC82 FOREIGN KEY(SUBORDINATEADMINUNITTYPEID)
 	// REFERENCES PUBLIC.ADMINUNITTYPE(ID))
-	
-	// this is hideous, ugly and must not be...
-	@Query(value = "select * from AdminUnitType where ID in (select adminUnitTypeID from (select adminUnitTypeID, idNull from (select  AdminUnitType.ID as adminUnitTypeID, ISNULL(AdminUnitTypeSubordinationTemp.ID,0) as idNull from AdminUnitType LEFT JOIN (select * from AdminUnitTypeSubordination where ClosedDate>NOW()) AS  AdminUnitTypeSubordinationTemp ON AdminUnitType.ID=AdminUnitTypeSubordinationTemp.SubordinateAdminUnitTypeID where AdminUnitType.ID<>1 and AdminUnitType.ID<>(:adminUnitTypeID) and AdminUnitType.ClosedDate>NOW() and AdminUnitType.ToDate>NOW() )) as templist where templist.IDNULL=0 )", nativeQuery = true)
+
+	// this is hideous, ugly and that's the way freaking hsqldb is working
+	@Query(value = "SELECT * FROM   adminunittype "
+			+ "WHERE  id IN (SELECT adminunittypeid "
+			+ "              FROM   (SELECT adminunittype.id AS adminUnitTypeID, "
+			+ "                             CASE "
+			+ "                               WHEN masteradminunittypeid IS NULL THEN -1 "
+			+ "                               ELSE 1  "
+			+ "                             END              AS idNull "
+			+ "                      FROM   adminunittype  "
+			+ "                             LEFT JOIN (SELECT * "
+			+ "                                        FROM   adminunittypesubordination "
+			+ "                                        WHERE  closeddate > Now()) AS "
+			+ "                                       AdminUnitTypeSubordinationTemp "
+			+ "                                    ON adminunittype.id = "
+			+ "             AdminUnitTypeSubordinationTemp.subordinateadminunittypeid "
+			// this here should be id of first adminunittype id in db (ie id of state)
+			// state can not be subunit of anything
+			+ "             WHERE  adminunittype.id not in (select id from adminunittype order by id asc limit 1) " 
+			+ "             AND adminunittype.id <> (:adminUnitTypeID)  "
+			+ "             AND adminunittype.closeddate > Now() "
+			+ "             AND adminunittype.todate > Now()) AS templist "
+			+ "              WHERE  templist.idnull = -1) ", nativeQuery = true)
 	List<AdminUnitType> findSubordinatesPossibleActiveNow(
 			@Param("adminUnitTypeID") Long adminUnitTypeID);
 
