@@ -50,17 +50,22 @@ public class AdminUnitTypeController {
 	
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
 	public String saveChanges(ModelMap model,
-			@ModelAttribute @Valid AdminUnitTypeVM formData, BindingResult result){
+			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData, BindingResult bindingResult){
 		LOGGER.debug("/AdminUnitTypeForm");
 		
 		System.out.println("unit name: "+formData.getAdminUnitType().getName());
+		System.out.println("unit code: "+formData.getAdminUnitType().getCode());
+		System.out.println("unit comment: "+formData.getAdminUnitType().getComment());
+		System.out.println("bindingresult: "+bindingResult);
 		
-		if (!result.hasErrors()) {
-			model.addAttribute("message", "message.ok");
-			return "redirect:/AdminUnitType/";
+		if (bindingResult.hasErrors()) {
+			return "AdminUnitType";
 		}
 		
-		return "AdminUnitType";
+		//there was no errors, so save everything
+		// TODO: save changes
+		model.addAttribute("message", "message.ok");
+		return "redirect:/AdminUnitType/";
 	}
 
 	private AdminUnitTypeVM populateViewModelWithData(Long adminUnitTypeID) {

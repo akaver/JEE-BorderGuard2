@@ -6,6 +6,8 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import border.helper.DateHelper;
 
 /*
@@ -19,12 +21,13 @@ public class AdminUnitType {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long adminUnitTypeID; 
-	@NotNull
+	@NotEmpty(message="Code must not be empty")
 	@Size(min = 2, max = 16)
 	private String code;
-	@NotNull
+	@NotEmpty(message="Name must not be empty")
 	@Size(min = 2, max = 64)
 	private String name;
+	
 	private String comment;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)

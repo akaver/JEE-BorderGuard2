@@ -19,7 +19,6 @@ public class DateHelper {
 		try {
 			res = (Date) formatter.parse("9999-12-31 23:59:59");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -40,7 +39,6 @@ public class DateHelper {
 		try {
 			res = (Date) formatter.parse(dateStr);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

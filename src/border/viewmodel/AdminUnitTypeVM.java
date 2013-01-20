@@ -3,10 +3,14 @@ package border.viewmodel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import border.model.AdminUnitType;
 
 public class AdminUnitTypeVM {
 	// adminunittype we are editing
+	// force validation on refernced object
+	@Valid
 	private AdminUnitType adminUnitType;
 	
 	// adminunittype wich is master for adminUnitType

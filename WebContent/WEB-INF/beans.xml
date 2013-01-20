@@ -32,7 +32,6 @@
 		requests with annotated controller methods using annotations such as @RequestMapping, 
 		@ExceptionHandler, and others. -->
 	<mvc:annotation-driven />
-
-
+	
 
 </beans>
