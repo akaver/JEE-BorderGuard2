@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 import border.helper.DateHelper;
 
@@ -17,8 +18,10 @@ public class AdminUnit {
 	private Long AdminUnitID;
 	
 	@Column(nullable = false)
+	@Size(min = 2, max = 16)
 	private String code;
 	@Column(nullable = false)
+	@Size(min = 2, max = 64)
 	private String name;
 	@Column(nullable = false)
 	private String comment;
