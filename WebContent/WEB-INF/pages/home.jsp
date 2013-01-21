@@ -20,7 +20,7 @@
 		<div>
 			<div class="withMargin">
 				<spring:message code="home.chooseAction" />
-				<br> <br> <a href="<c:url value='/populate' />">Puhast
+				<br> <br> <a href="<c:url value='/populate' />">Puhasta
 					baas ja lae testandmed</a><br> <br>
 			</div>
 
