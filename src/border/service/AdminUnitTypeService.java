@@ -31,7 +31,8 @@ public class AdminUnitTypeService {
 	}
 
 	@Transactional
-	public List<AdminUnitType> findAllPossibleMasters(AdminUnitType adminUnitType) {
+	public List<AdminUnitType> findAllPossibleMasters(
+			AdminUnitType adminUnitType) {
 		LOGGER.info("findAllExcludingOne (" + adminUnitType + ")");
 
 		if (adminUnitType == null) {
@@ -111,7 +112,7 @@ public class AdminUnitTypeService {
 				+ adminUnitType.getAdminUnitTypeID() + " Time: "
 				+ dateTimeString);
 
-		if (adminUnitType.getAdminUnitTypeID()==null){
+		if (adminUnitType.getAdminUnitTypeID() == null) {
 			return adminUnitTypeRepository
 					.findSubordinatesPossibleActiveNow(0L);
 
@@ -122,40 +123,52 @@ public class AdminUnitTypeService {
 	}
 
 	public AdminUnitType save(AdminUnitType adminUnitType) {
-		LOGGER.info("save: "+adminUnitType);
-		AdminUnitType res=adminUnitTypeRepository.save(adminUnitType);
-		LOGGER.info("after save: "+adminUnitType);
+		LOGGER.info("save: " + adminUnitType);
+		AdminUnitType res = adminUnitTypeRepository.save(adminUnitType);
+		LOGGER.info("after save: " + adminUnitType);
 		return res;
 	}
 
 	public void saveMaster(AdminUnitType adminUnitType,
 			Long adminUnitTypeMasterID, String dateTimeString) {
-		LOGGER.info("saveMaster: "+adminUnitType+" master ID:"+adminUnitTypeMasterID);
+		LOGGER.info("saveMaster: " + adminUnitType + " master ID:"
+				+ adminUnitTypeMasterID);
 		// update this units master (on specified time)
-		// TODO: dont allow to set master on master unit (ie the first should be country/state, which has no master)
-		
+		// TODO: dont allow to set master on master unit (ie the first should be
+		// country/state, which has no master)
+
 		// if master id is 0, then master is removed/nothing
 		// if master id != 0, tehn master is added/updated
-		if ((adminUnitTypeMasterID==null) || (adminUnitTypeMasterID==0L)){
+		if ((adminUnitTypeMasterID == null) || (adminUnitTypeMasterID == 0L)) {
 			// remove the master
 			adminUnitTypeSubordinationRepository.removeMaster(adminUnitType,
-					 adminUnitTypeMasterID,  dateTimeString);
+					adminUnitTypeMasterID, dateTimeString);
 		} else {
 			// add the master
-			adminUnitTypeSubordinationRepository.addMaster( adminUnitType,
-					 adminUnitTypeMasterID,  dateTimeString);
-	
+			adminUnitTypeSubordinationRepository.addMaster(adminUnitType,
+					adminUnitTypeMasterID, dateTimeString);
+
 		}
 	}
 
 	public Long getAdminUnitTypeMasterID(AdminUnitType adminUnitType,
 			String dateTimeString) {
-		LOGGER.info("getAdminUnitTypeMasterID: "+adminUnitType+" time :"+dateTimeString);
-		
-		List<AdminUnitTypeSubordination> resList = adminUnitTypeSubordinationRepository.getMasterActiveNow(adminUnitType.getAdminUnitTypeID());
-		if (resList.size()==0) return 0L;
+		LOGGER.info("getAdminUnitTypeMasterID: " + adminUnitType + " time :"
+				+ dateTimeString);
+
+		List<AdminUnitTypeSubordination> resList = adminUnitTypeSubordinationRepository
+				.getMasterActiveNow(adminUnitType.getAdminUnitTypeID());
+		if (resList.size() == 0)
+			return 0L;
 		return resList.get(0).getAdminUnitTypeMaster().getAdminUnitTypeID();
 	}
 
+	public void addSubordinate(AdminUnitType masterAdminUnitType,
+			AdminUnitType subordinateAdminUnitType) {
+		AdminUnitTypeSubordination sub = new AdminUnitTypeSubordination(
+				masterAdminUnitType, subordinateAdminUnitType, "");
+		sub = adminUnitTypeSubordinationRepository.save(sub);
+
+	}
 
 }

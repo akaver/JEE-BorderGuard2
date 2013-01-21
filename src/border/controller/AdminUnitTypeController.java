@@ -56,8 +56,7 @@ public class AdminUnitTypeController {
 
 	// only when save button is pressed on the jsp
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "SubmitButton")
-	public String saveChanges(
-			ModelMap model,
+	public String saveChanges(ModelMap model,
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
 			BindingResult bindingResult) {
 		LOGGER.info("/AdminUnitTypeForm (bindingresult: " + bindingResult + ")");
@@ -84,16 +83,68 @@ public class AdminUnitTypeController {
 		// 2 - master unit (add or remove)
 		// 3 - subordinates (addor remove)
 
-		// get the entity
-		AdminUnitType _adminUnitType = formData.getAdminUnitType();
 
 		// save basic changes, if this was new entry then id has now value
-		_adminUnitType = adminUnitTypeService.save(_adminUnitType);
-		
+		 formData.setAdminUnitType(adminUnitTypeService.save(formData.getAdminUnitType()));
+		 
 		// update this units master
 		// if master id is 0, then master is removed/nothing
 		// if master id != 0, tehn master is added/updated
-		adminUnitTypeService.saveMaster(formData.getAdminUnitType(),formData.getAdminUnitTypeMasterID(),"NOW()");
+		adminUnitTypeService.saveMaster(formData.getAdminUnitType(),
+				formData.getAdminUnitTypeMasterID(), "NOW()");
+
+		// update this units subordinates
+		// user can remove and add items back and forth
+		// find out, what shall we really do - what is changed compared to
+		// original list
+
+		// so, load back orginal list of subordinates from service
+		List<AdminUnitType> originalSubordinates = adminUnitTypeService
+				.getSubordinates(formData.getAdminUnitType(), "NOW");
+		// go throught the list of current (on the form) subordinates
+		for (AdminUnitType curSubordinate : formData
+				.getAdminUnitTypesSubordinateList()) {
+			int status = 0;
+			int i = 0;
+
+			// this item is in the original list - do nothing (it wasnt added or removed)
+			for (i = 0; i < originalSubordinates.size(); i++) {
+				if (originalSubordinates.get(i).getAdminUnitTypeID()
+						.equals(curSubordinate.getAdminUnitTypeID())) {
+					// so this item from session was in original list
+					status = 1;
+					break;
+				}
+			}
+			
+			
+			// so this item from session was in original list
+			if (status == 1) {
+				// nothing to save
+				// remove it from originals list
+				LOGGER.info("Nothing to do on subordinate:"
+						+ originalSubordinates.get(i));
+				originalSubordinates.remove(i);
+			}
+			
+			// so this item wasnt int the originals list, so its new
+			
+			if (status == 0) {
+				// save it to db, as new subordinate
+				System.out.println("Adding new subordinate:" + curSubordinate);
+				
+				adminUnitTypeService
+						.addSubordinate(formData.getAdminUnitType(), curSubordinate);
+			}
+
+		}
+		
+		// go over the rest of list, these are removed subordinates
+		// TODO: implement
+		for (AdminUnitType removeSubordinate : originalSubordinates) {
+			System.out.println("Deleting old subordinate:" + removeSubordinate);
+			//adminUnitTypeDAO.removeSubordinate(adminUnitTypeID,removeSubordinate);
+		}
 
 	}
 
@@ -214,17 +265,21 @@ public class AdminUnitTypeController {
 			// the list is filled with masters (there can be only one in any
 			// specific timeperiod)
 			// master-slave(this unit)
-			
-			// you could get the list through jpa, but since we have time constraints - no good
-			// for (AdminUnitTypeSubordination foo : formData.getAdminUnitType().getAdminUnitTypeSubordinationSubordinates()) {
+
+			// you could get the list through jpa, but since we have time
+			// constraints - no good
+			// for (AdminUnitTypeSubordination foo :
+			// formData.getAdminUnitType().getAdminUnitTypeSubordinationSubordinates())
+			// {
 			// so, you have to query it through service
-			formData.setAdminUnitTypeMasterID(adminUnitTypeService.getAdminUnitTypeMasterID(formData.getAdminUnitType(),"NOW()"));
-			
-			
-			
+			formData.setAdminUnitTypeMasterID(adminUnitTypeService
+					.getAdminUnitTypeMasterID(formData.getAdminUnitType(),
+							"NOW()"));
+
 		}
 
-		// load the possible masters, excluding itself and all childrens under itself
+		// load the possible masters, excluding itself and all childrens under
+		// itself
 		// so you cant attach this unit into circular reference
 		formData.setAdminUnitTypeMasterListWithZero(adminUnitTypeService
 				.findAllPossibleMasters(formData.getAdminUnitType()));
@@ -239,10 +294,6 @@ public class AdminUnitTypeController {
 		// load the list of possible new subordinates
 		formData.setAdminUnitTypesSubordinateListPossible(adminUnitTypeService
 				.getPossibleSubordinates(formData.getAdminUnitType(), "NOW"));
-			
-			
-		
-
 
 		return formData;
 	}
