@@ -17,14 +17,14 @@ import border.viewmodel.AdminUnitVM;
 
 @Controller
 @RequestMapping("/AdminUnit")
-@SessionAttributes("modelLists")
+@SessionAttributes("formData")
 public class AdminUnitController {
 	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AdminUnitRepositoryImpl.class);
 	
 	@Autowired
-	AdminUnitService adminUnitService;	
+	AdminUnitService adminUnitService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String adminUnitHome(
@@ -43,7 +43,6 @@ public class AdminUnitController {
 		
 		AdminUnitVM adminUnitVM = populateViewModelWithData(adminUnitID);
 		model.addAttribute("formData", adminUnitVM);
-		model.addAttribute("modelLists",adminUnitVM);
 		
 		return "AdminUnit";	
 	}
@@ -57,6 +56,8 @@ public class AdminUnitController {
 		}
 		else {
 			formData.setAdminUnit(adminUnitService.getByID(adminUnitID));
+			formData.setAdminUnitMaster(adminUnitService.getAdminUnitMaster(adminUnitID));
+			formData.setAdminUnitsSubordinateList(adminUnitService.getAdminUnitSubordinates(adminUnitID));
 		}
 		
 		return formData;

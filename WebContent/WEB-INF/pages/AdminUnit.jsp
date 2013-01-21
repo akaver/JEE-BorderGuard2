@@ -61,7 +61,8 @@
 						<tr>
 							<td>Allub</td>
 							<td><select name="AdminUnitMaster_adminUnitID">
-									<c:forEach var="entry"
+								<option>${formData.adminUnitMaster.name}</option>
+									<%-- <c:forEach var="entry"
 										items="${formData.adminUnitMasterListWithZero}">
 										<c:set var="selected" value="" />
 										<c:if
@@ -72,7 +73,7 @@
 											test="${entry.adminUnitID!=formData.adminUnit.adminUnitID}">
 											<option value="${entry.adminUnitID}" ${selected}>${entry.name}</option>
 										</c:if>
-									</c:forEach>
+									</c:forEach> --%>
 							</select></td>
 						</tr>
 					</table></td>
