@@ -45,6 +45,8 @@
 	<servlet-mapping>
 		<servlet-name>default</servlet-name>
 		<url-pattern>/static/*</url-pattern>
+		<url-pattern>/js/*</url-pattern>
+		<url-pattern>/images/*</url-pattern>
 	</servlet-mapping>
 	
 	<!-- everything in utf8 -->

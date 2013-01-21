@@ -177,4 +177,18 @@ public class AdminUnitTypeService {
 		adminUnitTypeSubordinationRepository.removeSubordination(masterAdminUnitType, msubordinateAdminUnitType);
 	}
 
+	public int getSubordinateCount(AdminUnitType adminUnitType) {
+		LOGGER.info("getSubordinateCount");
+		// get the subordination structrure
+		List<AdminUnitTypeSubordination> subordination = adminUnitTypeSubordinationRepository
+				.findSubordinatesActiveNow(adminUnitType.getAdminUnitTypeID());
+		// get the subordinate items
+		List<AdminUnitType> res = new ArrayList<AdminUnitType>();
+		for (AdminUnitTypeSubordination item : subordination) {
+			res.add(item.getAdminUnitTypeSubordinate());
+		}
+
+		return res.size();
+	}
+
 }
