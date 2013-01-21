@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
 <project name="JEE-BorderGuard2" default="compile">
-	<property name="team.name" value="Team02d-project2" />
+	<property name="team.name" value="Team02d2" />
 	<property name="project.name" value="JEE-BorderGuard2" />
 	<property name="project.dir" value="${basedir}" />
 
