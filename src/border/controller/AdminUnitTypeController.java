@@ -87,11 +87,13 @@ public class AdminUnitTypeController {
 		// get the entity
 		AdminUnitType _adminUnitType = formData.getAdminUnitType();
 
-		// save basic changes
+		// save basic changes, if this was new entry then id has now value
 		_adminUnitType = adminUnitTypeService.save(_adminUnitType);
-
+		
 		// update this units master
-		// adminUnitTypeService.saveMaster(formData.getAdminUnitType(),formData.getAdminUnitTypeMasterID());
+		// if master id is 0, then master is removed/nothing
+		// if master id != 0, tehn master is added/updated
+		adminUnitTypeService.saveMaster(formData.getAdminUnitType(),formData.getAdminUnitTypeMasterID(),"NOW()");
 
 	}
 
@@ -212,23 +214,14 @@ public class AdminUnitTypeController {
 			// the list is filled with masters (there can be only one in any
 			// specific timeperiod)
 			// master-slave(this unit)
-			for (AdminUnitTypeSubordination foo : formData.getAdminUnitType()
-					.getAdminUnitTypeSubordinationSubordinates()) {
-				System.out
-						.println("getAdminUnitTypeSubordinationSubordinates comment "
-								+ foo.getComment());
-				System.out
-						.println("getAdminUnitTypeSubordinationSubordinates master "
-								+ foo.getAdminUnitTypeMaster().getName());
-				System.out
-						.println("getAdminUnitTypeSubordinationSubordinates subordinate "
-								+ foo.getAdminUnitTypeSubordinate().getName());
-				// so we hope, that this was the one!
-				formData.setAdminUnitTypeMaster(foo.getAdminUnitTypeMaster());
-				// save the id
-				formData.setAdminUnitTypeMasterID(foo.getAdminUnitTypeMaster()
-						.getAdminUnitTypeID());
-			}
+			
+			// you could get the list through jpa, but since we have time constraints - no good
+			// for (AdminUnitTypeSubordination foo : formData.getAdminUnitType().getAdminUnitTypeSubordinationSubordinates()) {
+			// so, you have to query it through service
+			formData.setAdminUnitTypeMasterID(adminUnitTypeService.getAdminUnitTypeMasterID(formData.getAdminUnitType(),"NOW()"));
+			
+			
+			
 		}
 
 		// load the possible masters, excluding itself and all childrens under itself

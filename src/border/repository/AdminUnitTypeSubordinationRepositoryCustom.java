@@ -1,5 +1,6 @@
 package border.repository;
 
+
 import border.model.*;
 
 /*
@@ -7,5 +8,9 @@ import border.model.*;
  * then implement them on some class
  */
 public interface AdminUnitTypeSubordinationRepositoryCustom {
-	public AdminUnitTypeSubordination findById(Long id);
+	public void removeMaster(AdminUnitType adminUnitType, Long adminUnitTypeMasterID,
+			String dateTimeString);
+
+	public void addMaster(AdminUnitType adminUnitType, Long adminUnitTypeMasterID,
+			String dateTimeString);
 }
