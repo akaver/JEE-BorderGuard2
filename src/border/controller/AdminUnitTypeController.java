@@ -52,7 +52,7 @@ public class AdminUnitTypeController {
 		model.addAttribute("formData", adminUnitTypeVM);
 		// save the viewmodel aslo into session, so we can get the lists from it
 		// later
-		//model.addAttribute("modelLists", adminUnitTypeVM);
+		// model.addAttribute("modelLists", adminUnitTypeVM);
 
 		return "AdminUnitType";
 	}
@@ -61,14 +61,12 @@ public class AdminUnitTypeController {
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "SubmitButton")
 	public String saveChanges(
 			ModelMap model,
-			// get the copy of viewmodel stored in the session
-			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
 			BindingResult bindingResult) {
 		LOGGER.info("/AdminUnitTypeForm (bindingresult: " + bindingResult + ")");
-		LOGGER.info("admin id: "+formData.getAdminUnitTypeMasterID());
+		LOGGER.info("admin id: " + formData.getAdminUnitTypeMasterID());
 
-		//RestoreViewModelData(formData, modelLists);
+		// RestoreViewModelData(formData, modelLists);
 		model.addAttribute("formData", formData);
 
 		if (bindingResult.hasErrors()) {
@@ -77,8 +75,7 @@ public class AdminUnitTypeController {
 
 		// there was no errors, so save everything
 		SaveEntityChanges(formData);
-		
-		
+
 		return "redirect:/";
 	}
 
@@ -91,15 +88,14 @@ public class AdminUnitTypeController {
 		// 3 - subordinates (addor remove)
 
 		// get the entity
-		AdminUnitType _adminUnitType = formData.getAdminUnitType(); 
+		AdminUnitType _adminUnitType = formData.getAdminUnitType();
 
-		//save basic changes
+		// save basic changes
 		_adminUnitType = adminUnitTypeService.save(_adminUnitType);
-		
+
 		// update this units master
 		// adminUnitTypeService.saveMaster(formData.getAdminUnitType(),formData.getAdminUnitTypeMasterID());
-		
-		
+
 	}
 
 	// only when cancel button is pressed on the jsp
@@ -144,46 +140,29 @@ public class AdminUnitTypeController {
 		// and but it back
 		formData.setAdminUnitTypesSubordinateListPossible(adminUnitTypesSubordinateListPossible);
 
-
 		return "AdminUnitType";
-	}
-
-	private void RestoreViewModelData(AdminUnitTypeVM formData,
-			AdminUnitTypeVM modelLists) {
-		// restore data from session to viewmodel
-		formData.setAdminUnitTypeMasterList(modelLists
-				.getAdminUnitTypeMasterListWithZero());
-		formData.setAdminUnitTypesSubordinateList(modelLists
-				.getAdminUnitTypesSubordinateList());
-		formData.setAdminUnitTypesSubordinateListPossible(modelLists
-				.getAdminUnitTypesSubordinateListPossible());
 	}
 
 	// all other posts will end up here - this can only be to remove subordinate
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
-	public String removeSubordinates(
-			ModelMap model, 
+	public String removeSubordinates(ModelMap model,
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
-			BindingResult bindingResult, 
-			HttpServletRequest request)
-	{
+			BindingResult bindingResult, HttpServletRequest request) {
 		LOGGER.info("/removeSubordinates");
-		
-
 
 		Enumeration<String> paramNames = request.getParameterNames();
 		while (paramNames.hasMoreElements()) {
 			String paramName = paramNames.nextElement();
 			if (paramName.startsWith("RemoveButton_")) {
 				// found the button from the list, get the id
-				Integer removeSubLineNo = Integer.parseInt(paramName.substring(13));
-				LOGGER.info("Item no to remove: "+removeSubLineNo);
-				
+				Integer removeSubLineNo = Integer.parseInt(paramName
+						.substring(13));
+				LOGGER.info("Item no to remove: " + removeSubLineNo);
+
 				// get the list
 				List<AdminUnitType> adminUnitTypesSubordinateList = formData
 						.getAdminUnitTypesSubordinateList();
-				
-				
+
 				// get the item about to be removed, and insert it into
 				// possible sublist
 				formData.getAdminUnitTypesSubordinateListPossible().add(
@@ -255,12 +234,14 @@ public class AdminUnitTypeController {
 			}
 		}
 
-		// load the full list of AdminUnitType
+		// load the possible masters, excluding itself and all childrens under itself
+		// so you cant attach this unit into circular reference
 		formData.setAdminUnitTypeMasterListWithZero(adminUnitTypeService
-				.findAllExcludingOne(formData.getAdminUnitType()));
+				.findAllPossibleMasters(formData.getAdminUnitType()));
 
-		// load the list of subordinates, if it isnt new entity
+		// is it new entity?
 		if (adminUnitTypeID != 0) {
+			// load the list of subordinates
 			formData.setAdminUnitTypesSubordinateList(adminUnitTypeService
 					.getSubordinates(formData.getAdminUnitType(), "NOW"));
 		}
@@ -268,6 +249,10 @@ public class AdminUnitTypeController {
 		// load the list of possible new subordinates
 		formData.setAdminUnitTypesSubordinateListPossible(adminUnitTypeService
 				.getPossibleSubordinates(formData.getAdminUnitType(), "NOW"));
+			
+			
+		
+
 
 		return formData;
 	}

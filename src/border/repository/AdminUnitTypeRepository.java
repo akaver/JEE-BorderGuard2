@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import border.model.AdminUnitType;
-import border.model.AdminUnitTypeSubordination;
 
 /*
  * Implementing a data access layer of an application has been cumbersome for quite a while. 
@@ -88,6 +87,6 @@ public interface AdminUnitTypeRepository extends
 			+ "join link_tree p on p.SUBORDINATEADMINUNITTYPEID = c.MASTERADMINUNITTYPEID) "
 			+ "select SUBORDINATEADMINUNITTYPEID " + "from link_tree) "
 			+ "and " + "id<>(:adminUnitTypeID)", nativeQuery = true)
-	List<AdminUnitType> findAllExcludingOne(
+	List<AdminUnitType> findAllPossibleMasters(
 			@Param("adminUnitTypeID") Long adminUnitTypeID);
 }

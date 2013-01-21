@@ -31,13 +31,13 @@ public class AdminUnitTypeService {
 	}
 
 	@Transactional
-	public List<AdminUnitType> findAllExcludingOne(AdminUnitType adminUnitType) {
+	public List<AdminUnitType> findAllPossibleMasters(AdminUnitType adminUnitType) {
 		LOGGER.info("findAllExcludingOne (" + adminUnitType + ")");
 
 		if (adminUnitType == null) {
 			return adminUnitTypeRepository.findAll();
 		}
-		return adminUnitTypeRepository.findAllExcludingOne(adminUnitType
+		return adminUnitTypeRepository.findAllPossibleMasters(adminUnitType
 				.getAdminUnitTypeID());
 	}
 
@@ -111,16 +111,14 @@ public class AdminUnitTypeService {
 				+ adminUnitType.getAdminUnitTypeID() + " Time: "
 				+ dateTimeString);
 
-		try {
-			return adminUnitTypeRepository
-					.findSubordinatesPossibleActiveNow(adminUnitType
-							.getAdminUnitTypeID());
-
-		} catch (Exception e) {
+		if (adminUnitType.getAdminUnitTypeID()==null){
 			return adminUnitTypeRepository
 					.findSubordinatesPossibleActiveNow(0L);
-		}
 
+		}
+		return adminUnitTypeRepository
+				.findSubordinatesPossibleActiveNow(adminUnitType
+						.getAdminUnitTypeID());
 	}
 
 	public AdminUnitType save(AdminUnitType _adminUnitType) {
@@ -129,5 +127,6 @@ public class AdminUnitTypeService {
 		LOGGER.info("after save: "+_adminUnitType);
 		return res;
 	}
+
 
 }
