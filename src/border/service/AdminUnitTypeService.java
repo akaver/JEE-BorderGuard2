@@ -16,7 +16,7 @@ import border.repository.*;
 @Service
 public class AdminUnitTypeService {
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AdminUnitTypeRepositoryImpl.class);
+			.getLogger(AdminUnitTypeService.class);
 
 	// here are our database repos
 	@Autowired
@@ -26,7 +26,7 @@ public class AdminUnitTypeService {
 
 	@Transactional
 	public List<AdminUnitType> findAll() {
-		LOGGER.debug("findAll");
+		LOGGER.info("findAll");
 		return adminUnitTypeRepository.findAll();
 	}
 
@@ -43,7 +43,7 @@ public class AdminUnitTypeService {
 
 	@Transactional
 	public void deleteAll() {
-		LOGGER.debug("deleteAll");
+		LOGGER.info("deleteAll");
 		// this will not reset the autoincrement fields, use DBHelper truncate
 		// functionality
 		adminUnitTypeSubordinationRepository.deleteAll();
@@ -52,7 +52,7 @@ public class AdminUnitTypeService {
 
 	@Transactional
 	public void populateData() {
-		LOGGER.debug("populateData");
+		LOGGER.info("populateData");
 
 		AdminUnitType master = new AdminUnitType("0", "Riik", "0");
 		AdminUnitType sub1 = new AdminUnitType("1", "Maakond", "1");
@@ -82,14 +82,14 @@ public class AdminUnitTypeService {
 
 	@Transactional
 	public AdminUnitType getByID(Long adminUnitTypeID) {
-		LOGGER.debug("getByID:", adminUnitTypeID);
+		LOGGER.info("getByID:", adminUnitTypeID);
 		AdminUnitType res = adminUnitTypeRepository.findOne(adminUnitTypeID);
 		return res;
 	}
 
 	public List<AdminUnitType> getSubordinates(AdminUnitType adminUnitType,
 			String dateTimeString) {
-		LOGGER.debug("getSubordinates for: "
+		LOGGER.info("getSubordinates for: "
 				+ adminUnitType.getAdminUnitTypeID() + " Time: "
 				+ dateTimeString);
 
@@ -107,7 +107,7 @@ public class AdminUnitTypeService {
 
 	public List<AdminUnitType> getPossibleSubordinates(
 			AdminUnitType adminUnitType, String dateTimeString) {
-		LOGGER.debug("getPossibleSubordinates for: "
+		LOGGER.info("getPossibleSubordinates for: "
 				+ adminUnitType.getAdminUnitTypeID() + " Time: "
 				+ dateTimeString);
 
@@ -121,6 +121,13 @@ public class AdminUnitTypeService {
 					.findSubordinatesPossibleActiveNow(0L);
 		}
 
+	}
+
+	public AdminUnitType save(AdminUnitType _adminUnitType) {
+		LOGGER.info("save: "+_adminUnitType);
+		AdminUnitType res=adminUnitTypeRepository.save(_adminUnitType);
+		LOGGER.info("after save: "+_adminUnitType);
+		return res;
 	}
 
 }

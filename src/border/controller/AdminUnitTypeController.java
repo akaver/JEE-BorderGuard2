@@ -25,7 +25,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/AdminUnitType")
 // create session
-@SessionAttributes("modelLists")
+@SessionAttributes("formData")
 public class AdminUnitTypeController {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AdminUnitTypeController.class);
@@ -52,7 +52,7 @@ public class AdminUnitTypeController {
 		model.addAttribute("formData", adminUnitTypeVM);
 		// save the viewmodel aslo into session, so we can get the lists from it
 		// later
-		model.addAttribute("modelLists", adminUnitTypeVM);
+		//model.addAttribute("modelLists", adminUnitTypeVM);
 
 		return "AdminUnitType";
 	}
@@ -66,18 +66,40 @@ public class AdminUnitTypeController {
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
 			BindingResult bindingResult) {
 		LOGGER.info("/AdminUnitTypeForm (bindingresult: " + bindingResult + ")");
-		LOGGER.info("admin id: {0}", formData.getAdminUnitTypeMasterID());
+		LOGGER.info("admin id: "+formData.getAdminUnitTypeMasterID());
+
+		//RestoreViewModelData(formData, modelLists);
+		model.addAttribute("formData", formData);
 
 		if (bindingResult.hasErrors()) {
-			RestoreViewModelData(formData, modelLists);
-			model.addAttribute("formData", formData);
 			return "AdminUnitType";
 		}
 
 		// there was no errors, so save everything
-		// TODO: save changes
-		model.addAttribute("message", "message.ok");
-		return "redirect:/AdminUnitType/";
+		SaveEntityChanges(formData);
+		
+		
+		return "redirect:/";
+	}
+
+	private void SaveEntityChanges(AdminUnitTypeVM formData) {
+		// save the changes
+		LOGGER.info("SaveEntityChanges");
+		// we have to update
+		// 1 - basic data
+		// 2 - master unit (add or remove)
+		// 3 - subordinates (addor remove)
+
+		// get the entity
+		AdminUnitType _adminUnitType = formData.getAdminUnitType(); 
+
+		//save basic changes
+		_adminUnitType = adminUnitTypeService.save(_adminUnitType);
+		
+		// update this units master
+		// adminUnitTypeService.saveMaster(formData.getAdminUnitType(),formData.getAdminUnitTypeMasterID());
+		
+		
 	}
 
 	// only when cancel button is pressed on the jsp
@@ -92,15 +114,12 @@ public class AdminUnitTypeController {
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "AddSubordinateButton")
 	public String addSubordinates(
 			ModelMap model,
-			// get the copy of viewmodel stored in the session
-			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
 			BindingResult bindingResult,
 			@RequestParam(value = "AdminUnitType_NewSubordinateNo") Integer adminUnitType_NewSubordinateNo) {
 		LOGGER.info("/addSubordinates (AdminUnitType_NewSubordinateNo: "
 				+ adminUnitType_NewSubordinateNo + ")");
-
-		RestoreViewModelData(formData, modelLists);
+		LOGGER.info("bindingresult: " + bindingResult);
 
 		// add the select possible candidate to the subordinate list
 		// get the list of exsisting subordinates
@@ -125,14 +144,8 @@ public class AdminUnitTypeController {
 		// and but it back
 		formData.setAdminUnitTypesSubordinateListPossible(adminUnitTypesSubordinateListPossible);
 
-		model.addAttribute("formData", formData);
 
-		if (bindingResult.hasErrors()) {
-			return "AdminUnitType";
-		}
-
-		// there was no errors, so return to form
-		return "redirect:/AdminUnitType/";
+		return "AdminUnitType";
 	}
 
 	private void RestoreViewModelData(AdminUnitTypeVM formData,
@@ -149,15 +162,13 @@ public class AdminUnitTypeController {
 	// all other posts will end up here - this can only be to remove subordinate
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST)
 	public String removeSubordinates(
-			ModelMap model, // get the copy of viewmodel stored in the session
-			@ModelAttribute("modelLists") AdminUnitTypeVM modelLists,
+			ModelMap model, 
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
 			BindingResult bindingResult, 
 			HttpServletRequest request)
 	{
 		LOGGER.info("/removeSubordinates");
 		
-		RestoreViewModelData(formData, modelLists);
 
 
 		Enumeration<String> paramNames = request.getParameterNames();
@@ -187,15 +198,7 @@ public class AdminUnitTypeController {
 			}
 		}
 
-		model.addAttribute("formData", formData);
-
-		if (bindingResult.hasErrors()) {
-			return "AdminUnitType";
-		}
-
-		// there was no errors, so return to form
-		return "redirect:/AdminUnitType/";
-
+		return "AdminUnitType";
 	}
 
 	private AdminUnitTypeVM populateViewModelWithData(Long adminUnitTypeID) {
