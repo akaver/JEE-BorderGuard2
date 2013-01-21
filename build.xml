@@ -13,13 +13,18 @@
 	<property name="lib.dir" location="${project.dir}/lib" />
 	<property name="runtime.lib.dir" location="${web-inf.dir}/lib" />
 
+	<target name="copy.non.java.files">
+		<copy todir="${classes.dir}" includeemptydirs="false">
+			<fileset dir="${src.dir}" excludes="**/*.java" />
+		</copy>
+	</target>
 
 	<path id="compile.class.path">
 		<fileset dir="${runtime.lib.dir}" includes="*.jar" />
 		<fileset dir="${lib.dir}" includes="**/*.jar" />
 	</path>
 
-	<target name="compile" depends="clean, init" description="compile the Java source code to class files">
+	<target name="compile" depends="clean, init, copy.non.java.files" description="compile the Java source code to class files">
 		<javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="compile.class.path" />
 	</target>
 
