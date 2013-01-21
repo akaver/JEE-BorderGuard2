@@ -47,12 +47,9 @@ public class AdminUnitTypeController {
 			adminUnitID = 0L;
 		}
 		// set up viewmodel for rendering, lets name it formData (its based on
-		// HomeVM)
+		// HomeVM). Save it into session
 		AdminUnitTypeVM adminUnitTypeVM = populateViewModelWithData(adminUnitID);
 		model.addAttribute("formData", adminUnitTypeVM);
-		// save the viewmodel aslo into session, so we can get the lists from it
-		// later
-		// model.addAttribute("modelLists", adminUnitTypeVM);
 
 		return "AdminUnitType";
 	}

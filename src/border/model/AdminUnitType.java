@@ -61,6 +61,19 @@ public class AdminUnitType {
 
 	
 	public AdminUnitType() {
+		// TODO: find out real username
+		// TODO: do not overwrite exsisting dates
+		this.fromDate = DateHelper.getNow();
+		this.toDate = DateHelper.getFutureDate();
+
+		this.openedDate =  DateHelper.getNow();
+		this.changedDate =  DateHelper.getNow();
+		this.closedDate = DateHelper.getFutureDate();
+		
+		this.openedBy = "admin";
+		this.changedBy = "admin";
+		this.closedBy = "admin";
+
 	}
 
 	public AdminUnitType(String code, String name, String comment,
@@ -105,9 +118,19 @@ public class AdminUnitType {
 
 	@PrePersist
 	public void prePersist() {
-		Date now = new Date();
-		openedDate = now;
-		changedDate = now;
+		// TODO: find out real username
+		// TODO: do not overwrite exsisting dates
+		this.fromDate = DateHelper.getNow();
+		this.toDate = DateHelper.getFutureDate();
+
+		this.openedDate =  DateHelper.getNow();
+		this.changedDate =  DateHelper.getNow();
+		this.closedDate = DateHelper.getFutureDate();
+		
+		this.openedBy = "admin";
+		this.changedBy = "admin";
+		this.closedBy = "admin";
+		
 	}
 
 
