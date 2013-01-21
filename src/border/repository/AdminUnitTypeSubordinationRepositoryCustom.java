@@ -13,4 +13,8 @@ public interface AdminUnitTypeSubordinationRepositoryCustom {
 
 	public void addMaster(AdminUnitType adminUnitType, Long adminUnitTypeMasterID,
 			String dateTimeString);
+	
+	public void removeSubordination(AdminUnitType masterAdminUnitType,
+			AdminUnitType subordinateAdminUnitType);
+	
 }

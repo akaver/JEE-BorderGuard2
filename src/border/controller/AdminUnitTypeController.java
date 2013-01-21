@@ -140,10 +140,9 @@ public class AdminUnitTypeController {
 		}
 		
 		// go over the rest of list, these are removed subordinates
-		// TODO: implement
 		for (AdminUnitType removeSubordinate : originalSubordinates) {
 			System.out.println("Deleting old subordinate:" + removeSubordinate);
-			//adminUnitTypeDAO.removeSubordinate(adminUnitTypeID,removeSubordinate);
+			adminUnitTypeService.removeSubordinate(formData.getAdminUnitType(),removeSubordinate);
 		}
 
 	}

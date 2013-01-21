@@ -95,4 +95,24 @@ public class AdminUnitTypeSubordinationRepositoryImpl implements
 		}
 	}
 
+	@Override
+	@Transactional
+	public void removeSubordination(AdminUnitType masterAdminUnitType,
+			AdminUnitType subordinateAdminUnitType) {
+		LOGGER.info("removeSubordination masterAdminUnitType:" + masterAdminUnitType
+				+ " subordinateAdminUnitType:" + subordinateAdminUnitType);
+		// find and update datetime fields
+		String sql = "update AdminUnitTypeSubordination set "
+				+ "ChangedBy='Admin', ChangedDate=NOW(), ClosedBy='Admin', ClosedDate=NOW() "
+				+ "where SubordinateAdminUnitTypeID= :SubordinateAdminUnitTypeID and MasterAdminUnitTypeID=:MasterAdminUnitTypeID and ClosedDate>NOW()";
+		Query query = entityManager.createQuery(sql);
+		query.setParameter("SubordinateAdminUnitTypeID",
+				subordinateAdminUnitType.getAdminUnitTypeID());
+		query.setParameter(
+				"MasterAdminUnitTypeID", masterAdminUnitType.getAdminUnitTypeID());
+
+		int rows = query.executeUpdate();
+		LOGGER.info("removeSubordination changed rowcount:" + rows);
+	}
+
 }

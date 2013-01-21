@@ -171,4 +171,10 @@ public class AdminUnitTypeService {
 
 	}
 
+	public void removeSubordinate(AdminUnitType masterAdminUnitType,
+			AdminUnitType msubordinateAdminUnitType) {
+		//we cant delete anything from db, so you just have to update datetime fields
+		adminUnitTypeSubordinationRepository.removeSubordination(masterAdminUnitType, msubordinateAdminUnitType);
+	}
+
 }
