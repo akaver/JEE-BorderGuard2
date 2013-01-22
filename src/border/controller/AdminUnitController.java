@@ -57,7 +57,12 @@ public class AdminUnitController {
 		else {
 			formData.setAdminUnit(adminUnitService.getByID(adminUnitID));
 			formData.setAdminUnitMaster(adminUnitService.getAdminUnitMaster(adminUnitID));
+			LOGGER.info("Found a master: " + formData.getAdminUnitMaster().getName());
 			formData.setAdminUnitsSubordinateList(adminUnitService.getAdminUnitSubordinates(adminUnitID));
+			
+			for (AdminUnit sub : formData.getAdminUnitsSubordinateList()) {
+				LOGGER.info("Found a slave: " + sub.getName());
+			}
 		}
 		
 		return formData;

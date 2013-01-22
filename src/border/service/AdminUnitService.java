@@ -49,6 +49,12 @@ public class AdminUnitService {
 			adminUnitMaster = sub.getAdminUnitMaster();
 			break;
 		}
+		
+		if (adminUnitMaster == null) {
+			adminUnitMaster = new AdminUnit();
+			adminUnitMaster.setAdminUnitID(0L);
+		}
+		
 		return adminUnitMaster;
 	}
 
