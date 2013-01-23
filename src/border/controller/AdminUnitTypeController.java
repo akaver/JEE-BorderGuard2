@@ -81,15 +81,15 @@ public class AdminUnitTypeController {
 		// we have to update
 		// 1 - basic data
 		// 2 - master unit (add or remove)
-		// 3 - subordinates (addor remove)
+		// 3 - subordinates (add or remove)
 
 
 		// save basic changes, if this was new entry then id has now value
-		 formData.setAdminUnitType(adminUnitTypeService.save(formData.getAdminUnitType()));
+		formData.setAdminUnitType(adminUnitTypeService.save(formData.getAdminUnitType()));
 		 
 		// update this units master
 		// if master id is 0, then master is removed/nothing
-		// if master id != 0, tehn master is added/updated
+		// if master id != 0, then master is added/updated
 		adminUnitTypeService.saveMaster(formData.getAdminUnitType(),
 				formData.getAdminUnitTypeMasterID(), "NOW()");
 
@@ -98,10 +98,10 @@ public class AdminUnitTypeController {
 		// find out, what shall we really do - what is changed compared to
 		// original list
 
-		// so, load back orginal list of subordinates from service
+		// so, load back original list of subordinates from service
 		List<AdminUnitType> originalSubordinates = adminUnitTypeService
 				.getSubordinates(formData.getAdminUnitType(), "NOW");
-		// go throught the list of current (on the form) subordinates
+		// go through the list of current (on the form) subordinates
 		for (AdminUnitType curSubordinate : formData
 				.getAdminUnitTypesSubordinateList()) {
 			int status = 0;

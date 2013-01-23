@@ -141,11 +141,11 @@ public class AdminUnitTypeService {
 		LOGGER.info("saveMaster: " + adminUnitType + " master ID:"
 				+ adminUnitTypeMasterID);
 		// update this units master (on specified time)
-		// TODO: dont allow to set master on master unit (ie the first should be
+		// TODO: don't allow to set master on master unit (i.e the first should be
 		// country/state, which has no master)
 
 		// if master id is 0, then master is removed/nothing
-		// if master id != 0, tehn master is added/updated
+		// if master id != 0, then master is added/updated
 		if ((adminUnitTypeMasterID == null) || (adminUnitTypeMasterID == 0L)) {
 			// remove the master
 			adminUnitTypeSubordinationRepository.removeMaster(adminUnitType,

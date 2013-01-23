@@ -64,7 +64,7 @@ public class AdminUnitService {
 
 		return adminUnitMaster;
 	}
-	
+
 	// organizes return of empty master if no master is found or unit is new
 	public AdminUnit getAdminUnitMasterWithZero(Long adminUnitID) {
 		if (adminUnitID == null)
@@ -74,15 +74,13 @@ public class AdminUnitService {
 			return getEmptyAdminUnit();
 		return res;
 	}
-	
+
 	public AdminUnit getEmptyAdminUnit() {
 		AdminUnit emptyAdminUnit = new AdminUnit();
 		emptyAdminUnit.setAdminUnitID(0L);
 		emptyAdminUnit.setName("---");
 		return emptyAdminUnit;
 	}
-
-	
 
 	@Transactional
 	public List<AdminUnit> getAdminUnitSubordinates(Long adminUnitID) {
@@ -105,15 +103,45 @@ public class AdminUnitService {
 
 		return adminUnitSubordinatesPossible;
 	}
-	
+
 	public List<AdminUnit> getAllowedMasters(Long adminUnitTypeID) {
 		if (adminUnitTypeID == null)
 			return null;
-		
+
 		List<AdminUnit> allowedMasters = new ArrayList<AdminUnit>();
-		allowedMasters = adminUnitRepository.getAdminUnitMastersPossible(adminUnitTypeID);
-		
+		allowedMasters = adminUnitRepository
+				.getAdminUnitMastersPossible(adminUnitTypeID);
+
 		return allowedMasters;
+	}
+
+	public AdminUnit save(AdminUnit adminUnit) {
+		AdminUnit res = adminUnitRepository.save(adminUnit);
+		return res;
+	}
+
+	public void saveSubordination(AdminUnit adminUnit, Long adminUnitMasterID,
+			String dateTimeString) {
+
+		// if it is state, it can have no masters
+		if (adminUnit.getAdminUnitTypeID() == 1) {
+			return;
+		}
+		// if master id is 0, then master is removed/nothing		
+		else if (adminUnitMasterID == 0
+				|| adminUnitMasterID == null) {
+			
+			adminUnitSubordinationRepository.removeSubordination(
+					adminUnit.getAdminUnitID(),
+					dateTimeString);
+		}
+		// if master id > 1, then master is added/updated
+		else {
+			adminUnitSubordinationRepository.updateOrAddSubordination(
+					adminUnit.getAdminUnitID(), adminUnitMasterID,
+					dateTimeString);
+		}
+
 	}
 
 	@Transactional
@@ -170,5 +198,6 @@ public class AdminUnitService {
 		sub121_sub1212 = adminUnitSubordinationRepository.save(sub121_sub1212);
 		// sub1_sub13 = adminUnitSubordinationRepository.save(sub1_sub13);
 
-	}	
+	}
+
 }

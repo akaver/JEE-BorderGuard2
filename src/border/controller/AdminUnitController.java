@@ -114,11 +114,30 @@ public class AdminUnitController {
 		return formData;
 	}
 
+	
 	// POST part
 
+	
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = "SubmitButton")
-	public String saveChanges(ModelMap model) {
+	public String saveChanges(ModelMap model,
+			@Valid @ModelAttribute("formData") AdminUnitVM formData,
+			BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			LOGGER.info("Some errors, no saving.");
+			return "AdminUnitType";
+		}
 		LOGGER.info("Will go and save things.");
+		
+		// save basic changes; if this was new entry then id has now value
+		formData.setAdminUnit(adminUnitService.save(formData.getAdminUnit()));
+		
+		// save relationship between chosen unit and its master
+		adminUnitService.saveSubordination(formData.getAdminUnit(),
+				formData.getAdminUnitMasterID(), "NOW()");
+		
+		
+
 
 		return "redirect:/";
 	}
@@ -165,7 +184,7 @@ public class AdminUnitController {
 		return "AdminUnit";
 	}
 
-	// posts that are for changing adminunittype and for removing subordinates
+	// posts for changing adminunittype or removing subordinates
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST)
 	public String removeSubordinate(ModelMap model,
 			@Valid @ModelAttribute("formData") AdminUnitVM formData,
@@ -209,7 +228,9 @@ public class AdminUnitController {
 
 		return "AdminUnit";
 	}
-
+	
+	// if user changed type of the unit, all subordinations are removed,
+	// new possible subordinations evoked
 	private AdminUnitVM makeChangesToAdminUnitType(AdminUnitVM formData) {
 		Long adminUnitTypeID = formData.getAdminUnit().getAdminUnitTypeID();
 
@@ -230,6 +251,7 @@ public class AdminUnitController {
 
 			// remove current master, make unit masterless
 			formData.setAdminUnitMaster(adminUnitService.getEmptyAdminUnit());
+			formData.setAdminUnitMasterID(0L);
 
 			// find new possible masters for new unit type
 			formData.setAdminUnitMasterListWithZero(

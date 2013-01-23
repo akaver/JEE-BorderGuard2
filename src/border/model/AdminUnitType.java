@@ -242,7 +242,7 @@ public class AdminUnitType {
 
 	@Override
 	public String toString() {
-		return "Person [id=" + adminUnitTypeID + ", name=" + name + ", code=" + code + "]";
+		return "AdminUnitType [id=" + adminUnitTypeID + ", name=" + name + ", code=" + code + "]";
 	}
 
 	public Long getAdminUnitTypeID() {
