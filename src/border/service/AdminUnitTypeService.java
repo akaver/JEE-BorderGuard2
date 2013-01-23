@@ -90,7 +90,8 @@ public class AdminUnitTypeService {
 	@Transactional
 	public AdminUnitType getByID(Long adminUnitTypeID) {
 		LOGGER.info("getByID:", adminUnitTypeID);
-		AdminUnitType res = adminUnitTypeRepository.findOne(adminUnitTypeID);
+		AdminUnitType res = new AdminUnitType();
+		res = adminUnitTypeRepository.findOne(adminUnitTypeID);
 		return res;
 	}
 

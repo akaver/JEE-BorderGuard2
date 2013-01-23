@@ -27,7 +27,8 @@ public class AdminUnitService {
 
 	@Transactional
 	public AdminUnit getByID(Long adminUnitID) {
-		AdminUnit adminUnit = adminUnitRepository.findOne(adminUnitID);
+		AdminUnit adminUnit = new AdminUnit();
+		adminUnit = adminUnitRepository.findOne(adminUnitID);
 		return adminUnit;
 	}
 
@@ -63,6 +64,25 @@ public class AdminUnitService {
 
 		return adminUnitMaster;
 	}
+	
+	// organizes return of empty master if no master is found or unit is new
+	public AdminUnit getAdminUnitMasterWithZero(Long adminUnitID) {
+		if (adminUnitID == null)
+			return getEmptyAdminUnit();
+		AdminUnit res = getAdminUnitMaster(adminUnitID);
+		if (res == null)
+			return getEmptyAdminUnit();
+		return res;
+	}
+	
+	public AdminUnit getEmptyAdminUnit() {
+		AdminUnit emptyAdminUnit = new AdminUnit();
+		emptyAdminUnit.setAdminUnitID(0L);
+		emptyAdminUnit.setName("---");
+		return emptyAdminUnit;
+	}
+
+	
 
 	@Transactional
 	public List<AdminUnit> getAdminUnitSubordinates(Long adminUnitID) {
@@ -86,7 +106,10 @@ public class AdminUnitService {
 		return adminUnitSubordinatesPossible;
 	}
 	
-	public List<AdminUnit> getAllowedMastersByID(Long adminUnitTypeID) {
+	public List<AdminUnit> getAllowedMasters(Long adminUnitTypeID) {
+		if (adminUnitTypeID == null)
+			return null;
+		
 		List<AdminUnit> allowedMasters = new ArrayList<AdminUnit>();
 		allowedMasters = adminUnitRepository.getAdminUnitMastersPossible(adminUnitTypeID);
 		
@@ -147,7 +170,5 @@ public class AdminUnitService {
 		sub121_sub1212 = adminUnitSubordinationRepository.save(sub121_sub1212);
 		// sub1_sub13 = adminUnitSubordinationRepository.save(sub1_sub13);
 
-	}
-
-	
+	}	
 }

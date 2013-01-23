@@ -31,9 +31,8 @@ public class AdminUnitController {
 	@Autowired
 	AdminUnitTypeService adminUnitTypeService;
 
-	
-	//GET part	
-	
+	// GET part
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String adminUnitHome(
 			Model model,
@@ -68,55 +67,53 @@ public class AdminUnitController {
 			// current unit type
 			formData.setAdminUnitType(adminUnitTypeService.getByID(formData
 					.getAdminUnit().getAdminUnitTypeID()));
-
-			// its current master
-			formData.setAdminUnitMaster(adminUnitService
-					.getAdminUnitMaster(adminUnitID));
-			LOGGER.info("Found a master: "
-					+ formData.getAdminUnitMaster().getName());
-
-			// possible masters
-			formData.setAdminUnitMasterListWithZero(adminUnitService
-					.getAllowedMastersByID(formData.getAdminUnitType()
-							.getAdminUnitTypeID()), formData
-					.getAdminUnitMaster());
-
-			// its current slaves
-			formData.setAdminUnitsSubordinateList(adminUnitService
-					.getAdminUnitSubordinates(adminUnitID));
-
-			for (AdminUnit sub : formData.getAdminUnitsSubordinateList()) {
-				LOGGER.info("Found a slave: " + sub.getName());
-			}
-
-			// those that might still be enslaved
-			formData.setAdminUnitsSubordinateListPossible(adminUnitService
-					.getAdminUnitSubordinatesPossible(formData.getAdminUnit()
-							.getAdminUnitID(), formData.getAdminUnit()
-							.getAdminUnitTypeID()));
-
-			for (AdminUnit sub : formData
-					.getAdminUnitsSubordinateListPossible()) {
-				LOGGER.info("A possible slave: " + sub.getName());
-			}
-
-			// initate list of slaves that might be freed
-			formData.setAdminUnitsSubordinateListRemoved(new ArrayList<AdminUnit>());
 		}
+
+		// its current master
+		formData.setAdminUnitMaster(adminUnitService
+				.getAdminUnitMasterWithZero(formData.getAdminUnit()
+						.getAdminUnitID()));
+		LOGGER.info("Found a master: "
+				+ formData.getAdminUnitMaster().getName());
+
+		// possible masters
+		formData.setAdminUnitMasterListWithZero(adminUnitService
+				.getAllowedMasters(formData.getAdminUnit()
+						.getAdminUnitTypeID()), formData.getAdminUnitMaster());
+
+		// its current slaves
+		formData.setAdminUnitsSubordinateList(adminUnitService
+				.getAdminUnitSubordinates(adminUnitID));
+
+		for (AdminUnit sub : formData.getAdminUnitsSubordinateList()) {
+			LOGGER.info("Found a slave: " + sub.getName());
+		}
+
+		// those that might still be enslaved
+		formData.setAdminUnitsSubordinateListPossible(adminUnitService
+				.getAdminUnitSubordinatesPossible(formData.getAdminUnit()
+						.getAdminUnitID(), formData.getAdminUnit()
+						.getAdminUnitTypeID()));
+
+		for (AdminUnit sub : formData.getAdminUnitsSubordinateListPossible()) {
+			LOGGER.info("A possible slave: " + sub.getName());
+		}
+
+		// initate list of slaves that might be freed
+		formData.setAdminUnitsSubordinateListRemoved(new ArrayList<AdminUnit>());
 
 		return formData;
 	}
-	
-	
+
 	// POST part
-	
-	
+
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = "CancelButton")
 	public String cancelChanges(ModelMap model) {
 		LOGGER.info("/cancelChanges - no save, return to root view ");
 		// jump back to root view
 		return "redirect:/";
 	}
-	
-//	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = )
+
+	// @RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST,
+	// params = )
 }
