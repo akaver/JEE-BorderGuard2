@@ -114,10 +114,8 @@ public class AdminUnitController {
 		return formData;
 	}
 
-	
 	// POST part
 
-	
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = "SubmitButton")
 	public String saveChanges(ModelMap model,
 			@Valid @ModelAttribute("formData") AdminUnitVM formData,
@@ -128,16 +126,24 @@ public class AdminUnitController {
 			return "AdminUnitType";
 		}
 		LOGGER.info("Will go and save things.");
-		
+
 		// save basic changes; if this was new entry then id has now value
 		formData.setAdminUnit(adminUnitService.save(formData.getAdminUnit()));
-		
-		// save relationship between chosen unit and its master
-		adminUnitService.saveSubordination(formData.getAdminUnit(),
-				formData.getAdminUnitMasterID(), "NOW()");
-		
-		
 
+		// save relationship between chosen unit and its master
+		adminUnitService.saveSubordination(formData.getAdminUnit().getAdminUnitID(),
+				formData.getAdminUnitMasterID(), "NOW()");
+
+		// update the master for all subordinates
+		for (AdminUnit sub : formData.getAdminUnitsSubordinateList()) {
+			adminUnitService.saveSubordination(sub.getAdminUnitID(), formData
+					.getAdminUnit().getAdminUnitID(), "NOW()");
+		}
+		// remove subordination entries for abandoned subordinates
+		for (AdminUnit subEx : formData
+				.getAdminUnitsSubordinateListRemoved()) {
+			adminUnitService.saveSubordination(subEx.getAdminUnitID(), 0L, "NOW()");
+		}
 
 		return "redirect:/";
 	}
@@ -228,7 +234,7 @@ public class AdminUnitController {
 
 		return "AdminUnit";
 	}
-	
+
 	// if user changed type of the unit, all subordinations are removed,
 	// new possible subordinations evoked
 	private AdminUnitVM makeChangesToAdminUnitType(AdminUnitVM formData) {
@@ -254,9 +260,10 @@ public class AdminUnitController {
 			formData.setAdminUnitMasterID(0L);
 
 			// find new possible masters for new unit type
-			formData.setAdminUnitMasterListWithZero(
-					adminUnitService.getAllowedMasters(formData.getAdminUnit()
-							.getAdminUnitTypeID()), formData.getAdminUnitMaster());
+			formData.setAdminUnitMasterListWithZero(adminUnitService
+					.getAllowedMasters(formData.getAdminUnit()
+							.getAdminUnitTypeID()), formData
+					.getAdminUnitMaster());
 		}
 
 		return formData;
