@@ -1,5 +1,7 @@
 package border.controller;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import border.model.AdminUnit;
 import border.repository.AdminUnitRepositoryImpl;
-import border.service.AdminUnitService;
+import border.service.*;
 import border.viewmodel.AdminUnitVM;
 
 @Controller
@@ -25,6 +27,8 @@ public class AdminUnitController {
 
 	@Autowired
 	AdminUnitService adminUnitService;
+	@Autowired
+	AdminUnitTypeService adminUnitTypeService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String adminUnitHome(
@@ -53,11 +57,26 @@ public class AdminUnitController {
 		if (adminUnitID == 0) {
 			formData.setAdminUnit(new AdminUnit());
 		} else {
+			// unit itself
 			formData.setAdminUnit(adminUnitService.getByID(adminUnitID));
+
+			// current unit type
+			formData.setAdminUnitType(adminUnitTypeService.getByID(formData
+					.getAdminUnit().getAdminUnitTypeID()));
+
+			// its current master
 			formData.setAdminUnitMaster(adminUnitService
 					.getAdminUnitMaster(adminUnitID));
 			LOGGER.info("Found a master: "
 					+ formData.getAdminUnitMaster().getName());
+
+			// possible masters
+			formData.setAdminUnitMasterListWithZero(adminUnitService
+					.getAllowedMastersByID(formData.getAdminUnitType()
+							.getAdminUnitTypeID()), formData
+					.getAdminUnitMaster());
+
+			// its current slaves
 			formData.setAdminUnitsSubordinateList(adminUnitService
 					.getAdminUnitSubordinates(adminUnitID));
 
@@ -65,13 +84,19 @@ public class AdminUnitController {
 				LOGGER.info("Found a slave: " + sub.getName());
 			}
 
+			// those that might still be enslaved
 			formData.setAdminUnitsSubordinateListPossible(adminUnitService
-					.getAdminUnitSubordinatesPossible(adminUnitID));
+					.getAdminUnitSubordinatesPossible(formData.getAdminUnit()
+							.getAdminUnitID(), formData.getAdminUnit()
+							.getAdminUnitTypeID()));
 
 			for (AdminUnit sub : formData
 					.getAdminUnitsSubordinateListPossible()) {
 				LOGGER.info("A possible slave: " + sub.getName());
 			}
+
+			// initate list of slaves that might be freed
+			formData.setAdminUnitsSubordinateListRemoved(new ArrayList<AdminUnit>());
 		}
 
 		return formData;

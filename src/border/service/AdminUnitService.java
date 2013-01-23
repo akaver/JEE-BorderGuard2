@@ -49,12 +49,12 @@ public class AdminUnitService {
 			adminUnitMaster = sub.getAdminUnitMaster();
 			break;
 		}
-		
+
 		if (adminUnitMaster == null) {
 			adminUnitMaster = new AdminUnit();
 			adminUnitMaster.setAdminUnitID(0L);
 		}
-		
+
 		return adminUnitMaster;
 	}
 
@@ -75,15 +75,22 @@ public class AdminUnitService {
 		AdminUnit adminUnit = adminUnitRepository.findOne(adminUnitID);
 		return adminUnit;
 	}
-	
-	public List<AdminUnit> getAdminUnitSubordinatesPossible(Long adminUnitID) {
-		
-		List<AdminUnit> adminUnitSubordinatesPossible = new ArrayList<AdminUnit>();
 
+	public List<AdminUnit> getAdminUnitSubordinatesPossible(Long adminUnitID,
+			Long adminUnitTypeID) {
+
+		List<AdminUnit> adminUnitSubordinatesPossible = new ArrayList<AdminUnit>();
 		adminUnitSubordinatesPossible = adminUnitRepository
-				.getAdminUnitSubordinatesPossible(adminUnitID);
+				.getAdminUnitSubordinatesPossible(adminUnitID, adminUnitTypeID);
 
 		return adminUnitSubordinatesPossible;
+	}
+	
+	public List<AdminUnit> getAllowedMastersByID(Long adminUnitTypeID) {
+		List<AdminUnit> allowedMasters = new ArrayList<AdminUnit>();
+		allowedMasters = adminUnitRepository.getAdminUnitMastersPossible(adminUnitTypeID);
+		
+		return allowedMasters;
 	}
 
 	@Transactional
@@ -95,17 +102,23 @@ public class AdminUnitService {
 		AdminUnit sub1 = new AdminUnit("Harjumaa", "Harjumaa maakond", "", 2L);
 		AdminUnit sub11 = new AdminUnit("Tallinn", "Tallinn", "pealinn", 3L);
 		AdminUnit sub12 = new AdminUnit("KiiliVald", "Kiili vald", "", 4L);
-		// AdminUnit sub1 = new AdminUnit("KiiliAlev", "Kiili alev", "", 6L);
-		// AdminUnit sub11 = new AdminUnit("Luige", "Luige alevik", "", 7L);
-		// AdminUnit sub12 = new AdminUnit("Kangru", "Kangru alevik", "", 7L);
-		// AdminUnit sub1 = new AdminUnit("Arusta", "Arusta kÃ¼la", "", 8L);
-		// AdminUnit sub11 = new AdminUnit("Kurevere", "Kurevere kÃ¼la", "", 8L);
-		// AdminUnit sub12 = new AdminUnit("Karuvere", "Karuvere kÃ¼la", "", 8L);
+		AdminUnit sub121 = new AdminUnit("KiiliAlev", "Kiili alev", "", 5L);
+		AdminUnit sub122 = new AdminUnit("Luige", "Luige alevik", "", 5L);
+		AdminUnit sub2 = new AdminUnit("Kangru", "Kangru alevik", "", 5L);
+		AdminUnit sub1211 = new AdminUnit("Arusta", "Arusta küla", "", 7L);
+		AdminUnit sub1212 = new AdminUnit("Kurevere", "Kurevere küla", "", 7L);
+		AdminUnit sub3 = new AdminUnit("Karuvere", "Karuvere küla", "", 7L);
 		AdminUnit sub13 = new AdminUnit("KureVald", "Kure vald", "", 4L);
 		adminUnitRepository.save(master);
 		adminUnitRepository.save(sub1);
 		adminUnitRepository.save(sub11);
 		adminUnitRepository.save(sub12);
+		adminUnitRepository.save(sub121);
+		adminUnitRepository.save(sub122);
+		adminUnitRepository.save(sub2);
+		adminUnitRepository.save(sub1211);
+		adminUnitRepository.save(sub1212);
+		adminUnitRepository.save(sub3);
 		adminUnitRepository.save(sub13);
 
 		AdminUnitSubordination master_sub1 = new AdminUnitSubordination(master,
@@ -114,13 +127,27 @@ public class AdminUnitService {
 				sub11, "Harjumaa->Tallinn");
 		AdminUnitSubordination sub1_sub12 = new AdminUnitSubordination(sub1,
 				sub12, "Harjumaa->Kiili vald");
-		AdminUnitSubordination sub1_sub13 = new AdminUnitSubordination(sub1,
-				sub13, "Harjumaa->Kure vald");
+		AdminUnitSubordination sub12_sub121 = new AdminUnitSubordination(sub12,
+				sub121, "Kiili vald->Kiili alev");
+		AdminUnitSubordination sub1_sub122 = new AdminUnitSubordination(sub12,
+				sub122, "Kiili vald->Luige alevik");
+		AdminUnitSubordination sub121_sub1211 = new AdminUnitSubordination(
+				sub121, sub1211, "Kiili alev->Arusta küla");
+		AdminUnitSubordination sub121_sub1212 = new AdminUnitSubordination(
+				sub121, sub1212, "Kiili alev->Kurevere küla");
+		// AdminUnitSubordination sub1_sub13 = new AdminUnitSubordination(sub1,
+		// sub13, "Harjumaa->Kure vald");
 
 		master_sub1 = adminUnitSubordinationRepository.save(master_sub1);
 		sub1_sub11 = adminUnitSubordinationRepository.save(sub1_sub11);
 		sub1_sub12 = adminUnitSubordinationRepository.save(sub1_sub12);
-		sub1_sub13 = adminUnitSubordinationRepository.save(sub1_sub13);
+		sub12_sub121 = adminUnitSubordinationRepository.save(sub12_sub121);
+		sub1_sub122 = adminUnitSubordinationRepository.save(sub1_sub122);
+		sub121_sub1211 = adminUnitSubordinationRepository.save(sub121_sub1211);
+		sub121_sub1212 = adminUnitSubordinationRepository.save(sub121_sub1212);
+		// sub1_sub13 = adminUnitSubordinationRepository.save(sub1_sub13);
 
 	}
+
+	
 }

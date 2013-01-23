@@ -59,14 +59,16 @@ public class AdminUnitTypeService {
 		AdminUnitType sub1 = new AdminUnitType("1", "Maakond", "1");
 		AdminUnitType sub11 = new AdminUnitType("11", "Maakonna linn", "11");
 		AdminUnitType sub12 = new AdminUnitType("12", "Vald", "12");
-		AdminUnitType sub2 = new AdminUnitType("2", "KÃ¼la", "2");
+		AdminUnitType sub2 = new AdminUnitType("2", "Alev", "2");
 		AdminUnitType sub3 = new AdminUnitType("2", "Talu", "2");
+		AdminUnitType sub4 = new AdminUnitType("2", "Küla", "2");
 		adminUnitTypeRepository.save(master);
 		adminUnitTypeRepository.save(sub1);
 		adminUnitTypeRepository.save(sub11);
 		adminUnitTypeRepository.save(sub12);
 		adminUnitTypeRepository.save(sub2);
 		adminUnitTypeRepository.save(sub3);
+		adminUnitTypeRepository.save(sub4);
 
 		AdminUnitTypeSubordination master_sub1 = new AdminUnitTypeSubordination(
 				master, sub1, "riik->maakond");
@@ -74,10 +76,14 @@ public class AdminUnitTypeService {
 				sub1, sub11, "maakond->maakonna_linn");
 		AdminUnitTypeSubordination sub1_sub12 = new AdminUnitTypeSubordination(
 				sub1, sub12, "maakond->vald");
+		AdminUnitTypeSubordination sub12_sub4 = new AdminUnitTypeSubordination(
+				sub12, sub4, "vald->küla");
 
 		master_sub1 = adminUnitTypeSubordinationRepository.save(master_sub1);
 		sub1_sub11 = adminUnitTypeSubordinationRepository.save(sub1_sub11);
 		sub1_sub12 = adminUnitTypeSubordinationRepository.save(sub1_sub12);
+		sub12_sub4 = adminUnitTypeSubordinationRepository.save(sub12_sub4);
+		
 
 	}
 
