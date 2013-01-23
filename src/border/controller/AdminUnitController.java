@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +31,9 @@ public class AdminUnitController {
 	@Autowired
 	AdminUnitTypeService adminUnitTypeService;
 
+	
+	//GET part	
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String adminUnitHome(
 			Model model,
@@ -53,6 +57,7 @@ public class AdminUnitController {
 	private AdminUnitVM populateViewModelWithData(Long adminUnitID) {
 
 		AdminUnitVM formData = new AdminUnitVM();
+		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());
 
 		if (adminUnitID == 0) {
 			formData.setAdminUnit(new AdminUnit());
@@ -101,4 +106,17 @@ public class AdminUnitController {
 
 		return formData;
 	}
+	
+	
+	// POST part
+	
+	
+	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = "CancelButton")
+	public String cancelChanges(ModelMap model) {
+		LOGGER.info("/cancelChanges - no save, return to root view ");
+		// jump back to root view
+		return "redirect:/";
+	}
+	
+//	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = )
 }

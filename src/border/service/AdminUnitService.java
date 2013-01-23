@@ -26,6 +26,12 @@ public class AdminUnitService {
 	private AdminUnitSubordinationRepository adminUnitSubordinationRepository;
 
 	@Transactional
+	public AdminUnit getByID(Long adminUnitID) {
+		AdminUnit adminUnit = adminUnitRepository.findOne(adminUnitID);
+		return adminUnit;
+	}
+
+	@Transactional
 	public List<AdminUnit> findAll() {
 		LOGGER.debug("findAll");
 
@@ -70,12 +76,6 @@ public class AdminUnitService {
 		return adminUnitSubordinates;
 	}
 
-	@Transactional
-	public AdminUnit getByID(Long adminUnitID) {
-		AdminUnit adminUnit = adminUnitRepository.findOne(adminUnitID);
-		return adminUnit;
-	}
-
 	public List<AdminUnit> getAdminUnitSubordinatesPossible(Long adminUnitID,
 			Long adminUnitTypeID) {
 
@@ -98,7 +98,7 @@ public class AdminUnitService {
 		LOGGER.debug("populateData");
 
 		AdminUnit master = new AdminUnit("Eesti", "Eesti Vabariik",
-				"KÃµrgeim haldusÃ¼ksus, riik", 1L);
+				"Kõrgeim haldusüksus, riik", 1L);
 		AdminUnit sub1 = new AdminUnit("Harjumaa", "Harjumaa maakond", "", 2L);
 		AdminUnit sub11 = new AdminUnit("Tallinn", "Tallinn", "pealinn", 3L);
 		AdminUnit sub12 = new AdminUnit("KiiliVald", "Kiili vald", "", 4L);

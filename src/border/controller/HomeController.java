@@ -81,7 +81,6 @@ public class HomeController {
 		if (_ReportAdminUnitTypeFlag != null) {
 			viewToLoad = "/AdminUnitTypeReport/";
 		}
-		// TODO: Make forwards
 		if (_ViewAdminUnitFlag != null) {
 			viewToLoad = "/AdminUnit/?AdminUnitID="+_AdminUnitID;
 		}
