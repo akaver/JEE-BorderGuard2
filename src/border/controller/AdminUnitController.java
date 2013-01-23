@@ -73,9 +73,6 @@ public class AdminUnitController {
 			// current unit type
 			formData.setAdminUnitType(adminUnitTypeService.getByID(formData
 					.getAdminUnit().getAdminUnitTypeID()));
-
-			formData.setAdminUnitTypeID(formData.getAdminUnitType()
-					.getAdminUnitTypeID());
 		}
 
 		// its current master
@@ -117,19 +114,15 @@ public class AdminUnitController {
 		return formData;
 	}
 
-	
 	// POST part
 
-	
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = "SubmitButton")
 	public String saveChanges(ModelMap model) {
 		LOGGER.info("Will go and save things.");
-		
-		
-		
+
 		return "redirect:/";
 	}
-	
+
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = "CancelButton")
 	public String cancelChanges(ModelMap model) {
 		LOGGER.info("/cancelChanges - no save, return to root view ");
@@ -145,7 +138,7 @@ public class AdminUnitController {
 			@RequestParam(value = "AdminUnit_NewSubordinateNo") Integer adminUnit_NewSubordinateNo) {
 
 		formData = makeChangesToAdminUnitType(formData);
-		
+
 		AdminUnit addedSubordinate = formData
 				.getAdminUnitsSubordinateListPossible().get(
 						adminUnit_NewSubordinateNo);
@@ -172,19 +165,19 @@ public class AdminUnitController {
 		return "AdminUnit";
 	}
 
-	// all other posts will end up here - this can only be to remove subordinate
+	// posts that are for changing adminunittype and for removing subordinates
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST)
 	public String removeSubordinate(ModelMap model,
 			@Valid @ModelAttribute("formData") AdminUnitVM formData,
 			BindingResult bindingResult, HttpServletRequest request) {
-		
+
 		formData = makeChangesToAdminUnitType(formData);
 
 		Enumeration<String> paramNames = request.getParameterNames();
 
 		while (paramNames.hasMoreElements()) {
 			String paramName = paramNames.nextElement();
-			
+
 			if (paramName.startsWith("RemoveButton")) {
 				Integer removeSubLineNo = Integer.parseInt(paramName
 						.substring(13));
@@ -210,7 +203,7 @@ public class AdminUnitController {
 				formData.getAdminUnitsSubordinateList().remove(
 						removedSubordinate);
 
-				// break;
+				break;
 			}
 		}
 
@@ -219,10 +212,31 @@ public class AdminUnitController {
 
 	private AdminUnitVM makeChangesToAdminUnitType(AdminUnitVM formData) {
 		Long adminUnitTypeID = formData.getAdminUnit().getAdminUnitTypeID();
-		
-		formData.setAdminUnitTypeID(adminUnitTypeID);
-		formData.setAdminUnitType(adminUnitTypeService.getByID(adminUnitTypeID));
-		
+
+		if (adminUnitTypeID != formData.getAdminUnitType().getAdminUnitTypeID()) {
+			formData.setAdminUnitType(adminUnitTypeService
+					.getByID(adminUnitTypeID));
+
+			// remove all current subordinates from session
+			formData.getAdminUnitsSubordinateListRemoved().addAll(
+					formData.getAdminUnitsSubordinateList());
+			formData.getAdminUnitsSubordinateList().clear();
+
+			// find new possible subordinates for new unit type
+			formData.setAdminUnitsSubordinateListPossible(adminUnitService
+					.getAdminUnitSubordinatesPossible(formData.getAdminUnit()
+							.getAdminUnitID(), formData.getAdminUnit()
+							.getAdminUnitTypeID()));
+
+			// remove current master, make unit masterless
+			formData.setAdminUnitMaster(adminUnitService.getEmptyAdminUnit());
+
+			// find new possible masters for new unit type
+			formData.setAdminUnitMasterListWithZero(
+					adminUnitService.getAllowedMasters(formData.getAdminUnit()
+							.getAdminUnitTypeID()), formData.getAdminUnitMaster());
+		}
+
 		return formData;
 	}
 }

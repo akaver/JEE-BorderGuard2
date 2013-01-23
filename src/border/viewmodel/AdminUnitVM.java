@@ -21,7 +21,6 @@ public class AdminUnitVM {
 		private  List<AdminUnit> adminUnitMasterListWithZero;
 		
 		private AdminUnitType adminUnitType;
-		private Long adminUnitTypeID;
 		// list of adminUnitTypes, for choosing new type
 		private  List<AdminUnitType> adminUnitTypeList;
 				
@@ -149,14 +148,6 @@ public class AdminUnitVM {
 
 		public void setAdminUnitMasterID(Long adminUnitMasterID) {
 			this.adminUnitMasterID = adminUnitMasterID;
-		}
-
-		public Long getAdminUnitTypeID() {
-			return adminUnitTypeID;
-		}
-
-		public void setAdminUnitTypeID(Long adminUnitTypeID) {
-			this.adminUnitTypeID = adminUnitTypeID;
 		}
 
 }
