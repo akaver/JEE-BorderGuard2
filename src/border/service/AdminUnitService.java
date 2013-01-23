@@ -75,6 +75,16 @@ public class AdminUnitService {
 		AdminUnit adminUnit = adminUnitRepository.findOne(adminUnitID);
 		return adminUnit;
 	}
+	
+	public List<AdminUnit> getAdminUnitSubordinatesPossible(Long adminUnitID) {
+		
+		List<AdminUnit> adminUnitSubordinatesPossible = new ArrayList<AdminUnit>();
+
+		adminUnitSubordinatesPossible = adminUnitRepository
+				.getAdminUnitSubordinatesPossible(adminUnitID);
+
+		return adminUnitSubordinatesPossible;
+	}
 
 	@Transactional
 	public void populateData() {

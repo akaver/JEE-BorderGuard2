@@ -19,52 +19,61 @@ import border.viewmodel.AdminUnitVM;
 @RequestMapping("/AdminUnit")
 @SessionAttributes("formData")
 public class AdminUnitController {
-	
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AdminUnitRepositoryImpl.class);
-	
+
 	@Autowired
 	AdminUnitService adminUnitService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String adminUnitHome(
 			Model model,
-			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID
-			) {
+			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID) {
 		LOGGER.info("adminUnit home for " + _AdminUnitID);
-		
+
 		// set up the amdminUnitID
 		Long adminUnitID;
-		try{
+		try {
 			adminUnitID = Long.decode(_AdminUnitID);
-		} catch( Exception e) {
+		} catch (Exception e) {
 			adminUnitID = 0L;
 		}
-		
+
 		AdminUnitVM adminUnitVM = populateViewModelWithData(adminUnitID);
 		model.addAttribute("formData", adminUnitVM);
-		
-		return "AdminUnit";	
+
+		return "AdminUnit";
 	}
 
 	private AdminUnitVM populateViewModelWithData(Long adminUnitID) {
-		
+
 		AdminUnitVM formData = new AdminUnitVM();
-		
+
 		if (adminUnitID == 0) {
 			formData.setAdminUnit(new AdminUnit());
-		}
-		else {
+		} else {
 			formData.setAdminUnit(adminUnitService.getByID(adminUnitID));
-			formData.setAdminUnitMaster(adminUnitService.getAdminUnitMaster(adminUnitID));
-			LOGGER.info("Found a master: " + formData.getAdminUnitMaster().getName());
-			formData.setAdminUnitsSubordinateList(adminUnitService.getAdminUnitSubordinates(adminUnitID));
-			
+			formData.setAdminUnitMaster(adminUnitService
+					.getAdminUnitMaster(adminUnitID));
+			LOGGER.info("Found a master: "
+					+ formData.getAdminUnitMaster().getName());
+			formData.setAdminUnitsSubordinateList(adminUnitService
+					.getAdminUnitSubordinates(adminUnitID));
+
 			for (AdminUnit sub : formData.getAdminUnitsSubordinateList()) {
 				LOGGER.info("Found a slave: " + sub.getName());
 			}
+
+			formData.setAdminUnitsSubordinateListPossible(adminUnitService
+					.getAdminUnitSubordinatesPossible(adminUnitID));
+
+			for (AdminUnit sub : formData
+					.getAdminUnitsSubordinateListPossible()) {
+				LOGGER.info("A possible slave: " + sub.getName());
+			}
 		}
-		
+
 		return formData;
 	}
 }
