@@ -1,6 +1,10 @@
 package border.controller;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,8 +83,8 @@ public class AdminUnitController {
 				+ formData.getAdminUnitMaster().getName());
 
 		// possible masters
-		formData.setAdminUnitMasterListWithZero(adminUnitService
-				.getAllowedMasters(formData.getAdminUnit()
+		formData.setAdminUnitMasterListWithZero(
+				adminUnitService.getAllowedMasters(formData.getAdminUnit()
 						.getAdminUnitTypeID()), formData.getAdminUnitMaster());
 
 		// its current slaves
@@ -99,7 +105,7 @@ public class AdminUnitController {
 			LOGGER.info("A possible slave: " + sub.getName());
 		}
 
-		// initate list of slaves that might be freed
+		// initiate list of slaves that might be freed
 		formData.setAdminUnitsSubordinateListRemoved(new ArrayList<AdminUnit>());
 
 		return formData;
@@ -114,6 +120,70 @@ public class AdminUnitController {
 		return "redirect:/";
 	}
 
-	// @RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST,
-	// params = )
+	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST, params = "AddSubordinateButton")
+	public String addSubordinate(
+			ModelMap model,
+			@Valid @ModelAttribute("formData") AdminUnitVM formData,
+			BindingResult bindingResult,
+			@RequestParam(value = "AdminUnit_NewSubordinateNo") Integer adminUnit_NewSubordinateNo) {
+
+		LOGGER.info("Adding a new subordinate");
+
+		AdminUnit addedSubordinate = formData.getAdminUnitsSubordinateListPossible()
+				.get(adminUnit_NewSubordinateNo);
+
+		// add the desired subordinate into our slaves list
+		if (formData.getAdminUnitsSubordinateList() == null) {
+			formData.setAdminUnitsSubordinateList(new ArrayList<AdminUnit>());
+		}
+		formData.getAdminUnitsSubordinateList().add(addedSubordinate);
+
+		// check if unit was removed during session, get it out of this list
+		if (formData.getAdminUnitsSubordinateListRemoved().contains(
+				addedSubordinate)) {
+			formData.getAdminUnitsSubordinateListRemoved().remove(
+					addedSubordinate);
+		}
+
+		// finally, get it out of the candidates list where it belongs no more
+		formData.getAdminUnitsSubordinateListPossible()
+				.remove(addedSubordinate);
+
+		return "AdminUnit";
+	}
+
+	// all other posts will end up here - this can only be to remove subordinate
+	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST)
+	public String removeSubordinate(ModelMap model,
+			@Valid @ModelAttribute("formData") AdminUnitVM formData,
+			BindingResult bindingResult, HttpServletRequest request) {
+
+		Enumeration<String> paramNames = request.getParameterNames();
+		while (paramNames.hasMoreElements()) {
+			String paramName = paramNames.nextElement();
+			if (paramName.startsWith("RemoveButton")) {
+				Integer removeSubLineNo = Integer.parseInt(paramName
+						.substring(13));
+
+				AdminUnit removedSubordinate = formData
+						.getAdminUnitsSubordinateList().get(removeSubLineNo);
+
+				// add the unit to candidates list
+				if (formData.getAdminUnitsSubordinateListPossible() == null)
+					formData.setAdminUnitMastersListPossible(new ArrayList<AdminUnit>());
+
+				formData.getAdminUnitsSubordinateListPossible().add(removedSubordinate);
+
+				// add the unit to freed slaves list
+				formData.getAdminUnitsSubordinateListRemoved().add(removedSubordinate);
+
+				// finally, remove the unit from active slaves list
+				formData.getAdminUnitsSubordinateList().remove(removedSubordinate);
+
+				break;
+			}
+		}
+
+		return "AdminUnit";
+	}
 }
