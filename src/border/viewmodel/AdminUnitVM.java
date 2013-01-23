@@ -105,6 +105,8 @@ public class AdminUnitVM {
 		/*
 		 * return list with one added record with ID=0 and name="----"
 		 * its used in dropdwon to indicate "no selection"
+		 * NB! foundMaster is needed separately because it might not be of a type
+		 * that is registered in adminunittypesubordination
 		 */
 		public void setAdminUnitMasterListWithZero(
 				List<AdminUnit> adminUnitMasterListWithZero, AdminUnit foundMaster) {
@@ -122,15 +124,15 @@ public class AdminUnitVM {
 			// append it to list
 			res.add(withZero);
 			
-			
+			// is master present in the list constructed by type
 			boolean masterPresent = false;
 			for (AdminUnit au : adminUnitMasterListWithZero) {	
 				res.add(au);
 				if (au.getName().equals(foundMaster.getName())) {
-					masterPresent = true;
+					masterPresent = true; 
 				}
 			}
-			
+			// if the master is an "outsider", not of registered mastertype, add it
 			if (foundMaster != null) {
 				if(!masterPresent && foundMaster.getAdminUnitID() != 0)
 					res.add(foundMaster);
