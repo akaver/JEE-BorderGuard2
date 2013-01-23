@@ -13,13 +13,13 @@ function chooseNewUnitType() {
 	dialog_buttons['OK'] = function() {
 		$('#forSending').attr('value',newUnitTypeTemp);
 		$(this).dialog('close');
-		makeReload();		
+		makeReload();
 	}; 
 	dialog_buttons['Loobu'] = function() {
 		$(this).dialog('close');
 	};
 		
-	$('#forUnitTypeChoosing').dialog({ 
+	$('#forUnitTypeChoosing').dialog({
 		buttons: dialog_buttons,
 		closeOnEscape: false,
 		modal: true,

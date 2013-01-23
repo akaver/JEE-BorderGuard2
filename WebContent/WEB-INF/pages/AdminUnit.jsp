@@ -43,44 +43,42 @@
 						</c:if>
 						<tr>
 							<td width="100px">Kood</td>
-							<td><input name="AdminUnitCode" type="text" size="10"
-								value="${formData.adminUnit.code}"></td>
+							<td><form:input path="adminUnit.code" type="text"
+									size="10" value="${formData.adminUnit.code}" /> <form:errors
+									path="adminUnit.code" cssClass="error" /></td>
 						</tr>
 						<tr>
 							<td>Nimi</td>
-							<td><input name="AdminUnitName" type="text" size="30"
-								value="${formData.adminUnit.name}"></td>
+							<td><form:input path="adminUnit.name" type="text"
+									size="30" value="${formData.adminUnit.name}" /> <form:errors
+									path="adminUnit.name" cssClass="error" /></td>
 						</tr>
 						<tr>
 							<td valign="top">Kommentaar</td>
-							<td><textarea name="AdminUnitComment" cols="42" rows="10">${formData.adminUnit.comment}</textarea></td>
+							<td><form:textarea path="adminUnit.comment" type="text"
+									cols="42" rows="10" value="${formData.adminUnit.comment}" /> <form:errors
+									path="adminUnit.comment" cssClass="error" /></td>
 						</tr>
 						<tr>
 							<td valign="top">Liik</td>
-							<td>
-								<div id="AdminUnitType">${formData.adminUnitType.name}</div>
+							<td><div>${formData.adminUnitType.name}</div>
 								<div>
 									<button type="button" onclick="chooseNewUnitType()">Muuda</button>
 								</div>
 							</td>
 						</tr>
-						<tr>
-							<td>Allub</td>
-							<td><select name="AdminUnitMaster_adminUnitID">
-								<c:forEach var="entry"
-									items="${formData.adminUnitMasterListWithZero}">
-									<c:set var="selected" value="" />
-									<c:if
-										test="${entry.adminUnitID == formData.adminUnitMaster.adminUnitID}">
-										<c:set var="selected" value="selected=\"selected\"" />
-									</c:if>
-									<c:if
-										test="${entry.adminUnitID!=formData.adminUnit.adminUnitID}">
-										<option value="${entry.adminUnitID}" ${selected}>${entry.name}</option>
-									</c:if>
-								</c:forEach>
-							</select></td>
-						</tr>
+						
+						<c:if test="${formData.adminUnit.adminUnitTypeID!=1}">
+							<tr>
+								<td>Allub</td>
+								<td><form:select path="adminUnitMasterID">
+										<form:options
+											items="${formData.adminUnitMasterListWithZero}"
+											itemValue="adminUnitID" itemLabel="name" />
+									</form:select>
+							</tr>
+						</c:if>
+
 					</table></td>
 				<td style="position: relative"><table width="100%"
 						class="borderedTable">
@@ -130,9 +128,9 @@
 					type="submit" value="Loobu"></td>
 			</tr>
 			<tr>
-				<td><input type="hidden" id="forSending"
-					name="AdminUnitType_adminUnitTypeID"
-					value="${formData.adminUnitType.adminUnitTypeID}"></td>
+				<td><form:input type="hidden" id="forSending"
+					path="adminUnit.adminUnitTypeID"
+					value="${formData.adminUnit.adminUnitTypeID}"/></td>
 			</tr>
 		</table>
 		<div id="forUnitTypeChoosing"

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import border.model.AdminUnit;
-import border.model.AdminUnitSubordination;
 
 public interface AdminUnitRepository extends JpaRepository<AdminUnit, Long>,
 		AdminUnitRepositoryCustom {

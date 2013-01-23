@@ -13,12 +13,15 @@ public class AdminUnitVM {
 		
 		// adminunit wich is master for adminUnit
 		private AdminUnit adminUnitMaster;
+		// masters id
+		private Long adminUnitMasterID;
 		// list of possible new masters for adminUnit
 		private List<AdminUnit> adminUnitMastersListPossible;
 		
 		private  List<AdminUnit> adminUnitMasterListWithZero;
 		
 		private AdminUnitType adminUnitType;
+		private Long adminUnitTypeID;
 		// list of adminUnitTypes, for choosing new type
 		private  List<AdminUnitType> adminUnitTypeList;
 				
@@ -138,6 +141,22 @@ public class AdminUnitVM {
 					res.add(foundMaster);
 			}
 			this.adminUnitMasterListWithZero = res;
+		}
+
+		public Long getAdminUnitMasterID() {
+			return adminUnitMasterID;
+		}
+
+		public void setAdminUnitMasterID(Long adminUnitMasterID) {
+			this.adminUnitMasterID = adminUnitMasterID;
+		}
+
+		public Long getAdminUnitTypeID() {
+			return adminUnitTypeID;
+		}
+
+		public void setAdminUnitTypeID(Long adminUnitTypeID) {
+			this.adminUnitTypeID = adminUnitTypeID;
 		}
 
 }
