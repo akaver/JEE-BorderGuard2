@@ -1,4 +1,5 @@
 var newUnitTypeTemp = null;
+var firstOneChosenForDefault = false;
 	
 function makeReload() {
 	document.forms["AdminUnitForm"].submit();
@@ -25,6 +26,10 @@ function chooseNewUnitType() {
 		modal: true,
 		open: function() {
 			$('#selectbox option').each(function() {
+				if (!firstOneChosenForDefault) {
+					$(this).attr('selected','true');
+					firstOneChosenForDefault = true;
+				}
 				if($(this).attr('value') == $('#forSending').attr('value')) {
 					$(this).attr('selected','true');
 				}

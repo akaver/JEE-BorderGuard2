@@ -15,6 +15,11 @@ table div+div {
 	overflow: hidden;
 }
 
+table div+div+div {
+	float: left;
+	overflow: hidden;
+}
+
 table.borderedTable {
 	position: absolute;
 	top: 0px;

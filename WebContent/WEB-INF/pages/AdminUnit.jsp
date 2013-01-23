@@ -20,9 +20,11 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
+	<form:errors path="*" cssClass="errorblock" element="div" />
 	<form:form method="post" action="AdminUnitForm"
 		name="AdminUnitForm" modelAttribute="formData"
-		commandName="formData">
+		commandName="formData">		
+		
 		<table width="800">
 			<tr>
 				<td colspan="2"><h3>Haldusüksuse redaktor</h3></td>
@@ -61,10 +63,12 @@
 						</tr>
 						<tr>
 							<td valign="top">Liik</td>
-							<td><div>${formData.adminUnitType.name}</div>
+							<td>
+								<div>${formData.adminUnitType.name}</div>								
 								<div>
 									<button type="button" onclick="chooseNewUnitType()">Muuda</button>
 								</div>
+								<div><form:errors path="adminUnit.adminUnitTypeID" cssClass="error" /></div>
 							</td>
 						</tr>
 						

@@ -121,9 +121,11 @@ public class AdminUnitController {
 			@Valid @ModelAttribute("formData") AdminUnitVM formData,
 			BindingResult bindingResult) {
 
+		model.addAttribute("formData", formData);
+		
 		if (bindingResult.hasErrors()) {
 			LOGGER.info("Some errors, no saving.");
-			return "AdminUnitType";
+			return "AdminUnit";
 		}
 		LOGGER.info("Will go and save things.");
 
@@ -192,7 +194,7 @@ public class AdminUnitController {
 
 	// posts for changing adminunittype or removing subordinates
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.POST)
-	public String removeSubordinate(ModelMap model,
+	public String removeSubOrChangeType(ModelMap model,
 			@Valid @ModelAttribute("formData") AdminUnitVM formData,
 			BindingResult bindingResult, HttpServletRequest request) {
 
@@ -240,7 +242,9 @@ public class AdminUnitController {
 	private AdminUnitVM makeChangesToAdminUnitType(AdminUnitVM formData) {
 		Long adminUnitTypeID = formData.getAdminUnit().getAdminUnitTypeID();
 
-		if (adminUnitTypeID != formData.getAdminUnitType().getAdminUnitTypeID()) {
+		// if type changed or new unit had no type until now
+		if (formData.getAdminUnitType() == null 
+				|| adminUnitTypeID != formData.getAdminUnitType().getAdminUnitTypeID()) {
 			formData.setAdminUnitType(adminUnitTypeService
 					.getByID(adminUnitTypeID));
 
