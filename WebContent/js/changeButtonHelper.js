@@ -1,5 +1,4 @@
 var newUnitTypeTemp = null;
-var firstOneChosenForDefault = false;
 	
 function makeReload() {
 	document.forms["AdminUnitForm"].submit();
@@ -12,7 +11,7 @@ function changeDocData(selectBox) {
 function chooseNewUnitType() {
 	var dialog_buttons = {};
 	dialog_buttons['OK'] = function() {
-		$('#forSending').attr('value',newUnitTypeTemp);
+		$('#forSending').attr('value',newUnitTypeTemp); //here it is read by Spring
 		$(this).dialog('close');
 		makeReload();
 	}; 
@@ -25,7 +24,7 @@ function chooseNewUnitType() {
 		closeOnEscape: false,
 		modal: true,
 		open: function() {
-			newUnitTypeTemp = 1; //to give it initial value in case dropbox index won't be changed
+			newUnitTypeTemp = 1; //initialization, 0 by default to evoke validation
 		}
 	});
 }
