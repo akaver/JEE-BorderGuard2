@@ -103,7 +103,6 @@ public class AdminUnitController {
 		// those that might still be enslaved
 		formData.setAdminUnitsSubordinateListPossible(adminUnitService
 				.getAdminUnitSubordinatesPossible(formData.getAdminUnit()
-						.getAdminUnitID(), formData.getAdminUnit()
 						.getAdminUnitTypeID()));
 
 		for (AdminUnit sub : formData.getAdminUnitsSubordinateListPossible()) {
@@ -258,7 +257,6 @@ public class AdminUnitController {
 			// find new possible subordinates for new unit type
 			formData.setAdminUnitsSubordinateListPossible(adminUnitService
 					.getAdminUnitSubordinatesPossible(formData.getAdminUnit()
-							.getAdminUnitID(), formData.getAdminUnit()
 							.getAdminUnitTypeID()));
 
 			// remove current master, make unit masterless

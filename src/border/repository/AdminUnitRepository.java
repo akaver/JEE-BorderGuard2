@@ -18,10 +18,9 @@ public interface AdminUnitRepository extends JpaRepository<AdminUnit, Long>,
 			+ "OpenedDate < NOW() and ClosedDate > NOW() and FromDate < NOW() and ToDate > NOW() and "
 			+ "id not in "
 			+ "(select SubordinateAdminUnitID from AdminUnitSubordination "
-			+ "where MasterAdminUnitID=:adminUnitID and "
+			+ "where "
 			+ "OpenedDate < NOW() and ClosedDate > NOW() and FromDate < NOW() and ToDate > NOW())", nativeQuery = true)
 	List<AdminUnit> getAdminUnitSubordinatesPossible(
-			@Param("adminUnitID") Long adminUnitID,
 			@Param("adminUnitTypeID") Long adminUnitTypeID);
 
 	@Query(value = "select * from AdminUnit where AdminUnitTypeID in "

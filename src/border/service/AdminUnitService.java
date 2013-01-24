@@ -94,16 +94,12 @@ public class AdminUnitService {
 		return adminUnitSubordinates;
 	}
 
-	public List<AdminUnit> getAdminUnitSubordinatesPossible(Long adminUnitID,
+	public List<AdminUnit> getAdminUnitSubordinatesPossible(
 			Long adminUnitTypeID) {
 
-		// for new units
-		if (adminUnitID == null) {
-			adminUnitID = 0L;
-		}
 		List<AdminUnit> adminUnitSubordinatesPossible = new ArrayList<AdminUnit>();
 		adminUnitSubordinatesPossible = adminUnitRepository
-				.getAdminUnitSubordinatesPossible(adminUnitID, adminUnitTypeID);
+				.getAdminUnitSubordinatesPossible(adminUnitTypeID);
 
 		return adminUnitSubordinatesPossible;
 	}
