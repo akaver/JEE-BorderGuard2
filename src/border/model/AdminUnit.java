@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -28,25 +29,26 @@ public class AdminUnit {
 	@NotNull
 	private String comment;
 	@NotNull
+	@Min(1)
 	private Long adminUnitTypeID;
-	@NotNull
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fromDate;
-	@NotNull
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date toDate;
-	@NotNull
+	@Column(nullable = false)
 	private String openedBy;
-	@NotNull
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date openedDate;
-	@NotNull
+	@Column(nullable = false)
 	private String changedBy;
-	@NotNull
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date changedDate;
 	private String closedBy; // only value from DB schema with NULL allowed
-	@NotNull
+	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date closedDate;
 

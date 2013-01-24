@@ -34,7 +34,7 @@ public class AdminUnitService {
 
 	@Transactional
 	public List<AdminUnit> findAll() {
-		LOGGER.debug("findAll");
+		LOGGER.debug("find all adminunits");
 
 		return adminUnitRepository.findAll();
 	}
@@ -97,6 +97,10 @@ public class AdminUnitService {
 	public List<AdminUnit> getAdminUnitSubordinatesPossible(Long adminUnitID,
 			Long adminUnitTypeID) {
 
+		// for new units
+		if (adminUnitID == null) {
+			adminUnitID = 0L;
+		}
 		List<AdminUnit> adminUnitSubordinatesPossible = new ArrayList<AdminUnit>();
 		adminUnitSubordinatesPossible = adminUnitRepository
 				.getAdminUnitSubordinatesPossible(adminUnitID, adminUnitTypeID);

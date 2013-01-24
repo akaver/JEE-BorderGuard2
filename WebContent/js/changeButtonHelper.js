@@ -25,15 +25,7 @@ function chooseNewUnitType() {
 		closeOnEscape: false,
 		modal: true,
 		open: function() {
-			$('#selectbox option').each(function() {
-				if (!firstOneChosenForDefault) {
-					$(this).attr('selected','true');
-					firstOneChosenForDefault = true;
-				}
-				if($(this).attr('value') == $('#forSending').attr('value')) {
-					$(this).attr('selected','true');
-				}
-			});
+			newUnitTypeTemp = 1; //to give it initial value in case dropbox index won't be changed
 		}
 	});
 }

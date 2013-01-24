@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import border.model.AdminUnit;
+import border.model.AdminUnitType;
 import border.repository.AdminUnitRepositoryImpl;
 import border.service.*;
 import border.viewmodel.AdminUnitVM;
@@ -66,6 +67,7 @@ public class AdminUnitController {
 
 		if (adminUnitID == 0) {
 			formData.setAdminUnit(new AdminUnit());
+			formData.getAdminUnit().setAdminUnitTypeID(0L);
 		} else {
 			// unit itself
 			formData.setAdminUnit(adminUnitService.getByID(adminUnitID));
@@ -124,7 +126,7 @@ public class AdminUnitController {
 		model.addAttribute("formData", formData);
 		
 		if (bindingResult.hasErrors()) {
-			LOGGER.info("Some errors, no saving.");
+			LOGGER.info("Some errors, no saving: " + bindingResult);			
 			return "AdminUnit";
 		}
 		LOGGER.info("Will go and save things.");

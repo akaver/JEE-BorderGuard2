@@ -83,10 +83,10 @@ public class AdminUnitTypeController {
 		// 2 - master unit (add or remove)
 		// 3 - subordinates (add or remove)
 
-
 		// save basic changes, if this was new entry then id has now value
-		formData.setAdminUnitType(adminUnitTypeService.save(formData.getAdminUnitType()));
-		 
+		formData.setAdminUnitType(adminUnitTypeService.save(formData
+				.getAdminUnitType()));
+
 		// update this units master
 		// if master id is 0, then master is removed/nothing
 		// if master id != 0, then master is added/updated
@@ -102,47 +102,51 @@ public class AdminUnitTypeController {
 		List<AdminUnitType> originalSubordinates = adminUnitTypeService
 				.getSubordinates(formData.getAdminUnitType(), "NOW");
 		// go through the list of current (on the form) subordinates
-		for (AdminUnitType curSubordinate : formData
-				.getAdminUnitTypesSubordinateList()) {
-			int status = 0;
-			int i = 0;
+		if (formData.getAdminUnitTypesSubordinateList() != null) {
+			for (AdminUnitType curSubordinate : formData
+					.getAdminUnitTypesSubordinateList()) {
+				int status = 0;
+				int i = 0;
 
-			// this item is in the original list - do nothing (it wasnt added or removed)
-			for (i = 0; i < originalSubordinates.size(); i++) {
-				if (originalSubordinates.get(i).getAdminUnitTypeID()
-						.equals(curSubordinate.getAdminUnitTypeID())) {
-					// so this item from session was in original list
-					status = 1;
-					break;
+				// this item is in the original list - do nothing (it wasnt
+				// added or removed)
+				for (i = 0; i < originalSubordinates.size(); i++) {
+					if (originalSubordinates.get(i).getAdminUnitTypeID()
+							.equals(curSubordinate.getAdminUnitTypeID())) {
+						// so this item from session was in original list
+						status = 1;
+						break;
+					}
 				}
-			}
-			
-			
-			// so this item from session was in original list
-			if (status == 1) {
-				// nothing to save
-				// remove it from originals list
-				LOGGER.info("Nothing to do on subordinate:"
-						+ originalSubordinates.get(i));
-				originalSubordinates.remove(i);
-			}
-			
-			// so this item wasnt int the originals list, so its new
-			
-			if (status == 0) {
-				// save it to db, as new subordinate
-				System.out.println("Adding new subordinate:" + curSubordinate);
-				
-				adminUnitTypeService
-						.addSubordinate(formData.getAdminUnitType(), curSubordinate);
-			}
 
+				// so this item from session was in original list
+				if (status == 1) {
+					// nothing to save
+					// remove it from originals list
+					LOGGER.info("Nothing to do on subordinate:"
+							+ originalSubordinates.get(i));
+					originalSubordinates.remove(i);
+				}
+
+				// so this item wasnt int the originals list, so its new
+
+				if (status == 0) {
+					// save it to db, as new subordinate
+					System.out.println("Adding new subordinate:"
+							+ curSubordinate);
+
+					adminUnitTypeService.addSubordinate(
+							formData.getAdminUnitType(), curSubordinate);
+				}
+
+			}
 		}
-		
+
 		// go over the rest of list, these are removed subordinates
 		for (AdminUnitType removeSubordinate : originalSubordinates) {
 			System.out.println("Deleting old subordinate:" + removeSubordinate);
-			adminUnitTypeService.removeSubordinate(formData.getAdminUnitType(),removeSubordinate);
+			adminUnitTypeService.removeSubordinate(formData.getAdminUnitType(),
+					removeSubordinate);
 		}
 
 	}
