@@ -23,37 +23,43 @@
 	<form:form method="post" action="AdminUnitForm" name="AdminUnitForm"
 		modelAttribute="formData" commandName="formData">
 		<form:errors path="*" cssClass="errorblock" element="div" />
-	
+
 		<table width="800">
 			<tr>
-				<td colspan="2"><h3>Haldusüksuse redaktor</h3></td>
+				<td colspan="2"><h3>
+						<spring:message code="adminUnit.label.title" />
+					</h3></td>
 			</tr>
 			<tr>
 				<td width="50%"><table width="100%">
 						<tr>
-							<td width="100px">Kood</td>
+							<td width="100px"><spring:message
+									code="adminUnit.label.code" /></td>
 							<td><form:input path="adminUnit.code" type="text" size="10"
 									value="${formData.adminUnit.code}" /> <form:errors
 									path="adminUnit.code" cssClass="error" /></td>
 						</tr>
 						<tr>
-							<td>Nimi</td>
+							<td><spring:message code="adminUnit.label.name" /></td>
 							<td><form:input path="adminUnit.name" type="text" size="30"
 									value="${formData.adminUnit.name}" /> <form:errors
 									path="adminUnit.name" cssClass="error" /></td>
 						</tr>
 						<tr>
-							<td valign="top">Kommentaar</td>
+							<td valign="top"><spring:message
+									code="adminUnit.label.comment" /></td>
 							<td><form:textarea path="adminUnit.comment" type="text"
 									cols="42" rows="10" value="${formData.adminUnit.comment}" /> <form:errors
 									path="adminUnit.comment" cssClass="error" /></td>
 						</tr>
 						<tr>
-							<td valign="top">Liik</td>
+							<td valign="top"><spring:message code="adminUnit.label.type" /></td>
 							<td>
 								<div>${formData.adminUnitType.name}</div>
 								<div>
-									<button type="button" onclick="chooseNewUnitType()">Muuda</button>
+									<button type="button" onclick="chooseNewUnitType()">
+										<spring:message code="adminUnit.button.change" />
+									</button>
 								</div>
 								<div>
 									<form:errors path="adminUnit.adminUnitTypeID" cssClass="error" />
@@ -63,7 +69,7 @@
 
 						<c:if test="${formData.adminUnit.adminUnitTypeID!=1}">
 							<tr>
-								<td>Allub</td>
+								<td><spring:message code="adminUnit.label.belongsTo" /></td>
 								<td><form:select path="adminUnitMasterID">
 										<form:options items="${formData.adminUnitMasterListWithZero}"
 											itemValue="adminUnitID" itemLabel="name" />
@@ -75,7 +81,8 @@
 				<td style="position: relative"><table width="100%"
 						class="borderedTable">
 						<tr>
-							<td class="allBorders" bgcolor="#CCCCCC">Alluvad</td>
+							<td class="allBorders" bgcolor="#CCCCCC"><spring:message
+									code="adminUnit.label.subordinates" /></td>
 						</tr>
 
 						<c:set var="counter" value="0" />
@@ -86,7 +93,7 @@
 									<div>${entry.name}</div>
 									<div>
 										<input name="RemoveButton_${counter}" type="submit"
-											value="Eemalda">
+											value="<spring:message code="adminUnit.button.remove" />">
 									</div>
 								</td>
 							</tr>
@@ -107,7 +114,8 @@
 										</select>
 									</div>
 									<div>
-										<input name="AddSubordinateButton" type="submit" value="Lisa">
+										<input name="AddSubordinateButton" type="submit"
+											value="<spring:message code="adminUnit.button.add" />">
 									</div>
 								</td>
 							</tr>
@@ -116,8 +124,10 @@
 			</tr>
 			<tr>
 				<td colspan="2" align="right"><input name="SubmitButton"
-					type="submit" value="Salvesta"> <input name="CancelButton"
-					type="submit" value="Loobu"></td>
+					type="submit"
+					value="<spring:message code="adminUnit.button.submit" />">
+					<input name="CancelButton" type="submit"
+					value="<spring:message code="adminUnit.button.cancel" />"></td>
 			</tr>
 			<tr>
 				<td><form:input type="hidden" id="forSending"
@@ -127,20 +137,12 @@
 		</table>
 		<div id="forUnitTypeChoosing"
 			style="display: none; font-family: 'Comic Sans MS', cursive, sans-serif;"
-			title="Vali uus liik">
+			title="<spring:message code="adminUnit.label.chooseNewType" />">
 			<form:select path="adminUnit.adminUnitTypeID"
 				onchange="changeDocData(this)">
 				<form:options items="${formData.adminUnitTypeList}"
 					itemValue="adminUnitTypeID" itemLabel="name" />
 			</form:select>
-
-
-			<%-- <select id="selectbox" name="AdminUnitType_adminUnitTypeID_orig"
-				onchange="changeDocData(this)">
-				<c:forEach var="entry" items="${formData.adminUnitTypeList}">
-					<option value="${entry.adminUnitTypeID}" ${selected}>${entry.name}</option>
-				</c:forEach>
-			</select> --%>
 		</div>
 	</form:form>
 </body>
