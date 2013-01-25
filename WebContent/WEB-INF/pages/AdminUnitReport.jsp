@@ -42,7 +42,7 @@
 </script>
 </head>
 <body>
-	<form method="post" action="" name="AdminUnitForm" id="AdminUnitForm">
+	<form method="post" action="AdminUnitReportForm" name="AdminUnitReportForm" >
 		<table width="450">
 			<tr>
 				<td colspan="2"><h3>Haldusüksuste alluvusraport</h3></td>

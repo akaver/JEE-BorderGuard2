@@ -43,6 +43,10 @@ public class AdminUnitTypeController {
 		Long adminUnitID;
 		try {
 			adminUnitID = Long.decode(_AdminUnitID);
+			// if there is no unit with such id
+			if (adminUnitTypeService.getByID(adminUnitID) == null) {
+				adminUnitID = 0L;
+			}
 		} catch (Exception e) {
 			adminUnitID = 0L;
 		}
