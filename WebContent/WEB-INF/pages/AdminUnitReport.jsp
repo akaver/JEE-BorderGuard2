@@ -1,6 +1,8 @@
 <%@page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -10,7 +12,8 @@
 <link rel="stylesheet" href="../static/style.css" type="text/css">
 <link rel="stylesheet"
 	href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/base/jquery-ui.css" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script
 	src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 <script type="text/javascript">
@@ -42,44 +45,28 @@
 </script>
 </head>
 <body>
-	<form method="post" action="AdminUnitReportForm" name="AdminUnitReportForm" >
+	<jsp:include page="header.jsp" />
+	<form:errors path="*" cssClass="errorblock" element="div" />
+	<form:form method="post" action="AdminUnitReportForm"
+		name="AdminUnitReportForm" modelAttribute="formData"
+		commandName="formData">
 		<table width="450">
 			<tr>
 				<td colspan="2"><h3>Haldusüksuste alluvusraport</h3></td>
-			</tr>
-			<tr>
-				<td><c:if test="${not empty errors}">
-						<tr>
-							<td colspan="2">
-								<div style="color: red">
-									<c:forEach var="error" items="${errors}">
-										<c:out value="${error}"></c:out>
-										<br />
-									</c:forEach>
-								</div>
-							</td>
-						</tr>
-					</c:if></td>
 			</tr>
 			<tr>
 				<td width="40%">Kuupäev</td>
 				<td width="60%">Liik</td>
 			</tr>
 			<tr>
-				<td><input name="SearchDate" type="text" size="30" disabled="true"
-					value="${formData.searchDate}"></td>
+				<td><form:input path="searchDate" type="text" size="30"
+						disabled="true" value="${formData.searchDate}" />
 				<td>
 					<div>
-						<select name="AdminUnitType_adminUnitTypeID">
-							<c:forEach var="entry" items="${formData.adminUnitTypeList}">
-								<c:set var="selected" value="" />
-								<c:if
-									test="${entry.adminUnitTypeID == formData.adminUnitType.adminUnitTypeID}">
-									<c:set var="selected" value="selected=\"selected\"" />
-								</c:if>
-								<option value="${entry.adminUnitTypeID}" ${selected}>${entry.name}</option>
-							</c:forEach>
-						</select>
+						<form:select path="adminUnitType.adminUnitTypeID">
+							<form:options items="${formData.adminUnitTypeList}"
+								itemValue="adminUnitTypeID" itemLabel="name" />
+						</form:select>
 					</div>
 					<div>
 						<input name="RefreshButton" type="submit" value="Värskenda">
@@ -100,7 +87,8 @@
 									<td class="allBorders">
 										<div>${subordinate.adminUnitSubordinate.name}</div>
 										<div>
-											<input name="LookButton_${subordinate.adminUnitSubordinate.adminUnitID}"
+											<input
+												name="LookButton_${subordinate.adminUnitSubordinate.adminUnitID}"
 												type="submit" value="Vaata">
 										</div>
 									</td>
@@ -124,15 +112,15 @@
 					value="Tagasi" style="float: right"></td>
 			</tr>
 		</table>
-	</form>
+	</form:form>
 	<div id="forInfoBox" style="display: none;">
 		<c:if test="${fn:length(formData.chosenSubordinate.name) > 0}">
 			<div
 				style="display: none; font-family: 'Comic Sans MS', cursive, sans-serif;"
 				id="infoBoxContent" title="${formData.chosenSubordinate.name}">
-				Nimi: ${formData.chosenSubordinate.name}<br> 
-				Kood: ${formData.chosenSubordinate.code}<br> 
-				Tüüp:${formData.chosenSubordinate.adminUnitTypeString}<br> 
+				Nimi: ${formData.chosenSubordinate.name}<br> Kood:
+				${formData.chosenSubordinate.code}<br>
+				Tüüp:${formData.chosenSubordinate.adminUnitTypeString}<br>
 				Kuulub: ${formData.chosenSubordinate.masterName}<br>
 
 				<c:if

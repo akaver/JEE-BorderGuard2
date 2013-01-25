@@ -2,12 +2,15 @@ package border.controller;
 
 import java.util.Calendar;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import border.model.AdminUnit;
@@ -15,6 +18,7 @@ import border.repository.AdminUnitRepositoryImpl;
 import border.service.AdminUnitService;
 import border.service.AdminUnitTypeService;
 import border.viewmodel.AdminUnitReportVM;
+import border.viewmodel.AdminUnitTypeVM;
 
 @Controller
 @RequestMapping("/AdminUnitReport")
@@ -28,7 +32,7 @@ public class AdminUnitReportController {
 	AdminUnitService adminUnitService;
 	@Autowired
 	AdminUnitTypeService adminUnitTypeService;
-	
+
 	// GET part
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,13 +50,15 @@ public class AdminUnitReportController {
 	}
 
 	private Long processAndValidateID(String _AdminUnitID) {
-		
+
 		// Make sure the unit ID is acceptable
 		// If problems appear, set up unit nr 1 (state)
 		Long adminUnitID;
 		try {
 			adminUnitID = Long.decode(_AdminUnitID);
-			if (adminUnitID < 1L) {
+			// don't accept under 1, don't accept if not present at DB
+			if (adminUnitID < 1L
+					|| adminUnitService.getByID(adminUnitID) == null) {
 				adminUnitID = 1L;
 			}
 		} catch (Exception e) {
@@ -113,24 +119,29 @@ public class AdminUnitReportController {
 
 		return formData;
 	}
-	
+
 	// POST part
-	
+
 	@RequestMapping(value = "/AdminUnitReportForm", method = RequestMethod.POST, params = "BackButton")
 	public String cancelChanges(ModelMap model) {
 		LOGGER.info("Saw the report, now going back.");
 		// jump back to root view
 		return "redirect:/";
 	}
-	
+
 	@RequestMapping(value = "/AdminUnitReportForm", method = RequestMethod.POST, params = "RefreshButton")
-	public String refreshReport(ModelMap model) {
-		LOGGER.info("Will refresh view");
-		
-		
-		
+	public String refreshReport(
+			ModelMap model,
+			@ModelAttribute("formData") AdminUnitReportVM formData,
+			BindingResult bindingResult,
+			@RequestParam(value = "adminUnitType.adminUnitTypeID") Long adminUnitTypeID) {
+		LOGGER.info("Will refresh view for: " + adminUnitTypeID);
+
+		formData = populateViewModelWithData(adminUnitTypeID);
+		model.addAttribute("formData", formData);
+
 		// jump back to root view
-		return "redirect:/";
+		return "AdminUnitReport";
 	}
 
 }

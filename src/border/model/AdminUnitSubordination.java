@@ -160,7 +160,7 @@ public class AdminUnitSubordination {
 
 	@Override
 	public String toString() {
-		return "Person [id=" + adminUnitSubordinationID + ", comment=" + comment + "]";
+		return "AdminUnit [id=" + adminUnitSubordinationID + ", comment=" + comment + "]";
 	}	
 	
 }

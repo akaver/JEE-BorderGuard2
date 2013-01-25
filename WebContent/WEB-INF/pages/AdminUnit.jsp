@@ -30,18 +30,6 @@
 			</tr>
 			<tr>
 				<td width="50%"><table width="100%">
-						<c:if test="${not empty errors}">
-							<tr>
-								<td colspan="2">
-									<div style="color: red">
-										<c:forEach var="error" items="${errors}">
-											<c:out value="${error}"></c:out>
-											<br />
-										</c:forEach>
-									</div>
-								</td>
-							</tr>
-						</c:if>
 						<tr>
 							<td width="100px">Kood</td>
 							<td><form:input path="adminUnit.code" type="text" size="10"
@@ -140,7 +128,8 @@
 		<div id="forUnitTypeChoosing"
 			style="display: none; font-family: 'Comic Sans MS', cursive, sans-serif;"
 			title="Vali uus liik">
-			<form:select path="adminUnit.adminUnitTypeID" onchange="changeDocData(this)">
+			<form:select path="adminUnit.adminUnitTypeID"
+				onchange="changeDocData(this)">
 				<form:options items="${formData.adminUnitTypeList}"
 					itemValue="adminUnitTypeID" itemLabel="name" />
 			</form:select>
