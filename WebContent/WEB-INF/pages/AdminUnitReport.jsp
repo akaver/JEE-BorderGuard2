@@ -34,10 +34,11 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<form:errors path="*" cssClass="errorblock" element="div" />
 	<form:form method="post" action="AdminUnitReportForm"
 		name="AdminUnitReportForm" modelAttribute="formData"
 		commandName="formData">
+		<form:errors path="*" cssClass="errorblock" element="div" />
+	
 		<table width="450">
 			<tr>
 				<td colspan="2"><h3>Haldusüksuste alluvusraport</h3></td>

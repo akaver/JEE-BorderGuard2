@@ -122,7 +122,7 @@ public class AdminUnitReportController {
 			@ModelAttribute("formData") AdminUnitReportVM formData,
 			BindingResult bindingResult) {
 
-		// to stop dialog opening by itself on get request for language
+		// to stop dialog re-opening by itself on get request for language
 		formData.setChosenSubordinate(null);
 		formData.setAdminUnitTypeName(null);
 		formData.setAdminUnitMasterName(null);

@@ -20,10 +20,10 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<form:errors path="*" cssClass="errorblock" element="div" />
 	<form:form method="post" action="AdminUnitForm" name="AdminUnitForm"
 		modelAttribute="formData" commandName="formData">
-
+		<form:errors path="*" cssClass="errorblock" element="div" />
+	
 		<table width="800">
 			<tr>
 				<td colspan="2"><h3>Haldusüksuse redaktor</h3></td>

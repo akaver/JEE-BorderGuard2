@@ -13,28 +13,17 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
-	<form:errors path="*" cssClass="errorblock" element="div" />
 	<form:form method="post" action="AdminUnitTypeForm"
 		name="AdminUnitTypeForm" modelAttribute="formData"
 		commandName="formData">
+		<form:errors path="*" cssClass="errorblock" element="div" />
+	
 		<table width="800">
 			<tr>
 				<td colspan="2"><h3>Admin Unit Type Editor</h3></td>
 			</tr>
 			<tr>
-				<td width="50%"><table width="100%">
-						<c:if test="${not empty errors}">
-							<tr>
-								<td colspan="2">
-									<div style="color: red">
-										<c:forEach var="error" items="${errors}">
-											<c:out value="${error}"></c:out>
-											<br />
-										</c:forEach>
-									</div>
-								</td>
-							</tr>
-						</c:if>
+				<td width="50%"><table width="100%">						
 						<tr>
 							<td width="100px">Code</td>
 							<td><form:input path="adminUnitType.code" type="text"
