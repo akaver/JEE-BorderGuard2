@@ -57,6 +57,12 @@ public class AdminUnitTypeController {
 
 		return "AdminUnitType";
 	}
+	
+	// so that language change GET wouldn't break the pot
+	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.GET)
+	public String handleLanguageChanges() {
+		return "AdminUnitType";
+	}
 
 	// only when save button is pressed on the jsp
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.POST, params = "SubmitButton")

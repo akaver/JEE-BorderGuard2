@@ -116,6 +116,21 @@ public class AdminUnitReportController {
 		return formData;
 	}
 
+	// for handling language changes
+	@RequestMapping(value = "/AdminUnitReportForm", method = RequestMethod.GET)
+	public String handleLanguageChange(ModelMap model,
+			@ModelAttribute("formData") AdminUnitReportVM formData,
+			BindingResult bindingResult) {
+
+		// to stop dialog opening by itself on get request for language
+		formData.setChosenSubordinate(null);
+		formData.setAdminUnitTypeName(null);
+		formData.setAdminUnitMasterName(null);
+		model.addAttribute("formData", formData);
+
+		return "AdminUnitReport";
+	}
+
 	// POST part
 
 	@RequestMapping(value = "/AdminUnitReportForm", method = RequestMethod.POST, params = "BackButton")
@@ -132,7 +147,8 @@ public class AdminUnitReportController {
 			BindingResult bindingResult,
 			@RequestParam(value = "adminUnitType.adminUnitTypeID") Long adminUnitTypeID) {
 		LOGGER.info("Will refresh view for adminUnitTypeID: " + adminUnitTypeID);
-		
+
+		// turn it to new get request
 		return "redirect:/AdminUnitReport/?AdminUnitTypeID=" + adminUnitTypeID;
 	}
 
@@ -163,9 +179,9 @@ public class AdminUnitReportController {
 	// info to be shown on dialog
 	private AdminUnitReportVM compileSubordinateInfo(
 			AdminUnitReportVM formData, String paramName) {
-		
+
 		String adminUnitID = paramName.substring(11);
-		
+
 		AdminUnit au = adminUnitService.getByID(Long.decode(adminUnitID));
 		if (au.getComment().startsWith("Add here extra information")) {
 			au.setComment(null);

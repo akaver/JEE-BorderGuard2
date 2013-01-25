@@ -30,7 +30,7 @@
 			});
 		}
 	};
-</script>
+</script/>
 </head>
 <body>
 	<jsp:include page="header.jsp" />

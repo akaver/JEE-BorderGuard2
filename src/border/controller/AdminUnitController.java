@@ -118,6 +118,12 @@ public class AdminUnitController {
 
 		return formData;
 	}
+	
+	// so that language change GET wouldn't break the pot
+	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.GET)
+	public String handleLanguageChanges() {
+		return "AdminUnit";
+	}
 
 	// POST part
 
