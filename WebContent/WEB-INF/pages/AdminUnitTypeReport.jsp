@@ -24,7 +24,7 @@
 	$(document).ready(function() {
 		$("#black").treeview({
 			url : "tree"
-		})
+		});
 	});
 </script>
 </head>

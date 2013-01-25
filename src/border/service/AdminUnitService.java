@@ -94,8 +94,7 @@ public class AdminUnitService {
 		return adminUnitSubordinates;
 	}
 
-	public List<AdminUnit> getAdminUnitSubordinatesPossible(
-			Long adminUnitTypeID) {
+	public List<AdminUnit> getAdminUnitSubordinatesPossible(Long adminUnitTypeID) {
 
 		List<AdminUnit> adminUnitSubordinatesPossible = new ArrayList<AdminUnit>();
 		adminUnitSubordinatesPossible = adminUnitRepository
@@ -120,27 +119,34 @@ public class AdminUnitService {
 		return res;
 	}
 
-	public void saveSubordination(Long adminUnitSubordinateID, Long adminUnitMasterID,
-			String dateTimeString) {
+	public void saveSubordination(Long adminUnitSubordinateID,
+			Long adminUnitMasterID, String dateTimeString) {
 
 		// if it is state, it can have no masters
 		if (adminUnitSubordinateID == 1) {
 			return;
 		}
-		// if master id is 0, then master is removed/nothing		
-		else if (adminUnitMasterID == 0
-				|| adminUnitMasterID == null) {
-			
+		// if master id is 0, then master is removed/nothing
+		else if (adminUnitMasterID == 0 || adminUnitMasterID == null) {
+
 			adminUnitSubordinationRepository.removeSubordination(
-					adminUnitSubordinateID,	dateTimeString);
+					adminUnitSubordinateID, dateTimeString);
 		}
 		// if master id > 1, then master is added/updated
 		else {
 			adminUnitSubordinationRepository.updateOrAddSubordination(
-					adminUnitSubordinateID, adminUnitMasterID,
-					dateTimeString);
+					adminUnitSubordinateID, adminUnitMasterID, dateTimeString);
 		}
 
+	}
+
+	public List<AdminUnit> getByAdminUnitTypeID(Long adminUnitTypeID,
+			String dateString) {
+		List<AdminUnit> adminUnitsOfCertainType = new ArrayList<AdminUnit>();
+		adminUnitsOfCertainType = adminUnitRepository
+				.getAdminUnitsOfCertainType(adminUnitTypeID, dateString);
+
+		return adminUnitsOfCertainType;
 	}
 
 	@Transactional

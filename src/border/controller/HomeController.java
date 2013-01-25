@@ -87,7 +87,7 @@ public class HomeController {
 			viewToLoad = "/AdminUnit/?AdminUnitID=0";
 		}
 		if (_ReportAdminUnitFlag != null) {
-			viewToLoad = "/AdminUnitReport";
+			viewToLoad = "/AdminUnitReport/?AdminUnitID="+_AdminUnitID;
 		}
 
 		return "redirect:"+viewToLoad;

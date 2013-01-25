@@ -53,12 +53,13 @@ public class AdminUnit {
 	private Date closedDate;
 
 	// one-to-many definitions into AdminUnitSubordination
-	// masters of this unit
+	
+	// subordinations where this unit is master
 	@OneToMany(mappedBy = "adminUnitMaster", fetch = FetchType.EAGER)
-	private Set<AdminUnitSubordination> adminUnitSubordinationMasters;
-	// subordinates of this unit
-	@OneToMany(mappedBy = "adminUnitSubordinate", fetch = FetchType.EAGER)
 	private Set<AdminUnitSubordination> adminUnitSubordinationSubordinates;
+	// subordinations where this unit is subordinate
+	@OneToMany(mappedBy = "adminUnitSubordinate", fetch = FetchType.EAGER)
+	private Set<AdminUnitSubordination> adminUnitSubordinationMasters;
 
 	public AdminUnit() {
 	}
@@ -238,6 +239,24 @@ public class AdminUnit {
 	@Override
 	public String toString() {
 		return "AdminUnit [id=" + AdminUnitID + ", name=" + name + "]";
+	}
+
+	public Set<AdminUnitSubordination> getAdminUnitSubordinationMasters() {
+		return adminUnitSubordinationMasters;
+	}
+
+	public void setAdminUnitSubordinationMasters(
+			Set<AdminUnitSubordination> adminUnitSubordinationMasters) {
+		this.adminUnitSubordinationMasters = adminUnitSubordinationMasters;
+	}
+
+	public Set<AdminUnitSubordination> getAdminUnitSubordinationSubordinates() {
+		return adminUnitSubordinationSubordinates;
+	}
+
+	public void setAdminUnitSubordinationSubordinates(
+			Set<AdminUnitSubordination> adminUnitSubordinationSubordinates) {
+		this.adminUnitSubordinationSubordinates = adminUnitSubordinationSubordinates;
 	}
 
 }

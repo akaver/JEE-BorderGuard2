@@ -1,7 +1,11 @@
 package border.repository;
 
+import java.util.List;
+
 import border.model.AdminUnit;
 
 public interface AdminUnitRepositoryCustom {
-	public AdminUnit findById(Long id);
+
+	List<AdminUnit> getAdminUnitsOfCertainType(Long adminUnitTypeID,
+			String dateString);
 }

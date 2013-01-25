@@ -177,10 +177,10 @@ public class AdminUnitTypeSubordination {
 
 	@Override
 	public String toString() {
-		// return "Person [id=" + id + ", master adminUnitTypeID=" +
+		// return "AdminUnitType [id=" + id + ", master adminUnitTypeID=" +
 		// adminUnitTypeID +
 		// ", slave subordinateAdminUnitTypeID="+subordinateAdminUnitTypeID+", comment="+comment+"]";
-		return "Person [id=" + AdminUnitTypeSubordinationID + ", comment=" + comment + "]";
+		return "AdminUnitType [id=" + AdminUnitTypeSubordinationID + ", comment=" + comment + "]";
 	}
 
 	public Long getAdminUnitTypeSubordinationID() {
