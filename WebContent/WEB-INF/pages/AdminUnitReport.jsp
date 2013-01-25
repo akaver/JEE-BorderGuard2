@@ -30,18 +30,6 @@
 			});
 		}
 	};
-
-	function openInfo(adminUnitID) {
-		var dialog_buttons = {};
-		dialog_buttons['OK'] = function() {
-			$(this).dialog('close');
-		};
-
-		$('#adminUnitID' + adminUnitID).dialog({
-			buttons : dialog_buttons,
-			closeOnEscape : true
-		});
-	}
 </script>
 </head>
 <body>
@@ -112,16 +100,16 @@
 					value="Tagasi" style="float: right"></td>
 			</tr>
 		</table>
-	</form:form>
-	<div id="forInfoBox" style="display: none;">
+		<div id="forInfoBox" style="display: none;">
 		<c:if test="${fn:length(formData.chosenSubordinate.name) > 0}">
 			<div
 				style="display: none; font-family: 'Comic Sans MS', cursive, sans-serif;"
 				id="infoBoxContent" title="${formData.chosenSubordinate.name}">
-				Nimi: ${formData.chosenSubordinate.name}<br> Kood:
-				${formData.chosenSubordinate.code}<br>
-				Tüüp:${formData.chosenSubordinate.adminUnitTypeString}<br>
-				Kuulub: ${formData.chosenSubordinate.masterName}<br>
+				
+				<form:label path="chosenSubordinate.name">Nimi: ${formData.chosenSubordinate.name}</form:label><br>
+				<form:label path="chosenSubordinate.code">Kood: ${formData.chosenSubordinate.code}</form:label><br>
+				<form:label path="adminUnitTypeName">Tüüp: ${formData.adminUnitTypeName}</form:label><br>
+				<form:label path="adminUnitMasterName">Kuulub: ${formData.adminUnitMasterName}</form:label><br>
 
 				<c:if
 					test="${fn:length(formData.chosenSubordinate.adminUnitSubordinationSubordinates) > 0}">
@@ -129,7 +117,7 @@
 				</c:if>
 				<c:forEach var="subsubordinate"
 					items="${formData.chosenSubordinate.adminUnitSubordinationSubordinates}">
-					<span style="padding-left: 20px;"> - ${subsubordinate.name}</span>
+					<span style="padding-left: 20px;"> - ${subsubordinate.adminUnitSubordinate.name}</span>
 					<br>
 				</c:forEach>
 
@@ -139,5 +127,6 @@
 			</div>
 		</c:if>
 	</div>
+	</form:form>	
 </body>
 </html>

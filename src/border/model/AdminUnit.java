@@ -60,6 +60,7 @@ public class AdminUnit {
 	// subordinations where this unit is subordinate
 	@OneToMany(mappedBy = "adminUnitSubordinate", fetch = FetchType.EAGER)
 	private Set<AdminUnitSubordination> adminUnitSubordinationMasters;
+	
 
 	public AdminUnit() {
 	}
@@ -258,5 +259,4 @@ public class AdminUnit {
 			Set<AdminUnitSubordination> adminUnitSubordinationSubordinates) {
 		this.adminUnitSubordinationSubordinates = adminUnitSubordinationSubordinates;
 	}
-
 }

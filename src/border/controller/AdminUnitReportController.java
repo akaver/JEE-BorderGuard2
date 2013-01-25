@@ -1,8 +1,9 @@
 package border.controller;
 
 import java.util.Calendar;
+import java.util.Enumeration;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +14,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import border.model.AdminUnit;
 import border.repository.AdminUnitRepositoryImpl;
 import border.service.AdminUnitService;
 import border.service.AdminUnitTypeService;
 import border.viewmodel.AdminUnitReportVM;
-import border.viewmodel.AdminUnitTypeVM;
+import border.model.*;
 
 @Controller
 @RequestMapping("/AdminUnitReport")
@@ -38,36 +38,32 @@ public class AdminUnitReportController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String AdminUnitReportHome(
 			Model model,
-			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID) {
+			@RequestParam(required = false, value = "AdminUnitTypeID") String _AdminUnitTypeID) {
 
-		LOGGER.info("Entered admin unit report with ID: " + _AdminUnitID);
+		LOGGER.info("Entered admin unit report with ID: " + _AdminUnitTypeID);
 
-		Long adminUnitTypeID = processAndValidateID(_AdminUnitID);
+		// extra validation when parameter entered from url
+		Long adminUnitTypeID = validateTypeID(_AdminUnitTypeID);
 		AdminUnitReportVM adminUnitReportVM = populateViewModelWithData(adminUnitTypeID);
 		model.addAttribute("formData", adminUnitReportVM);
 
 		return "AdminUnitReport";
 	}
 
-	private Long processAndValidateID(String _AdminUnitID) {
+	private Long validateTypeID(String _AdminUnitTypeID) {
+		Long adminUnitTypeID;
 
-		// Make sure the unit ID is acceptable
-		// If problems appear, set up unit nr 1 (state)
-		Long adminUnitID;
 		try {
-			adminUnitID = Long.decode(_AdminUnitID);
+			adminUnitTypeID = Long.decode(_AdminUnitTypeID);
 			// don't accept under 1, don't accept if not present at DB
-			if (adminUnitID < 1L
-					|| adminUnitService.getByID(adminUnitID) == null) {
-				adminUnitID = 1L;
+			if (adminUnitTypeID < 1L
+					|| adminUnitTypeService.getByID(adminUnitTypeID) == null) {
+				adminUnitTypeID = 1L;
 			}
 		} catch (Exception e) {
-			adminUnitID = 1L;
+			// if non-numeric stuff is entered
+			adminUnitTypeID = 1L;
 		}
-
-		// Find out which unit type we are dealing with
-		AdminUnit au = adminUnitService.getByID(adminUnitID);
-		Long adminUnitTypeID = au.getAdminUnitTypeID();
 
 		return adminUnitTypeID;
 	}
@@ -78,7 +74,6 @@ public class AdminUnitReportController {
 		formData.setAdminUnitType(adminUnitTypeService.getByID(adminUnitTypeID));
 		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());
 		formData = setUnitTypeSpecifics(formData);
-
 		return formData;
 	}
 
@@ -95,7 +90,7 @@ public class AdminUnitReportController {
 		return dateString;
 	}
 
-	// make sure date is two digits long
+	// make sure date-part is two digits long
 	private String guaranteeTwoNumbers(String datePart) {
 		if (datePart.length() == 1) {
 			datePart = "0" + datePart;
@@ -103,13 +98,14 @@ public class AdminUnitReportController {
 		return datePart;
 	}
 
+	// all necessary stuff to fill jsp
 	private AdminUnitReportVM setUnitTypeSpecifics(AdminUnitReportVM formData) {
 
 		Long adminUnitTypeID = formData.getAdminUnitType().getAdminUnitTypeID();
 		// String dateString = reFormat(formData.getSearchDate());
 		String dateString = "NOW()";
 
-		// get the master units, the ones we have chosen from dropdown
+		// get the units of the type we need
 		formData.setAdminUnitMasterList(adminUnitService.getByAdminUnitTypeID(
 				adminUnitTypeID, dateString));
 
@@ -135,13 +131,52 @@ public class AdminUnitReportController {
 			@ModelAttribute("formData") AdminUnitReportVM formData,
 			BindingResult bindingResult,
 			@RequestParam(value = "adminUnitType.adminUnitTypeID") Long adminUnitTypeID) {
-		LOGGER.info("Will refresh view for: " + adminUnitTypeID);
+		LOGGER.info("Will refresh view for adminUnitTypeID: " + adminUnitTypeID);
+		
+		return "redirect:/AdminUnitReport/?AdminUnitTypeID=" + adminUnitTypeID;
+	}
 
-		formData = populateViewModelWithData(adminUnitTypeID);
+	// Only option: querying extra information for a subordinate
+	@RequestMapping(value = "/AdminUnitReportForm", method = RequestMethod.POST)
+	public String showExtraInfo(
+			ModelMap model,
+			@ModelAttribute("formData") AdminUnitReportVM formData,
+			BindingResult bindingResult,
+			@RequestParam(value = "adminUnitType.adminUnitTypeID") Long adminUnitTypeID,
+			HttpServletRequest request) {
+
+		Enumeration<String> paramNames = request.getParameterNames();
+
+		while (paramNames.hasMoreElements()) {
+			String paramName = paramNames.nextElement();
+			if (paramName.startsWith("LookButton_")) {
+				formData = compileSubordinateInfo(formData, paramName);
+				break;
+			}
+		}
+
 		model.addAttribute("formData", formData);
 
-		// jump back to root view
 		return "AdminUnitReport";
+	}
+
+	// info to be shown on dialog
+	private AdminUnitReportVM compileSubordinateInfo(
+			AdminUnitReportVM formData, String paramName) {
+		
+		String adminUnitID = paramName.substring(11);
+		
+		AdminUnit au = adminUnitService.getByID(Long.decode(adminUnitID));
+		if (au.getComment().startsWith("Add here extra information")) {
+			au.setComment(null);
+		}
+		formData.setChosenSubordinate(au);
+		formData.setAdminUnitTypeName(adminUnitTypeService.getByID(
+				au.getAdminUnitTypeID()).getName());
+		formData.setAdminUnitMasterName(adminUnitService.getAdminUnitMaster(
+				au.getAdminUnitID()).getName());
+
+		return formData;
 	}
 
 }

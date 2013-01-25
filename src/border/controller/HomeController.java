@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import border.helper.DBHelper;
+import border.model.AdminUnit;
 import border.repository.AdminUnitTypeRepositoryImpl;
 import border.service.AdminUnitTypeService;
 import border.service.AdminUnitService;
@@ -47,8 +48,6 @@ public class HomeController {
 	public String populate(Model model) {
 		LOGGER.info("Populating data");
 
-		//adminUnitService.deleteAll();
-		//adminUnitTypeService.deleteAll();
 		DBHelper.TruncateDB();
 		
 		adminUnitTypeService.populateData();
@@ -87,11 +86,38 @@ public class HomeController {
 			viewToLoad = "/AdminUnit/?AdminUnitID=0";
 		}
 		if (_ReportAdminUnitFlag != null) {
-			viewToLoad = "/AdminUnitReport/?AdminUnitID="+_AdminUnitID;
+			
+			// first find admin unit type			
+			Long adminUnitTypeID = makeTypeIdFromUnitId(_AdminUnitID);			
+			viewToLoad = "/AdminUnitReport/?AdminUnitTypeID="+adminUnitTypeID;
 		}
 
 		return "redirect:"+viewToLoad;
 
+	}	
+
+	private Long makeTypeIdFromUnitId(String _AdminUnitID) {
+
+		// Make sure the unit ID is acceptable
+		// If problems appear, set up unit type nr 1 (state)
+		Long adminUnitID;
+		try {
+			adminUnitID = Long.decode(_AdminUnitID);
+			// don't accept under 1, don't accept if not present at DB
+			if (adminUnitID < 1L
+					|| adminUnitService.getByID(adminUnitID) == null) {
+				adminUnitID = 1L;
+			}
+		} catch (Exception e) {
+			// if some non-numeric stuff is entered
+			adminUnitID = 1L;
+		}
+
+		// Find out which unit type we are dealing with
+		AdminUnit au = adminUnitService.getByID(adminUnitID);
+		Long adminUnitTypeID = au.getAdminUnitTypeID();
+
+		return adminUnitTypeID;
 	}
 
 }
