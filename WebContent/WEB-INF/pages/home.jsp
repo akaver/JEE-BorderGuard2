@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>BorderGuard Main Screen</title>
+<title><spring:message code="home.label.title" /></title>
 <link href="<c:url value='/static/style.css' />" type="text/css"
 	rel="stylesheet">
 </head>

@@ -4,21 +4,31 @@
 	function addLangParam(value) {
 		var loc = window.location.href;
 		var regex = new RegExp("[?//&]lang=");
-		if(regex.test(loc)) {
+		if (regex.test(loc)) {
 			var langIdx = loc.search(regex);
-			window.location.href = loc.replace(loc.substring(langIdx + 1, langIdx + 8), 'lang=' + value);
-		}
-		else if (loc.indexOf('?') == -1) {
+			window.location.href = loc.replace(loc.substring(langIdx + 1,
+					langIdx + 8), 'lang=' + value);
+		} else if (loc.indexOf('?') == -1) {
 			window.location.href = loc + "?lang=" + value;
-		}
-		else {
+		} else {
 			window.location.href = loc + "&lang=" + value;
 		}
 	}
 </script>
-<div class="milHeading">
-	<spring:message code="header.label.appName"/> - Anu Kuusmaa <spring:message code="header.label.and"/> Andres Käver 
-		(<a href="javascript:addLangParam('en');"><img src="<c:url value='/static/en.gif' />" /></a> | 
-		<a href="javascript:addLangParam('et');"><img	src="<c:url value='/static/et.gif' />" /></a>)
-		<br>
+<div style="overflow: hidden">
+	<div class="milHeading" style="float: left">
+		<spring:message code="header.label.appName" />
+		- Anu Kuusmaa
+		<spring:message code="header.label.and" />
+		Andres Käver (<a href="javascript:addLangParam('en');"><img
+			src="<c:url value='/static/en.gif' />" /></a> | <a
+			href="javascript:addLangParam('et');"><img
+			src="<c:url value='/static/et.gif' />" /></a>) <br>
+	</div>
+	
+	<div style="float: right">
+		<a href="<c:url value='/logout' />"><spring:message
+				code="header.link.logout" /></a>
+	</div>
+	 
 </div>

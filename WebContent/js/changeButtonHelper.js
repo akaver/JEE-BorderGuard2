@@ -14,7 +14,7 @@ function chooseNewUnitType() {
 		$('#forSending').attr('value',newUnitTypeTemp); //here it is read by Spring
 		$(this).dialog('close');
 		makeReload();
-	}; 
+	};
 	dialog_buttons[$('#cancelButton').attr('value')] = function() {
 		$(this).dialog('close');
 	};
