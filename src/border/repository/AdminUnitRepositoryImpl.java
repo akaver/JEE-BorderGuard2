@@ -24,16 +24,15 @@ public class AdminUnitRepositoryImpl implements AdminUnitRepositoryCustom {
 
 	@Override
 	@Transactional
-	public List<AdminUnit> getAdminUnitsOfCertainType(Long adminUnitTypeID,
-			String dateString) {
+	public List<AdminUnit> getAdminUnitsOfCertainType(Long adminUnitTypeID) {
 		LOGGER.info("Getting adminunits of type: " + adminUnitTypeID);
 
 		List<AdminUnit> res = new ArrayList<AdminUnit>();
 		TypedQuery<AdminUnit> query = entityManager
 				.createQuery(
 						"select au from AdminUnit au where AdminUnitTypeID = :adminUnitTypeID "
-								+ "and OpenedDate < " + dateString + " and ClosedDate > " + dateString
-								+ " and FromDate < " + dateString + " and ToDate > " + dateString,
+								+ "and OpenedDate < NOW() and ClosedDate > NOW() " +
+								"and FromDate < NOW() and ToDate > NOW()",
 						AdminUnit.class);
 		query.setParameter("adminUnitTypeID", adminUnitTypeID);
 

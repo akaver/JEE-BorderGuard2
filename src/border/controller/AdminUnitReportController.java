@@ -102,12 +102,10 @@ public class AdminUnitReportController {
 	private AdminUnitReportVM setUnitTypeSpecifics(AdminUnitReportVM formData) {
 
 		Long adminUnitTypeID = formData.getAdminUnitType().getAdminUnitTypeID();
-		// String dateString = reFormat(formData.getSearchDate());
-		String dateString = "NOW()";
-
+		
 		// get the units of the type we need
 		formData.setAdminUnitMasterList(adminUnitService.getByAdminUnitTypeID(
-				adminUnitTypeID, dateString));
+				adminUnitTypeID));
 
 		// for each unit the subordinates list will be filled automatically
 		// by JPA one-to-many mapping. time limits are not considered

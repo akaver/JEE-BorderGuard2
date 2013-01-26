@@ -8,11 +8,9 @@ import border.model.*;
  * then implement them on some class
  */
 public interface AdminUnitTypeSubordinationRepositoryCustom {
-	public void removeMaster(AdminUnitType adminUnitType, Long adminUnitTypeMasterID,
-			String dateTimeString);
+	public void removeMaster(AdminUnitType adminUnitType, Long adminUnitTypeMasterID);
 
-	public void addMaster(AdminUnitType adminUnitType, Long adminUnitTypeMasterID,
-			String dateTimeString);
+	public void addMaster(AdminUnitType adminUnitType, Long adminUnitTypeMasterID);
 	
 	public void removeSubordination(AdminUnitType masterAdminUnitType,
 			AdminUnitType subordinateAdminUnitType);

@@ -156,17 +156,16 @@ public class AdminUnitController {
 
 		// save relationship between chosen unit and its master
 		adminUnitService.saveSubordination(formData.getAdminUnit()
-				.getAdminUnitID(), formData.getAdminUnitMasterID(), "NOW()");
+				.getAdminUnitID(), formData.getAdminUnitMasterID());
 
 		// update the master for all subordinates
 		for (AdminUnit sub : formData.getAdminUnitsSubordinateList()) {
 			adminUnitService.saveSubordination(sub.getAdminUnitID(), formData
-					.getAdminUnit().getAdminUnitID(), "NOW()");
+					.getAdminUnit().getAdminUnitID());
 		}
 		// remove subordination entries for abandoned subordinates
 		for (AdminUnit subEx : formData.getAdminUnitsSubordinateListRemoved()) {
-			adminUnitService.saveSubordination(subEx.getAdminUnitID(), 0L,
-					"NOW()");
+			adminUnitService.saveSubordination(subEx.getAdminUnitID(), 0L);
 		}
 
 		return "redirect:/";

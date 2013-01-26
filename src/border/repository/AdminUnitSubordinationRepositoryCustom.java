@@ -3,10 +3,9 @@ package border.repository;
 
 public interface AdminUnitSubordinationRepositoryCustom {
 
-	void removeSubordination(Long adminUnitSubordinateID,
-			String dateTimeString);
+	void removeSubordination(Long adminUnitSubordinateID);
 
 	void updateOrAddSubordination(Long adminUnitSubordinateID,
-			Long adminUnitMasterID, String dateTimeString);
+			Long adminUnitMasterID);
 
 }

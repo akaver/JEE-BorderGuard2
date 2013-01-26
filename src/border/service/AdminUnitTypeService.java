@@ -149,11 +149,11 @@ public class AdminUnitTypeService {
 		if ((adminUnitTypeMasterID == null) || (adminUnitTypeMasterID == 0L)) {
 			// remove the master
 			adminUnitTypeSubordinationRepository.removeMaster(adminUnitType,
-					adminUnitTypeMasterID, dateTimeString);
+					adminUnitTypeMasterID);
 		} else {
 			// add the master
 			adminUnitTypeSubordinationRepository.addMaster(adminUnitType,
-					adminUnitTypeMasterID, dateTimeString);
+					adminUnitTypeMasterID);
 
 		}
 	}

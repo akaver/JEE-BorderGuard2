@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.data.jpa.repository.support.QueryDslJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import border.helper.AccessHelper;
 import border.model.AdminUnit;
 import border.model.AdminUnitSubordination;
 
@@ -25,11 +26,13 @@ public class AdminUnitSubordinationRepositoryImpl implements
 
 	@Override
 	@Transactional
-	public void removeSubordination(Long adminUnitSubordinateID, String dateTimeString) {
+	public void removeSubordination(Long adminUnitSubordinateID) {
 		LOGGER.info("removeSubordination slaveID:" + adminUnitSubordinateID);
+		
+		String username = AccessHelper.getUserName();
 
 		String sql = "update AdminUnitSubordination set " +
-				"ChangedBy='Admin', ChangedDate=NOW(), ClosedBy='Admin', ClosedDate=NOW(), ToDate=NOW() " +
+				"ChangedBy='" + username + "', ChangedDate=NOW(), ClosedBy='" + username + "', ClosedDate=NOW(), ToDate=NOW() " +
 				"where SubordinateAdminUnitID=:subordinateAdminUnitID " +
 				"and OpenedDate < NOW() and ClosedDate > NOW() and FromDate < NOW() and ToDate > NOW()";
 		Query query = entityManager.createQuery(sql);
@@ -44,14 +47,16 @@ public class AdminUnitSubordinationRepositoryImpl implements
 	@Override
 	@Transactional
 	public void updateOrAddSubordination(Long adminUnitSubordinateID,
-			Long adminUnitMasterID, String dateTimeString) {
+			Long adminUnitMasterID) {
 		
 		// try to update master for this particular slave
 		LOGGER.info("updateOrAddSubordination slaveID:" + adminUnitSubordinateID
 				+ " masterID:" + adminUnitMasterID);
 		
+		String username = AccessHelper.getUserName();
+		
 		String sql = "update AdminUnitSubordination set " +
-				"MasterAdminUnitID= :adminUnitMasterID, ChangedBy='Admin', ChangedDate=NOW() " +
+				"MasterAdminUnitID= :adminUnitMasterID, ChangedBy='" + username + "', ChangedDate=NOW() " +
 				"where SubordinateAdminUnitID=:subordinateAdminUnitID and " +
 				"OpenedDate < NOW() and ClosedDate > NOW() and FromDate < NOW() and ToDate > NOW()";
 		

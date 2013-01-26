@@ -120,7 +120,7 @@ public class AdminUnitService {
 	}
 
 	public void saveSubordination(Long adminUnitSubordinateID,
-			Long adminUnitMasterID, String dateTimeString) {
+			Long adminUnitMasterID) {
 
 		// if it is state, it can have no masters
 		if (adminUnitSubordinateID == 1) {
@@ -130,21 +130,20 @@ public class AdminUnitService {
 		else if (adminUnitMasterID == 0 || adminUnitMasterID == null) {
 
 			adminUnitSubordinationRepository.removeSubordination(
-					adminUnitSubordinateID, dateTimeString);
+					adminUnitSubordinateID);
 		}
 		// if master id > 1, then master is added/updated
 		else {
 			adminUnitSubordinationRepository.updateOrAddSubordination(
-					adminUnitSubordinateID, adminUnitMasterID, dateTimeString);
+					adminUnitSubordinateID, adminUnitMasterID);
 		}
 
 	}
 
-	public List<AdminUnit> getByAdminUnitTypeID(Long adminUnitTypeID,
-			String dateString) {
+	public List<AdminUnit> getByAdminUnitTypeID(Long adminUnitTypeID) {
 		List<AdminUnit> adminUnitsOfCertainType = new ArrayList<AdminUnit>();
 		adminUnitsOfCertainType = adminUnitRepository
-				.getAdminUnitsOfCertainType(adminUnitTypeID, dateString);
+				.getAdminUnitsOfCertainType(adminUnitTypeID);
 
 		return adminUnitsOfCertainType;
 	}

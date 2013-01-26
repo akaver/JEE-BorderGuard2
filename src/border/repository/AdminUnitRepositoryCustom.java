@@ -6,6 +6,5 @@ import border.model.AdminUnit;
 
 public interface AdminUnitRepositoryCustom {
 
-	List<AdminUnit> getAdminUnitsOfCertainType(Long adminUnitTypeID,
-			String dateString);
+	List<AdminUnit> getAdminUnitsOfCertainType(Long adminUnitTypeID);
 }
