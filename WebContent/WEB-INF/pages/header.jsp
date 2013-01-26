@@ -24,11 +24,5 @@
 			src="<c:url value='/static/en.gif' />" /></a> | <a
 			href="javascript:addLangParam('et');"><img
 			src="<c:url value='/static/et.gif' />" /></a>) <br>
-	</div>
-	
-	<div style="float: right">
-		<a href="<c:url value='/logout' />"><spring:message
-				code="header.link.logout" /></a>
-	</div>
-	 
+	</div>	 
 </div>

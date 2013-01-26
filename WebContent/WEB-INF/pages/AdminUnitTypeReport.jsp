@@ -34,6 +34,7 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
+	<jsp:include page="logout.jsp" />
 	<div id="main" class="withMargin">
 		<p><spring:message code="adminUnitTypeReport.label.title" /></p>
 		<p>

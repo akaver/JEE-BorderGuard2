@@ -15,6 +15,7 @@
 </head>
 <body>
 	<jsp:include page="header.jsp" />
+	<jsp:include page="logout.jsp" />
 	<!-- plain old form, no model connected with it -->
 	<form method="post" action="homeActivityForm">
 		<div>
