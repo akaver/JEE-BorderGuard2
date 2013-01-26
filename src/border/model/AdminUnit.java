@@ -6,10 +6,9 @@ import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import border.helper.DateHelper;
 
@@ -20,15 +19,17 @@ public class AdminUnit {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long AdminUnitID;
-	@NotNull
+	@Column(nullable = false)
+	@NotBlank
 	@Size(min = 2, max = 16)
 	private String code;
-	@NotNull
+	@Column(nullable = false)
+	@NotBlank
 	@Size(min = 2, max = 64)
 	private String name;
 	@Column(nullable = false)
 	private String comment;
-	@NotNull
+	@Column(nullable = false)
 	@Min(1)
 	private Long adminUnitTypeID;
 	@Column(nullable = false)

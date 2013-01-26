@@ -6,7 +6,7 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import border.helper.DateHelper;
 
@@ -21,8 +21,12 @@ public class AdminUnitType {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long adminUnitTypeID; 
+	@Column(nullable = false)
+	@NotBlank
 	@Size(min = 1, max = 16)
 	private String code;
+	@Column(nullable = false)
+	@NotBlank
 	@Size(min = 1, max = 64)
 	private String name;
 	@Column(nullable = false)
@@ -33,17 +37,16 @@ public class AdminUnitType {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date toDate;
-	@NotNull
+	@Column(nullable = false)
 	private String openedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date openedDate;
-	@NotNull
+	@Column(nullable = false)
 	private String changedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date changedDate;
-	@NotNull
 	private String closedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)

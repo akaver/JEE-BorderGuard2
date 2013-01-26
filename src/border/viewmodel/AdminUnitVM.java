@@ -3,6 +3,7 @@ package border.viewmodel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.ReportAsSingleViolation;
 import javax.validation.Valid;
 
 import border.model.AdminUnit;
