@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 
 import border.repository.AdminUnitRepositoryImpl;
 
@@ -30,5 +31,16 @@ public class AccessHelper {
 		}
 		LOGGER.info("Meaningless simple user trying to access, throw him back");
 		return false;
+	}
+	
+	public static String getUserName() {
+		String username = "admin";
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		if (authentication != null) {
+			User user = (User) authentication.getPrincipal();
+			username = user.getUsername();
+		}
+		return username;
 	}
 }

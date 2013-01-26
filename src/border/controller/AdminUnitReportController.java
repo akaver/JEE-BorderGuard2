@@ -42,7 +42,7 @@ public class AdminUnitReportController {
 
 		LOGGER.info("Entered admin unit report with ID: " + _AdminUnitTypeID);
 
-		// extra validation when parameter entered from url
+		// extra validation when parameter entered from URL
 		Long adminUnitTypeID = validateTypeID(_AdminUnitTypeID);
 		AdminUnitReportVM adminUnitReportVM = populateViewModelWithData(adminUnitTypeID);
 		model.addAttribute("formData", adminUnitReportVM);
@@ -183,9 +183,12 @@ public class AdminUnitReportController {
 		String adminUnitID = paramName.substring(11);
 
 		AdminUnit au = adminUnitService.getByID(Long.decode(adminUnitID));
-		if (au.getComment().startsWith("Add here extra information")) {
+		
+		// Don't show empty comments 
+		if (au.getComment().trim().length() == 0) {
 			au.setComment(null);
 		}
+		
 		formData.setChosenSubordinate(au);
 		formData.setAdminUnitTypeName(adminUnitTypeService.getByID(
 				au.getAdminUnitTypeID()).getName());

@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import border.helper.AccessHelper;
 import border.helper.DateHelper;
 
 @Entity
@@ -71,12 +72,12 @@ public class AdminUnit {
 			String openedBy, String openedDate, String changedBy,
 			String changedDate, String closedBy, String closedDate)
 			throws ParseException {
-
+		
 		this.code = code;
 		this.name = name;
 
 		if (comment == null || comment.trim().isEmpty()) {
-			this.comment = "Add here extra information";
+			this.comment = "";
 		} else {
 			this.comment = comment;
 		}
@@ -94,21 +95,24 @@ public class AdminUnit {
 
 	public AdminUnit(String code, String name, String comment,
 			Long adminUnitTypeID) {
+		
+		String username = AccessHelper.getUserName();
+		
 		this.code = code;
 		this.name = name;
 		this.comment = comment;
 		if (this.comment == null || this.comment.trim().isEmpty()) {
-			this.comment = "Add here extra information";
+			this.comment = "";
 		}
 		this.adminUnitTypeID = adminUnitTypeID;
 
 		this.fromDate = DateHelper.getNow();
 		this.toDate = DateHelper.getFutureDate();
-		this.openedBy = "admin";
+		this.openedBy = username;
 		this.openedDate = DateHelper.getNow();
-		this.changedBy = "admin";
+		this.changedBy = username;
 		this.changedDate = DateHelper.getNow();
-		this.closedBy = "admin";
+		this.closedBy = username;
 		this.closedDate = DateHelper.getFutureDate();
 
 	}
@@ -120,11 +124,12 @@ public class AdminUnit {
 
 	@PrePersist
 	public void prePersist() {
-		// TODO: find out real username
 		// TODO: do not overwrite existing dates
 		
+		String username = AccessHelper.getUserName();
+		
 		if (this.comment == null || this.comment.trim().isEmpty()) {
-			this.comment = "Add here extra information";
+			this.comment = "";
 		}
 		
 		this.fromDate = DateHelper.getNow();
@@ -134,9 +139,9 @@ public class AdminUnit {
 		this.changedDate = DateHelper.getNow();
 		this.closedDate = DateHelper.getFutureDate();
 
-		this.openedBy = "admin";
-		this.changedBy = "admin";
-		this.closedBy = "admin";
+		this.openedBy = username;
+		this.changedBy = username;
+		this.closedBy = username;
 	}
 
 	public Long getAdminUnitID() {

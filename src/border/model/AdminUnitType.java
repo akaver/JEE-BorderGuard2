@@ -8,6 +8,7 @@ import javax.validation.constraints.*;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import border.helper.AccessHelper;
 import border.helper.DateHelper;
 
 /*
@@ -62,8 +63,10 @@ public class AdminUnitType {
 
 	
 	public AdminUnitType() {
-		// TODO: find out real username
-		// TODO: do not overwrite exsisting dates
+		// TODO: do not overwrite existing dates
+		
+		String username = AccessHelper.getUserName();
+		
 		this.fromDate = DateHelper.getNow();
 		this.toDate = DateHelper.getFutureDate();
 
@@ -71,9 +74,9 @@ public class AdminUnitType {
 		this.changedDate =  DateHelper.getNow();
 		this.closedDate = DateHelper.getFutureDate();
 		
-		this.openedBy = "admin";
-		this.changedBy = "admin";
-		this.closedBy = "admin";
+		this.openedBy = username;
+		this.changedBy = username;
+		this.closedBy = username;
 
 	}
 
@@ -86,7 +89,7 @@ public class AdminUnitType {
 		this.name = name;
 		
 		if (comment == null || comment.trim().isEmpty()) {
-			this.comment = "Add here extra information";
+			this.comment = "";
 		} else {
 			this.comment = comment;
 		}
@@ -102,11 +105,14 @@ public class AdminUnitType {
 	}
 
 	public AdminUnitType(String code, String name, String comment) {
+		
+		String username = AccessHelper.getUserName();
+		
 		this.code = code;
 		this.name = name;
 		
 		if (comment == null || comment.trim().isEmpty()) {
-			this.comment = "Add here extra information";
+			this.comment = "";
 		} else {
 			this.comment = comment;
 		}
@@ -114,11 +120,11 @@ public class AdminUnitType {
 		this.fromDate = DateHelper.getNow();
 		this.toDate = DateHelper.getFutureDate();
 
-		this.openedBy = "admin";
+		this.openedBy = username;
 		this.openedDate = DateHelper.getNow();
-		this.changedBy = "admin";
+		this.changedBy = username;
 		this.changedDate = DateHelper.getNow();
-		this.closedBy = "admin";
+		this.closedBy = username;
 		this.closedDate = DateHelper.getFutureDate();
 		
 	}
@@ -129,12 +135,13 @@ public class AdminUnitType {
 	}
 
 	@PrePersist
-	public void prePersist() {
-		// TODO: find out real username
+	public void prePersist() {		 
 		// TODO: do not overwrite exsisting dates
 		
+		String username = AccessHelper.getUserName();
+		
 		if (this.comment == null || this.comment.trim().isEmpty()) {
-			this.comment = "Add here extra information";
+			this.comment = "";
 		}
 		
 		this.fromDate = DateHelper.getNow();
@@ -144,9 +151,9 @@ public class AdminUnitType {
 		this.changedDate =  DateHelper.getNow();
 		this.closedDate = DateHelper.getFutureDate();
 		
-		this.openedBy = "admin";
-		this.changedBy = "admin";
-		this.closedBy = "admin";
+		this.openedBy = username;
+		this.changedBy = username;
+		this.closedBy = username;
 		
 	}
 
