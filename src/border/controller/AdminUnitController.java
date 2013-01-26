@@ -127,14 +127,14 @@ public class AdminUnitController {
 	// so that language change GET wouldn't break the pot
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.GET)
 	public String handleLanguageChanges() {
-		
+
 		// only admins can access
 		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
 			return "redirect:/";
 		}
 
 		return "AdminUnit";
-	}	
+	}
 
 	// POST part
 
@@ -156,16 +156,20 @@ public class AdminUnitController {
 
 		// save relationship between chosen unit and its master
 		adminUnitService.saveSubordination(formData.getAdminUnit()
-				.getAdminUnitID(), formData.getAdminUnitMasterID());
+				.getAdminUnitID(),
+				formData.getAdminUnit().getAdminUnitTypeID(), formData
+						.getAdminUnitMasterID());
 
 		// update the master for all subordinates
 		for (AdminUnit sub : formData.getAdminUnitsSubordinateList()) {
-			adminUnitService.saveSubordination(sub.getAdminUnitID(), formData
-					.getAdminUnit().getAdminUnitID());
+			adminUnitService.saveSubordination(sub.getAdminUnitID(), sub
+					.getAdminUnitTypeID(), formData.getAdminUnit()
+					.getAdminUnitID());
 		}
 		// remove subordination entries for abandoned subordinates
 		for (AdminUnit subEx : formData.getAdminUnitsSubordinateListRemoved()) {
-			adminUnitService.saveSubordination(subEx.getAdminUnitID(), 0L);
+			adminUnitService.saveSubordination(subEx.getAdminUnitID(),
+					subEx.getAdminUnitTypeID(), 0L);
 		}
 
 		return "redirect:/";
@@ -280,6 +284,17 @@ public class AdminUnitController {
 					.getAdminUnitSubordinatesPossible(formData.getAdminUnit()
 							.getAdminUnitTypeID()));
 
+			// make sure that unit itself wouldn't fall into that list
+			for (AdminUnit possibleSub : formData
+					.getAdminUnitsSubordinateListPossible()) {
+				if (possibleSub.getAdminUnitID() == formData.getAdminUnit()
+						.getAdminUnitID()) {
+					formData.getAdminUnitsSubordinateListPossible().remove(
+							possibleSub);
+					break;
+				}
+			}
+
 			// remove current master, make unit masterless
 			formData.setAdminUnitMaster(adminUnitService.getEmptyAdminUnit());
 			formData.setAdminUnitMasterID(0L);
@@ -289,6 +304,17 @@ public class AdminUnitController {
 					.getAllowedMasters(formData.getAdminUnit()
 							.getAdminUnitTypeID()), formData
 					.getAdminUnitMaster());
+
+			// make sure that unit itself wouldn't fall into that list
+			for (AdminUnit possibleMaster : formData
+					.getAdminUnitMasterListWithZero()) {
+				if (possibleMaster.getAdminUnitID() == formData.getAdminUnit()
+						.getAdminUnitID()) {
+					formData.getAdminUnitMasterListWithZero().remove(
+							possibleMaster);
+					break;
+				}
+			}
 		}
 
 		return formData;

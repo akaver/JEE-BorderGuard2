@@ -120,10 +120,11 @@ public class AdminUnitService {
 	}
 
 	public void saveSubordination(Long adminUnitSubordinateID,
+			Long subordinatesAdminUnitTypeID,
 			Long adminUnitMasterID) {
 
 		// if it is state, it can have no masters
-		if (adminUnitSubordinateID == 1) {
+		if (subordinatesAdminUnitTypeID == 1) {
 			return;
 		}
 		// if master id is 0, then master is removed/nothing
