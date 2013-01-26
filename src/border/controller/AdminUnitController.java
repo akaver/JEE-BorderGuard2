@@ -9,6 +9,9 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import border.helper.AccessHelper;
 import border.model.AdminUnit;
 import border.model.AdminUnitType;
 import border.repository.AdminUnitRepositoryImpl;
@@ -45,6 +49,11 @@ public class AdminUnitController {
 			Model model,
 			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID) {
 		LOGGER.info("adminUnit home for " + _AdminUnitID);
+
+		// only admins can access
+		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
+			return "redirect:/";
+		}
 
 		// set up the amdminUnitID
 		Long adminUnitID;
@@ -118,12 +127,18 @@ public class AdminUnitController {
 
 		return formData;
 	}
-	
+
 	// so that language change GET wouldn't break the pot
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.GET)
 	public String handleLanguageChanges() {
+		
+		// only admins can access
+		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
+			return "redirect:/";
+		}
+
 		return "AdminUnit";
-	}
+	}	
 
 	// POST part
 
@@ -133,9 +148,9 @@ public class AdminUnitController {
 			BindingResult bindingResult) {
 
 		model.addAttribute("formData", formData);
-		
+
 		if (bindingResult.hasErrors()) {
-			LOGGER.info("Some errors, no saving: " + bindingResult);			
+			LOGGER.info("Some errors, no saving: " + bindingResult);
 			return "AdminUnit";
 		}
 		LOGGER.info("Will go and save things.");
@@ -144,8 +159,8 @@ public class AdminUnitController {
 		formData.setAdminUnit(adminUnitService.save(formData.getAdminUnit()));
 
 		// save relationship between chosen unit and its master
-		adminUnitService.saveSubordination(formData.getAdminUnit().getAdminUnitID(),
-				formData.getAdminUnitMasterID(), "NOW()");
+		adminUnitService.saveSubordination(formData.getAdminUnit()
+				.getAdminUnitID(), formData.getAdminUnitMasterID(), "NOW()");
 
 		// update the master for all subordinates
 		for (AdminUnit sub : formData.getAdminUnitsSubordinateList()) {
@@ -153,9 +168,9 @@ public class AdminUnitController {
 					.getAdminUnit().getAdminUnitID(), "NOW()");
 		}
 		// remove subordination entries for abandoned subordinates
-		for (AdminUnit subEx : formData
-				.getAdminUnitsSubordinateListRemoved()) {
-			adminUnitService.saveSubordination(subEx.getAdminUnitID(), 0L, "NOW()");
+		for (AdminUnit subEx : formData.getAdminUnitsSubordinateListRemoved()) {
+			adminUnitService.saveSubordination(subEx.getAdminUnitID(), 0L,
+					"NOW()");
 		}
 
 		return "redirect:/";
@@ -254,8 +269,9 @@ public class AdminUnitController {
 		Long adminUnitTypeID = formData.getAdminUnit().getAdminUnitTypeID();
 
 		// if type changed or new unit had no type until now
-		if (formData.getAdminUnitType() == null 
-				|| adminUnitTypeID != formData.getAdminUnitType().getAdminUnitTypeID()) {
+		if (formData.getAdminUnitType() == null
+				|| adminUnitTypeID != formData.getAdminUnitType()
+						.getAdminUnitTypeID()) {
 			formData.setAdminUnitType(adminUnitTypeService
 					.getByID(adminUnitTypeID));
 

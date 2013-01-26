@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import border.helper.AccessHelper;
 import border.model.AdminUnitType;
 import border.model.AdminUnitTypeSubordination;
 import border.service.AdminUnitTypeService;
@@ -37,6 +38,12 @@ public class AdminUnitTypeController {
 	public String home(
 			Model model,
 			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID) {
+
+		// only admins can access
+		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
+			return "redirect:/";
+		}
+
 		LOGGER.info("/");
 
 		// set up the amdminUnitID
@@ -57,10 +64,16 @@ public class AdminUnitTypeController {
 
 		return "AdminUnitType";
 	}
-	
+
 	// so that language change GET wouldn't break the pot
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.GET)
 	public String handleLanguageChanges() {
+
+		// only admins can access
+		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
+			return "redirect:/";
+		}
+
 		return "AdminUnitType";
 	}
 

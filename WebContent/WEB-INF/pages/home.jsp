@@ -16,6 +16,7 @@
 <body>
 	<jsp:include page="header.jsp" />
 	<jsp:include page="logout.jsp" />
+	
 	<!-- plain old form, no model connected with it -->
 	<form method="post" action="homeActivityForm">
 		<div>
@@ -49,6 +50,7 @@
 					</c:forEach>
 				</select>
 				
+				<!-- Only admin can add and edit -->
 				<sec:authorize ifAnyGranted="ROLE_ADMIN">
 					<input type="submit" name="ViewAdminUnit" value="<spring:message code="home.button.lookChange" />">
 					<input type="submit" name="AddAdminUnit" value="<spring:message code="home.button.addNew" />"> 
