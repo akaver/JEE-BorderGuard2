@@ -26,23 +26,34 @@
 			</div>
 
 			<div class="milContent">
-				<spring:message code="home.label.adminUnitType" />:<br> <select name="AdminUnitTypeID">
+				<spring:message code="home.label.adminUnitType" />:<br> 
+				<select name="AdminUnitTypeID">
 					<c:forEach var="entry" items="${formData.adminUnitTypeList}">
 						<option value="${entry.adminUnitTypeID}">${entry.name}</option>
 					</c:forEach>
-				</select> <input type="submit" name="ViewAdminUnitType" value="<spring:message code="home.button.lookChange" />">
-				<input type="submit" name="AddAdminUnitType" value="<spring:message code="home.button.addNew" />">
+				</select> 
+				
+				<!-- Only admin can add and edit -->
+			    <sec:authorize ifAnyGranted="ROLE_ADMIN">
+			        <input type="submit" name="ViewAdminUnitType" value="<spring:message code="home.button.lookChange" />">
+					<input type="submit" name="AddAdminUnitType" value="<spring:message code="home.button.addNew" />">				
+			    </sec:authorize>
 				<input type="submit" name="ReportAdminUnitType" value="<spring:message code="home.button.report" />">
 			</div>
 
 			<div class="milContent">
-				<spring:message code="home.label.adminUnit" />: <br> <select name="AdminUnitID">
+				<spring:message code="home.label.adminUnit" />:<br> 
+				<select name="AdminUnitID">
 					<c:forEach var="entry" items="${formData.adminUnitList}">
 						<option value="${entry.adminUnitID}">${entry.name}</option>
 					</c:forEach>
-				</select> <input type="submit" name="ViewAdminUnit" value="<spring:message code="home.button.lookChange" />">
-				<input type="submit" name="AddAdminUnit" value="<spring:message code="home.button.addNew" />"> <input
-					type="submit" name="ReportAdminUnit" value="<spring:message code="home.button.report" />">
+				</select>
+				
+				<sec:authorize ifAnyGranted="ROLE_ADMIN">
+					<input type="submit" name="ViewAdminUnit" value="<spring:message code="home.button.lookChange" />">
+					<input type="submit" name="AddAdminUnit" value="<spring:message code="home.button.addNew" />"> 
+				</sec:authorize>
+				<input type="submit" name="ReportAdminUnit" value="<spring:message code="home.button.report" />">
 			</div>
 		</div>
 	</form>
