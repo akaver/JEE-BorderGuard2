@@ -50,6 +50,7 @@
 			p:paramName="lang">
 		</bean>
 	</mvc:interceptors>
+	
 	<!-- where to keep currently active language setting (CookieLocaleResolver 
 		or SessionLocaleResolver or AcceptHeaderLocaleResolver) -->
 	<bean id="localeResolver"

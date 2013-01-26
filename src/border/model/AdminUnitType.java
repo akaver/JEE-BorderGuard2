@@ -27,7 +27,7 @@ public class AdminUnitType {
 	@NotEmpty(message="Name must not be empty")
 	@Size(min = 1, max = 64)
 	private String name;
-	
+	@Column(nullable = false)
 	private String comment;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
@@ -83,7 +83,13 @@ public class AdminUnitType {
 
 		this.code = code;
 		this.name = name;
-		this.comment = comment;
+		
+		if (comment == null || comment.trim().isEmpty()) {
+			this.comment = "Add here extra information";
+		} else {
+			this.comment = comment;
+		}
+		
 		this.fromDate = DateHelper.getParsedDate(fromDate);
 		this.toDate = DateHelper.getParsedDate(toDate);
 		this.openedBy = openedBy;
@@ -97,7 +103,12 @@ public class AdminUnitType {
 	public AdminUnitType(String code, String name, String comment) {
 		this.code = code;
 		this.name = name;
-		this.comment = comment;
+		
+		if (comment == null || comment.trim().isEmpty()) {
+			this.comment = "Add here extra information";
+		} else {
+			this.comment = comment;
+		}
 
 		this.fromDate = DateHelper.getNow();
 		this.toDate = DateHelper.getFutureDate();

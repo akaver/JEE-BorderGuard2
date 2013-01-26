@@ -17,7 +17,7 @@
 	}
 </script>
 <div class="milHeading">
-	<spring:message code="header.appName"/> - Anu Kuusmaa <spring:message code="header.and"/> Andres Käver 
+	<spring:message code="header.label.appName"/> - Anu Kuusmaa <spring:message code="header.label.and"/> Andres Käver 
 		(<a href="javascript:addLangParam('en');"><img src="<c:url value='/static/en.gif' />" /></a> | 
 		<a href="javascript:addLangParam('et');"><img	src="<c:url value='/static/et.gif' />" /></a>)
 		<br>
