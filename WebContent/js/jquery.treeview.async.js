@@ -36,7 +36,7 @@ function load(settings, root, child, container) {
 					}, branch);
 				}
 				if (this.children && this.children.length) {
-					$.each(this.children, createNode, [branch])
+					$.each(this.children, createNode, [branch]);
 				}
 			}
 		}

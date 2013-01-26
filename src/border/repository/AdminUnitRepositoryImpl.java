@@ -5,12 +5,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import border.model.AdminUnit;
@@ -22,7 +20,7 @@ public class AdminUnitRepositoryImpl implements AdminUnitRepositoryCustom {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	private JpaRepository<AdminUnit, Long> repository;
+	//private JpaRepository<AdminUnit, Long> repository;
 
 	@Override
 	@Transactional

@@ -7,7 +7,7 @@ import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.support.QueryDslJpaRepository;
+//import org.springframework.data.jpa.repository.support.QueryDslJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import border.model.AdminUnit;
@@ -21,7 +21,7 @@ public class AdminUnitSubordinationRepositoryImpl implements
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	private QueryDslJpaRepository<AdminUnitSubordination, Long> repository;
+	//private QueryDslJpaRepository<AdminUnitSubordination, Long> repository;
 
 	@Override
 	@Transactional

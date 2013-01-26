@@ -9,9 +9,6 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import border.helper.AccessHelper;
 import border.model.AdminUnit;
-import border.model.AdminUnitType;
 import border.repository.AdminUnitRepositoryImpl;
 import border.service.*;
 import border.viewmodel.AdminUnitVM;
