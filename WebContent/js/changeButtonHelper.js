@@ -15,7 +15,7 @@ function chooseNewUnitType() {
 		$(this).dialog('close');
 		makeReload();
 	}; 
-	dialog_buttons['Loobu'] = function() {
+	dialog_buttons[$('#cancelButton').attr('value')] = function() {
 		$(this).dialog('close');
 	};
 		

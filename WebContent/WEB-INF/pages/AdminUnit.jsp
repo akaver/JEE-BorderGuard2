@@ -128,7 +128,7 @@
 					<td colspan="2" align="right"><input name="SubmitButton"
 						type="submit"
 						value="<spring:message code="adminUnit.button.submit" />">
-						<input name="CancelButton" type="submit"
+						<input name="CancelButton" type="submit" id="cancelButton"
 						value="<spring:message code="adminUnit.button.cancel" />"></td>
 				</tr>
 				<tr>
