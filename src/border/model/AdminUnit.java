@@ -26,7 +26,7 @@ public class AdminUnit {
 	@NotNull
 	@Size(min = 2, max = 64)
 	private String name;
-	@NotNull
+	@Column(nullable = false)
 	private String comment;
 	@NotNull
 	@Min(1)
@@ -121,6 +121,11 @@ public class AdminUnit {
 	public void prePersist() {
 		// TODO: find out real username
 		// TODO: do not overwrite existing dates
+		
+		if (this.comment == null || this.comment.trim().isEmpty()) {
+			this.comment = "Add here extra information";
+		}
+		
 		this.fromDate = DateHelper.getNow();
 		this.toDate = DateHelper.getFutureDate();
 

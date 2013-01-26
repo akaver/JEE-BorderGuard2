@@ -21,10 +21,8 @@ public class AdminUnitType {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long adminUnitTypeID; 
-	@NotEmpty(message="Code must not be empty")
 	@Size(min = 1, max = 16)
 	private String code;
-	@NotEmpty(message="Name must not be empty")
 	@Size(min = 1, max = 64)
 	private String name;
 	@Column(nullable = false)
@@ -131,6 +129,11 @@ public class AdminUnitType {
 	public void prePersist() {
 		// TODO: find out real username
 		// TODO: do not overwrite exsisting dates
+		
+		if (this.comment == null || this.comment.trim().isEmpty()) {
+			this.comment = "Add here extra information";
+		}
+		
 		this.fromDate = DateHelper.getNow();
 		this.toDate = DateHelper.getFutureDate();
 
