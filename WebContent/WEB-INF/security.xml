@@ -5,6 +5,8 @@
     http://www.springframework.org/schema/security
     http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
+
+
 	<http pattern="/login" security="none" />
 	<http pattern="/loginfailed" security="none" />
 	<http pattern="/static/**" security="none" />
@@ -15,7 +17,7 @@
 		<form-login login-page="/login" default-target-url="/"
 			authentication-failure-url="/loginfailed" />
 
-		<logout logout-url="/logout" logout-success-url="/login" />		
+		<logout logout-url="/logout" logout-success-url="/login" />
 	</http>
 
 	<authentication-manager>

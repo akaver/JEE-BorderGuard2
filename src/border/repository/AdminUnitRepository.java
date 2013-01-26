@@ -31,7 +31,7 @@ public interface AdminUnitRepository extends JpaRepository<AdminUnit, Long>,
 	List<AdminUnit> getAdminUnitMastersPossible(@Param("adminUnitTypeID") Long adminUnitTypeID);
 	
 	
-	@Query(value = "select au from AdminUnit au where AdminUnitTypeID = :adminUnitTypeID "
+	@Query(value = "select * from AdminUnit au where AdminUnitTypeID = :adminUnitTypeID "
 								+ "and OpenedDate < NOW() and ClosedDate > NOW() " +
 								"and FromDate < NOW() and ToDate > NOW()", nativeQuery = true)
 	List<AdminUnit> getAdminUnitsOfCertainType(@Param("adminUnitTypeID") Long adminUnitTypeID) ;
