@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import border.helper.DBHelper;
 import border.model.AdminUnit;
-import border.repository.AdminUnitTypeRepositoryImpl;
 import border.service.AdminUnitTypeService;
 import border.service.AdminUnitService;
 import border.viewmodel.HomeVM;
@@ -22,7 +21,7 @@ import border.viewmodel.HomeVM;
 @Controller
 public class HomeController {
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AdminUnitTypeRepositoryImpl.class);
+			.getLogger(HomeController.class);
 
 	@Autowired
 	AdminUnitTypeService adminUnitTypeService;
@@ -37,8 +36,8 @@ public class HomeController {
 		LOGGER.info("homepage");
 
 		HomeVM formData = new HomeVM();
-//		formData.setAdminUnitList(adminUnitService.findAll());
-//		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());
+		formData.setAdminUnitList(adminUnitService.findAll());
+		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());
 		model.addAttribute("formData", formData);
 
 		return "home";
