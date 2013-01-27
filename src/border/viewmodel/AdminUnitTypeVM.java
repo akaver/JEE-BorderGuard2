@@ -13,19 +13,19 @@ public class AdminUnitTypeVM {
 	@Valid
 	private AdminUnitType adminUnitType;
 	
-	// adminunittype wich is master for adminUnitType
+	// adminunittype which is master for adminUnitType
 	private  AdminUnitType adminUnitTypeMaster;
 
-	// ID of adminunittype wich is master for current adminUnitType
+	// ID of adminunittype which is master for current adminUnitType
 	private Long adminUnitTypeMasterID;
 	
 	// list of adminUnitTypes, for dropdown
 	private  List<AdminUnitType> adminUnitTypeMasterListWithZero;
 	
-	// list of adminunitypes which are subordinates to adminUnitType
+	// list of adminunittypes which are subordinates to adminUnitType
 	private List<AdminUnitType> adminUnitTypesSubordinateList;
 	
-	// list of adminunitypes which are possible new subordinates to adminUnitType
+	// list of adminunittypes which are possible new subordinates to adminUnitType
 	private List<AdminUnitType> adminUnitTypesSubordinateListPossible;
 
 	public AdminUnitType getAdminUnitType() {

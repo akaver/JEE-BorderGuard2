@@ -12,13 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import border.model.AdminUnit;
 import border.model.AdminUnitSubordination;
 import border.repository.AdminUnitRepository;
-import border.repository.AdminUnitRepositoryImpl;
 import border.repository.AdminUnitSubordinationRepository;
 
 @Service
 public class AdminUnitService {
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AdminUnitRepositoryImpl.class);
+			.getLogger(AdminUnitService.class);
 
 	@Autowired
 	private AdminUnitRepository adminUnitRepository;
@@ -34,21 +33,25 @@ public class AdminUnitService {
 
 	@Transactional
 	public List<AdminUnit> findAll() {
-		LOGGER.debug("find all adminunits");
+		LOGGER.info("Find all adminunits");
 
 		return adminUnitRepository.findAll();
 	}
 
 	@Transactional
 	public void deleteAll() {
-		LOGGER.debug("deleteAll");
+		LOGGER.info("Delete all adminunits and subordinations");
 		adminUnitSubordinationRepository.deleteAll();
 		adminUnitRepository.deleteAll();
 	}
 
 	@Transactional
 	public AdminUnit getAdminUnitMaster(Long adminUnitID) {
+		LOGGER.info("getAdminUnitMaster for adminUnitID: " + adminUnitID);
+
 		AdminUnit adminUnitMaster = null;
+
+		// Result will come as list of one; we'll take the first one
 		List<AdminUnitSubordination> adminUnitMasterSubordinations = adminUnitSubordinationRepository
 				.getMasterActiveNow(adminUnitID);
 
@@ -76,6 +79,8 @@ public class AdminUnitService {
 	}
 
 	public AdminUnit getEmptyAdminUnit() {
+		LOGGER.info("Making an empty master unit");
+
 		AdminUnit emptyAdminUnit = new AdminUnit();
 		emptyAdminUnit.setAdminUnitID(0L);
 		emptyAdminUnit.setName("---");
@@ -84,6 +89,8 @@ public class AdminUnitService {
 
 	@Transactional
 	public List<AdminUnit> getAdminUnitSubordinates(Long adminUnitID) {
+		LOGGER.info("getAdminUnitSubordinates for adminUnitID: " + adminUnitID);
+
 		List<AdminUnit> adminUnitSubordinates = new ArrayList<AdminUnit>();
 
 		List<AdminUnitSubordination> adminUnitSubordinations = adminUnitSubordinationRepository
@@ -96,6 +103,9 @@ public class AdminUnitService {
 
 	public List<AdminUnit> getAdminUnitSubordinatesPossible(Long adminUnitTypeID) {
 
+		LOGGER.info("getAdminUnitSubordinates by adminUnitTypeID: "
+				+ adminUnitTypeID);
+
 		List<AdminUnit> adminUnitSubordinatesPossible = new ArrayList<AdminUnit>();
 		adminUnitSubordinatesPossible = adminUnitRepository
 				.getAdminUnitSubordinatesPossible(adminUnitTypeID);
@@ -104,6 +114,10 @@ public class AdminUnitService {
 	}
 
 	public List<AdminUnit> getAllowedMasters(Long adminUnitTypeID) {
+		
+		LOGGER.info("getAllowedMasters by adminUnitTypeID: "
+				+ adminUnitTypeID);
+		
 		if (adminUnitTypeID == null)
 			return null;
 
@@ -120,8 +134,7 @@ public class AdminUnitService {
 	}
 
 	public void saveSubordination(Long adminUnitSubordinateID,
-			Long subordinatesAdminUnitTypeID,
-			Long adminUnitMasterID) {
+			Long subordinatesAdminUnitTypeID, Long adminUnitMasterID) {
 
 		// if it is state, it can have no masters
 		if (subordinatesAdminUnitTypeID == 1) {
@@ -130,8 +143,8 @@ public class AdminUnitService {
 		// if master id is 0, then master is removed/nothing
 		else if (adminUnitMasterID == 0 || adminUnitMasterID == null) {
 
-			adminUnitSubordinationRepository.removeSubordination(
-					adminUnitSubordinateID);
+			adminUnitSubordinationRepository
+					.removeSubordination(adminUnitSubordinateID);
 		}
 		// if master id > 1, then master is added/updated
 		else {
@@ -142,6 +155,9 @@ public class AdminUnitService {
 	}
 
 	public List<AdminUnit> getByAdminUnitTypeID(Long adminUnitTypeID) {
+		
+		LOGGER.info("get units by adminunittypeid: " + adminUnitTypeID);
+		
 		List<AdminUnit> adminUnitsOfCertainType = new ArrayList<AdminUnit>();
 		adminUnitsOfCertainType = adminUnitRepository
 				.getAdminUnitsOfCertainType(adminUnitTypeID);

@@ -19,8 +19,9 @@
 <script type="text/javascript" src="../js/changeButtonHelper.js"></script>
 </head>
 <body>
-	<jsp:include page="header.jsp" />
 	<jsp:include page="logout.jsp" />
+	<jsp:include page="header.jsp" />
+	
 	<div class="withMargin">
 		<form:form method="post" action="AdminUnitForm" name="AdminUnitForm"
 			modelAttribute="formData" commandName="formData">

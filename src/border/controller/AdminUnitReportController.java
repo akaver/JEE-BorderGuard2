@@ -14,7 +14,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import border.repository.AdminUnitRepositoryImpl;
 import border.service.AdminUnitService;
 import border.service.AdminUnitTypeService;
 import border.viewmodel.AdminUnitReportVM;
@@ -26,7 +25,7 @@ import border.model.*;
 public class AdminUnitReportController {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AdminUnitRepositoryImpl.class);
+			.getLogger(AdminUnitReportController.class);
 
 	@Autowired
 	AdminUnitService adminUnitService;
@@ -40,7 +39,7 @@ public class AdminUnitReportController {
 			Model model,
 			@RequestParam(required = false, value = "AdminUnitTypeID") String _AdminUnitTypeID) {
 
-		LOGGER.info("Entered admin unit report with ID: " + _AdminUnitTypeID);
+		LOGGER.info("Entered report page with admiUnitTypeID: " + _AdminUnitTypeID);
 
 		// extra validation when parameter entered from URL
 		Long adminUnitTypeID = validateTypeID(_AdminUnitTypeID);
@@ -69,6 +68,8 @@ public class AdminUnitReportController {
 	}
 
 	private AdminUnitReportVM populateViewModelWithData(Long adminUnitTypeID) {
+		LOGGER.info("Finding data for adminUnitTypeID: " + adminUnitTypeID);
+		
 		AdminUnitReportVM formData = new AdminUnitReportVM();
 		formData.setSearchDate(initializeDate());
 		formData.setAdminUnitType(adminUnitTypeService.getByID(adminUnitTypeID));
@@ -98,7 +99,7 @@ public class AdminUnitReportController {
 		return datePart;
 	}
 
-	// all necessary stuff to fill jsp
+	// all necessary stuff to fill JSP
 	private AdminUnitReportVM setUnitTypeSpecifics(AdminUnitReportVM formData) {
 
 		Long adminUnitTypeID = formData.getAdminUnitType().getAdminUnitTypeID();
@@ -119,6 +120,8 @@ public class AdminUnitReportController {
 	public String handleLanguageChange(ModelMap model,
 			@ModelAttribute("formData") AdminUnitReportVM formData,
 			BindingResult bindingResult) {
+		
+		LOGGER.info("Changing language.");
 
 		// to stop dialog re-opening by itself on get request for language
 		formData.setChosenSubordinate(null);
@@ -133,8 +136,8 @@ public class AdminUnitReportController {
 
 	@RequestMapping(value = "/AdminUnitReportForm", method = RequestMethod.POST, params = "BackButton")
 	public String cancelChanges(ModelMap model) {
-		LOGGER.info("Saw the report, now going back.");
-		// jump back to root view
+		
+		LOGGER.info("Saw the report, now going back home.");
 		return "redirect:/";
 	}
 
@@ -144,6 +147,7 @@ public class AdminUnitReportController {
 			@ModelAttribute("formData") AdminUnitReportVM formData,
 			BindingResult bindingResult,
 			@RequestParam(value = "adminUnitType.adminUnitTypeID") Long adminUnitTypeID) {
+		
 		LOGGER.info("Will refresh view for adminUnitTypeID: " + adminUnitTypeID);
 
 		// turn it to new get request
@@ -158,7 +162,7 @@ public class AdminUnitReportController {
 			BindingResult bindingResult,
 			@RequestParam(value = "adminUnitType.adminUnitTypeID") Long adminUnitTypeID,
 			HttpServletRequest request) {
-
+		
 		Enumeration<String> paramNames = request.getParameterNames();
 
 		while (paramNames.hasMoreElements()) {
@@ -179,6 +183,7 @@ public class AdminUnitReportController {
 			AdminUnitReportVM formData, String paramName) {
 
 		String adminUnitID = paramName.substring(11);
+		LOGGER.info("Finding dialog info for adminUnitID: " + adminUnitID);
 
 		AdminUnit au = adminUnitService.getByID(Long.decode(adminUnitID));
 		

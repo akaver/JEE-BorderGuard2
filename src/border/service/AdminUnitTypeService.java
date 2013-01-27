@@ -26,7 +26,7 @@ public class AdminUnitTypeService {
 
 	@Transactional
 	public List<AdminUnitType> findAll() {
-		LOGGER.info("findAll");
+		LOGGER.info("Find all adminunittypes");
 		return adminUnitTypeRepository.findAll();
 	}
 
@@ -44,7 +44,7 @@ public class AdminUnitTypeService {
 
 	@Transactional
 	public void deleteAll() {
-		LOGGER.info("deleteAll");
+		LOGGER.info("Delete all adminunittypes and subordinations");
 		// this will not reset the autoincrement fields, use DBHelper truncate
 		// functionality
 		adminUnitTypeSubordinationRepository.deleteAll();
@@ -53,7 +53,7 @@ public class AdminUnitTypeService {
 
 	@Transactional
 	public void populateData() {
-		LOGGER.info("populateData");
+		LOGGER.info("populateData for adminunittypes");
 
 		AdminUnitType master = new AdminUnitType("0", "Riik", "0");
 		AdminUnitType sub1 = new AdminUnitType("1", "Maakond", "1");
@@ -83,7 +83,6 @@ public class AdminUnitTypeService {
 		sub1_sub11 = adminUnitTypeSubordinationRepository.save(sub1_sub11);
 		sub1_sub12 = adminUnitTypeSubordinationRepository.save(sub1_sub12);
 		sub12_sub4 = adminUnitTypeSubordinationRepository.save(sub12_sub4);
-		
 
 	}
 
@@ -95,11 +94,9 @@ public class AdminUnitTypeService {
 		return res;
 	}
 
-	public List<AdminUnitType> getSubordinates(AdminUnitType adminUnitType,
-			String dateTimeString) {
+	public List<AdminUnitType> getSubordinates(AdminUnitType adminUnitType) {
 		LOGGER.info("getSubordinates for: "
-				+ adminUnitType.getAdminUnitTypeID() + " Time: "
-				+ dateTimeString);
+				+ adminUnitType.getAdminUnitTypeID());
 
 		// get the subordination structrure
 		List<AdminUnitTypeSubordination> subordination = adminUnitTypeSubordinationRepository
@@ -114,10 +111,9 @@ public class AdminUnitTypeService {
 	}
 
 	public List<AdminUnitType> getPossibleSubordinates(
-			AdminUnitType adminUnitType, String dateTimeString) {
+			AdminUnitType adminUnitType) {
 		LOGGER.info("getPossibleSubordinates for: "
-				+ adminUnitType.getAdminUnitTypeID() + " Time: "
-				+ dateTimeString);
+				+ adminUnitType.getAdminUnitTypeID());
 
 		if (adminUnitType.getAdminUnitTypeID() == null) {
 			return adminUnitTypeRepository
@@ -140,9 +136,12 @@ public class AdminUnitTypeService {
 			Long adminUnitTypeMasterID, String dateTimeString) {
 		LOGGER.info("saveMaster: " + adminUnitType + " master ID:"
 				+ adminUnitTypeMasterID);
-		// update this units master (on specified time)
-		// TODO: don't allow to set master on master unit (i.e the first should be
+		// update this units master
+
+		// don't allow to set master on master unit (i.e the first should be
 		// country/state, which has no master)
+		if (adminUnitType.getAdminUnitTypeID() == 1)
+			return;
 
 		// if master id is 0, then master is removed/nothing
 		// if master id != 0, then master is added/updated
@@ -158,10 +157,8 @@ public class AdminUnitTypeService {
 		}
 	}
 
-	public Long getAdminUnitTypeMasterID(AdminUnitType adminUnitType,
-			String dateTimeString) {
-		LOGGER.info("getAdminUnitTypeMasterID: " + adminUnitType + " time :"
-				+ dateTimeString);
+	public Long getAdminUnitTypeMasterID(AdminUnitType adminUnitType) {
+		LOGGER.info("getAdminUnitTypeMasterID: " + adminUnitType);
 
 		List<AdminUnitTypeSubordination> resList = adminUnitTypeSubordinationRepository
 				.getMasterActiveNow(adminUnitType.getAdminUnitTypeID());
@@ -180,15 +177,19 @@ public class AdminUnitTypeService {
 
 	public void removeSubordinate(AdminUnitType masterAdminUnitType,
 			AdminUnitType msubordinateAdminUnitType) {
-		//we cant delete anything from db, so you just have to update datetime fields
-		adminUnitTypeSubordinationRepository.removeSubordination(masterAdminUnitType, msubordinateAdminUnitType);
+		// we can't delete anything from DB, so you just have to update datetime
+		// fields
+		adminUnitTypeSubordinationRepository.removeSubordination(
+				masterAdminUnitType, msubordinateAdminUnitType);
 	}
 
 	public int getSubordinateCount(AdminUnitType adminUnitType) {
 		LOGGER.info("getSubordinateCount");
-		// get the subordination structrure
+		
+		// get the subordination structure
 		List<AdminUnitTypeSubordination> subordination = adminUnitTypeSubordinationRepository
 				.findSubordinatesActiveNow(adminUnitType.getAdminUnitTypeID());
+		
 		// get the subordinate items
 		List<AdminUnitType> res = new ArrayList<AdminUnitType>();
 		for (AdminUnitTypeSubordination item : subordination) {

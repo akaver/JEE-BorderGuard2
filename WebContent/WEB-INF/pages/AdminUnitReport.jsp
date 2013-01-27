@@ -33,8 +33,9 @@
 </script>
 </head>
 <body>
-	<jsp:include page="header.jsp" />
 	<jsp:include page="logout.jsp" />
+	<jsp:include page="header.jsp" />
+
 	<div class="withMargin">
 		<form:form method="post" action="AdminUnitReportForm"
 			name="AdminUnitReportForm" modelAttribute="formData"

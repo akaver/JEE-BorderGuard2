@@ -28,6 +28,7 @@ import java.util.*;
 // create session
 @SessionAttributes("formData")
 public class AdminUnitTypeController {
+	
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(AdminUnitTypeController.class);
 
@@ -44,7 +45,7 @@ public class AdminUnitTypeController {
 			return "redirect:/";
 		}
 
-		LOGGER.info("/");
+		LOGGER.info("Entered with AdminUnitTypeID: " + _AdminUnitID);
 
 		// set up the amdminUnitID
 		Long adminUnitID;
@@ -68,6 +69,8 @@ public class AdminUnitTypeController {
 	// so that language change GET wouldn't break the pot
 	@RequestMapping(value = "/AdminUnitTypeForm", method = RequestMethod.GET)
 	public String handleLanguageChanges() {
+		
+		LOGGER.info("Changing the language");
 
 		// only admins can access
 		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
@@ -82,8 +85,9 @@ public class AdminUnitTypeController {
 	public String saveChanges(ModelMap model,
 			@Valid @ModelAttribute("formData") AdminUnitTypeVM formData,
 			BindingResult bindingResult) {
-		LOGGER.info("/AdminUnitTypeForm (bindingresult: " + bindingResult + ")");
-		LOGGER.info("admin id: " + formData.getAdminUnitTypeMasterID());
+		
+		LOGGER.info("/AdminUnitTypeForm submit (bindingresult: " + bindingResult + ")");
+		LOGGER.info("AdminUnitTypeID: " + formData.getAdminUnitType().getAdminUnitTypeID());
 
 		// RestoreViewModelData(formData, modelLists);
 		model.addAttribute("formData", formData);
@@ -123,7 +127,7 @@ public class AdminUnitTypeController {
 
 		// so, load back original list of subordinates from service
 		List<AdminUnitType> originalSubordinates = adminUnitTypeService
-				.getSubordinates(formData.getAdminUnitType(), "NOW");
+				.getSubordinates(formData.getAdminUnitType());
 		// go through the list of current (on the form) subordinates
 		if (formData.getAdminUnitTypesSubordinateList() != null) {
 			for (AdminUnitType curSubordinate : formData
@@ -299,8 +303,7 @@ public class AdminUnitTypeController {
 			// {
 			// so, you have to query it through service
 			formData.setAdminUnitTypeMasterID(adminUnitTypeService
-					.getAdminUnitTypeMasterID(formData.getAdminUnitType(),
-							"NOW()"));
+					.getAdminUnitTypeMasterID(formData.getAdminUnitType()));
 
 		}
 
@@ -314,12 +317,12 @@ public class AdminUnitTypeController {
 		if (adminUnitTypeID != 0) {
 			// load the list of subordinates
 			formData.setAdminUnitTypesSubordinateList(adminUnitTypeService
-					.getSubordinates(formData.getAdminUnitType(), "NOW"));
+					.getSubordinates(formData.getAdminUnitType()));
 		}
 
 		// load the list of possible new subordinates
 		formData.setAdminUnitTypesSubordinateListPossible(adminUnitTypeService
-				.getPossibleSubordinates(formData.getAdminUnitType(), "NOW"));
+				.getPossibleSubordinates(formData.getAdminUnitType()));
 
 		return formData;
 	}

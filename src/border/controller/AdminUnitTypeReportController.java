@@ -27,23 +27,21 @@ import border.service.AdminUnitTypeService;
 @RequestMapping("/AdminUnitTypeReport")
 public class AdminUnitTypeReportController {
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AdminUnitTypeController.class);
+			.getLogger(AdminUnitTypeReportController.class);
 
 	@Autowired
 	AdminUnitTypeService adminUnitTypeService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
-		LOGGER.info("/");
+		LOGGER.info("AdminUnitTypeReport/");
 
 		return "AdminUnitTypeReport";
 	}
 
 	@RequestMapping(value = "/tree", method = RequestMethod.GET)
 	public String returnJSON(Model model, HttpServletRequest request, HttpServletResponse response) throws IOException {
-		LOGGER.info("/");
-
-		
+		LOGGER.info("/tree");		
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
@@ -68,7 +66,7 @@ public class AdminUnitTypeReportController {
 					// load the list of childrens
 					for (AdminUnitType adminUnitType : adminUnitTypeService
 							.getSubordinates(adminUnitTypeService.getByID(Long.parseLong(request
-									.getParameter("root"))), "NOW()")) {
+									.getParameter("root"))))) {
 
 						children.add(saveToJSONType(
 								adminUnitType,
@@ -81,12 +79,7 @@ public class AdminUnitTypeReportController {
 		}
 
 		out.println(gson.toJson(children));
-
 		out.flush();		
-		
-		
-		
-		
 		return null;
 	}
 

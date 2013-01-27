@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import border.helper.AccessHelper;
 import border.model.AdminUnit;
-import border.repository.AdminUnitRepositoryImpl;
 import border.service.*;
 import border.viewmodel.AdminUnitVM;
 
@@ -31,7 +30,7 @@ import border.viewmodel.AdminUnitVM;
 public class AdminUnitController {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AdminUnitRepositoryImpl.class);
+			.getLogger(AdminUnitController.class);
 
 	@Autowired
 	AdminUnitService adminUnitService;
@@ -44,7 +43,7 @@ public class AdminUnitController {
 	public String adminUnitHome(
 			Model model,
 			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID) {
-		LOGGER.info("adminUnit home for " + _AdminUnitID);
+		LOGGER.info("AdminUnit home for " + _AdminUnitID);
 
 		// only admins can access
 		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
@@ -70,6 +69,7 @@ public class AdminUnitController {
 	}
 
 	private AdminUnitVM populateViewModelWithData(Long adminUnitID) {
+		LOGGER.info("Finding data for adminUnitID: " + adminUnitID);
 
 		AdminUnitVM formData = new AdminUnitVM();
 		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());
@@ -100,6 +100,10 @@ public class AdminUnitController {
 		formData.setAdminUnitMasterListWithZero(
 				adminUnitService.getAllowedMasters(formData.getAdminUnit()
 						.getAdminUnitTypeID()), formData.getAdminUnitMaster());
+		
+		for (AdminUnit master : formData.getAdminUnitMasterListWithZero()) {
+			LOGGER.info("Member of possible masters list: " + master.getName());
+		}
 
 		// its current slaves
 		formData.setAdminUnitsSubordinateList(adminUnitService
@@ -127,6 +131,7 @@ public class AdminUnitController {
 	// so that language change GET wouldn't break the pot
 	@RequestMapping(value = "/AdminUnitForm", method = RequestMethod.GET)
 	public String handleLanguageChanges() {
+		LOGGER.info("Language shall be changed");
 
 		// only admins can access
 		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
@@ -271,6 +276,9 @@ public class AdminUnitController {
 		if (formData.getAdminUnitType() == null
 				|| adminUnitTypeID != formData.getAdminUnitType()
 						.getAdminUnitTypeID()) {
+			
+			LOGGER.info("Will change units type to ID: " + adminUnitTypeID);
+			
 			formData.setAdminUnitType(adminUnitTypeService
 					.getByID(adminUnitTypeID));
 

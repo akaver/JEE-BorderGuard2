@@ -59,7 +59,7 @@ public class AdminUnitTypeSubordinationRepositoryImpl implements
 				"AdminUnitTypeMasterID", adminUnitTypeMasterID);
 
 		int rows = query.executeUpdate();
-		LOGGER.info("removeMaster changed rowcount:" + rows);
+		LOGGER.info("updating master changed rowcount:" + rows);
 
 		// no master was updated, so we need to insert new one
 		if (rows == 0) {

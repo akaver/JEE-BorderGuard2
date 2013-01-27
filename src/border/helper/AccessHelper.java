@@ -40,6 +40,7 @@ public class AccessHelper {
 		if (authentication != null) {
 			User user = (User) authentication.getPrincipal();
 			username = user.getUsername();
+			LOGGER.info("Found current username: " + username);
 		}
 		return username;
 	}

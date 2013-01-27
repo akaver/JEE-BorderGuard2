@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import border.helper.AccessHelper;
 import border.helper.DBHelper;
 import border.model.AdminUnit;
 import border.service.AdminUnitTypeService;
@@ -45,10 +46,14 @@ public class HomeController {
 
 	@RequestMapping(value = "/populate")
 	public String populate(Model model) {
-		LOGGER.info("Populating data");
 
-		DBHelper.TruncateDB();
+		// only admins can access
+		if (!AccessHelper.userAuthorized("ROLE_ADMIN")) {
+			return "redirect:/";
+		}
 		
+		LOGGER.info("Populating data");
+		DBHelper.TruncateDB();
 		adminUnitTypeService.populateData();
 		adminUnitService.populateData();
 
@@ -65,12 +70,12 @@ public class HomeController {
 			@RequestParam(required = false, value = "ReportAdminUnit") String _ReportAdminUnitFlag,
 			@RequestParam(required = false, value = "AdminUnitTypeID") String _AdminUnitTypeID,
 			@RequestParam(required = false, value = "AdminUnitID") String _AdminUnitID
-			
-			) {
+
+	) {
 		LOGGER.info("redirectView");
 		String viewToLoad = "/";
 		if (_ViewAdminUnitTypeFlag != null) {
-			viewToLoad = "/AdminUnitType/?AdminUnitID="+_AdminUnitTypeID;
+			viewToLoad = "/AdminUnitType/?AdminUnitID=" + _AdminUnitTypeID;
 		}
 		if (_AddAdminUnitTypeFlag != null) {
 			viewToLoad = "/AdminUnitType/?AdminUnitID=0";
@@ -79,26 +84,27 @@ public class HomeController {
 			viewToLoad = "/AdminUnitTypeReport/";
 		}
 		if (_ViewAdminUnitFlag != null) {
-			viewToLoad = "/AdminUnit/?AdminUnitID="+_AdminUnitID;
+			viewToLoad = "/AdminUnit/?AdminUnitID=" + _AdminUnitID;
 		}
 		if (_AddAdminUnitFlag != null) {
 			viewToLoad = "/AdminUnit/?AdminUnitID=0";
 		}
 		if (_ReportAdminUnitFlag != null) {
-			
-			// first find admin unit type			
-			Long adminUnitTypeID = makeTypeIdFromUnitId(_AdminUnitID);			
-			viewToLoad = "/AdminUnitReport/?AdminUnitTypeID="+adminUnitTypeID;
+
+			// first find admin unit type
+			Long adminUnitTypeID = makeTypeIdFromUnitId(_AdminUnitID);
+			viewToLoad = "/AdminUnitReport/?AdminUnitTypeID=" + adminUnitTypeID;
 		}
 
-		return "redirect:"+viewToLoad;
+		return "redirect:" + viewToLoad;
 
-	}	
+	}
 
 	private Long makeTypeIdFromUnitId(String _AdminUnitID) {
 
 		// Make sure the unit ID is acceptable
-		// If problems appear, set up unit type nr 1 (state)
+		// If problems appear, set up unit type nr 1 (should be state, but no
+		// difference)
 		Long adminUnitID;
 		try {
 			adminUnitID = Long.decode(_AdminUnitID);

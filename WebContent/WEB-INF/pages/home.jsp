@@ -14,16 +14,18 @@
 	rel="stylesheet">
 </head>
 <body>
-	<jsp:include page="header.jsp" />
 	<jsp:include page="logout.jsp" />
+	<jsp:include page="header.jsp" />
 	
 	<!-- plain old form, no model connected with it -->
 	<form method="post" action="homeActivityForm">
 		<div>
 			<div class="withMargin">
 				<spring:message code="home.label.chooseAction" />
+				<sec:authorize ifAnyGranted="ROLE_ADMIN">
 				<br> <br> <a href="<c:url value='/populate' />"><spring:message
 						code="home.label.reloadDatabase" /></a><br> <br>
+				</sec:authorize>
 			</div>
 
 			<div class="milContent">
