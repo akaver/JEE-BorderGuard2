@@ -21,7 +21,7 @@ public class AdminUnitType {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long adminUnitTypeID; 
+	private Long adminUnitTypeID;
 	@Column(nullable = false)
 	@NotBlank
 	@Size(min = 1, max = 16)
@@ -52,32 +52,16 @@ public class AdminUnitType {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date closedDate;
-	
+
 	// one-to-many definitions into AdminUnitTypeSubordination
 	// masters of this unit
-	@OneToMany(mappedBy="adminUnitTypeSubordinate", fetch = FetchType.EAGER)
-    private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationMasters;
+	@OneToMany(mappedBy = "adminUnitTypeSubordinate", fetch = FetchType.EAGER)
+	private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationMasters;
 	// subordinates of this unit
-	@OneToMany(mappedBy="adminUnitTypeMaster",  fetch = FetchType.EAGER)
-    private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationSubordinates;
+	@OneToMany(mappedBy = "adminUnitTypeMaster", fetch = FetchType.EAGER)
+	private Set<AdminUnitTypeSubordination> adminUnitTypeSubordinationSubordinates;
 
-	
 	public AdminUnitType() {
-		// TODO: do not overwrite existing dates
-		
-		String username = AccessHelper.getUserName();
-		
-		this.fromDate = DateHelper.getNow();
-		this.toDate = DateHelper.getFutureDate();
-
-		this.openedDate =  DateHelper.getNow();
-		this.changedDate =  DateHelper.getNow();
-		this.closedDate = DateHelper.getFutureDate();
-		
-		this.openedBy = username;
-		this.changedBy = username;
-		this.closedBy = username;
-
 	}
 
 	public AdminUnitType(String code, String name, String comment,
@@ -87,13 +71,13 @@ public class AdminUnitType {
 
 		this.code = code;
 		this.name = name;
-		
+
 		if (comment == null || comment.trim().isEmpty()) {
 			this.comment = "";
 		} else {
 			this.comment = comment;
 		}
-		
+
 		this.fromDate = DateHelper.getParsedDate(fromDate);
 		this.toDate = DateHelper.getParsedDate(toDate);
 		this.openedBy = openedBy;
@@ -105,12 +89,12 @@ public class AdminUnitType {
 	}
 
 	public AdminUnitType(String code, String name, String comment) {
-		
+
 		String username = AccessHelper.getUserName();
-		
+
 		this.code = code;
 		this.name = name;
-		
+
 		if (comment == null || comment.trim().isEmpty()) {
 			this.comment = "";
 		} else {
@@ -126,37 +110,40 @@ public class AdminUnitType {
 		this.changedDate = DateHelper.getNow();
 		this.closedBy = username;
 		this.closedDate = DateHelper.getFutureDate();
-		
+
 	}
 
 	@PreUpdate
 	public void preUpdate() {
-		changedDate = new Date();
+		String username = AccessHelper.getUserName();
+		this.changedDate = DateHelper.getNow();
+		this.changedBy = username;
 	}
 
 	@PrePersist
-	public void prePersist() {		 
-		// TODO: do not overwrite exsisting dates
-		
+	public void prePersist() {
 		String username = AccessHelper.getUserName();
-		
-		if (this.comment == null || this.comment.trim().isEmpty()) {
+
+		// if comment is null, add empty string to satisfy DB
+		if (this.comment == null) {
 			this.comment = "";
 		}
-		
-		this.fromDate = DateHelper.getNow();
-		this.toDate = DateHelper.getFutureDate();
 
-		this.openedDate =  DateHelper.getNow();
-		this.changedDate =  DateHelper.getNow();
-		this.closedDate = DateHelper.getFutureDate();
-		
+		if (this.fromDate == null)
+			this.fromDate = DateHelper.getNow();
+		if (this.toDate == null)
+			this.toDate = DateHelper.getFutureDate();
+		if (this.openedDate == null)
+			this.openedDate = DateHelper.getNow();
+		if (this.changedDate == null)
+			this.changedDate = DateHelper.getNow();
+		if (this.closedDate == null)
+			this.closedDate = DateHelper.getFutureDate();
+
 		this.openedBy = username;
 		this.changedBy = username;
 		this.closedBy = username;
-		
 	}
-
 
 	public String getCode() {
 		return code;
@@ -245,7 +232,7 @@ public class AdminUnitType {
 	public void setClosedDate(Date closedDate) {
 		this.closedDate = closedDate;
 	}
-	
+
 	public Set<AdminUnitTypeSubordination> getAdminUnitTypeSubordinationMasters() {
 		return adminUnitTypeSubordinationMasters;
 	}
@@ -266,7 +253,8 @@ public class AdminUnitType {
 
 	@Override
 	public String toString() {
-		return "AdminUnitType [id=" + adminUnitTypeID + ", name=" + name + ", code=" + code + "]";
+		return "AdminUnitType [id=" + adminUnitTypeID + ", name=" + name
+				+ ", code=" + code + "]";
 	}
 
 	public Long getAdminUnitTypeID() {
@@ -276,7 +264,5 @@ public class AdminUnitType {
 	public void setAdminUnitTypeID(Long adminUnitTypeID) {
 		this.adminUnitTypeID = adminUnitTypeID;
 	}
-
-
 
 }

@@ -34,7 +34,7 @@ public class AccessHelper {
 	}
 	
 	public static String getUserName() {
-		String username = "admin";
+		String username = "";
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		if (authentication != null) {

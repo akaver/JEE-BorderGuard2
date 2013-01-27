@@ -37,8 +37,8 @@ public class HomeController {
 		LOGGER.info("homepage");
 
 		HomeVM formData = new HomeVM();
-		formData.setAdminUnitList(adminUnitService.findAll());
-		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());
+//		formData.setAdminUnitList(adminUnitService.findAll());
+//		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());
 		model.addAttribute("formData", formData);
 
 		return "home";

@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import border.helper.AccessHelper;
 import border.helper.DateHelper;
 
 @Entity
@@ -27,81 +28,111 @@ public class AdminUnitTypeSubordination {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long AdminUnitTypeSubordinationID;
 
-	
 	@ManyToOne
-    @JoinColumn(name="masterAdminUnitTypeID")
-    private AdminUnitType adminUnitTypeMaster;
-	
-	@ManyToOne
-    @JoinColumn(name="subordinateAdminUnitTypeID")
-    private AdminUnitType adminUnitTypeSubordinate;
-	
-	
-	// ID of master unit
-	// private Long adminUnitTypeId;
-	// ID of subordinate
-	//private Long subordinateAdminUnitTypeId;
+	@JoinColumn(name = "masterAdminUnitTypeID")
+	private AdminUnitType adminUnitTypeMaster;
 
+	@ManyToOne
+	@JoinColumn(name = "subordinateAdminUnitTypeID")
+	private AdminUnitType adminUnitTypeSubordinate;
+
+	@Column(nullable = false)
 	private String comment;
-	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	private Date fromDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	private Date toDate;
+	@Column(nullable = false)
 	private String openedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date openedDate;
-	@NotNull
+	@Column(nullable = false)
 	private String changedBy;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date changedDate;
-	@NotNull
-	private String closedBy;
+	private String closedBy; // only value from DB schema with NULL allowed
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date closedDate;
 
-	
-	public AdminUnitTypeSubordination(){
-		
+	public AdminUnitTypeSubordination() {
+
 	}
 
-	public AdminUnitTypeSubordination(AdminUnitType adminUnitTypeMaster, AdminUnitType adminUnitTypeSubordinate, String comment){
+	public AdminUnitTypeSubordination(AdminUnitType adminUnitTypeMaster,
+			AdminUnitType adminUnitTypeSubordinate, String comment,
+			String fromDate, String toDate, String openedBy, String openedDate,
+			String changedBy, String changedDate, String closedBy,
+			String closedDate) {
+
 		this.adminUnitTypeMaster = adminUnitTypeMaster;
 		this.adminUnitTypeSubordinate = adminUnitTypeSubordinate;
-    	this.comment = comment;
+
+		if (comment == null || comment.trim().isEmpty()) {
+			this.comment = "";
+		} else {
+			this.comment = comment;
+		}
+
+		this.fromDate = DateHelper.getParsedDate(fromDate);
+		this.toDate = DateHelper.getParsedDate(toDate);
+		this.openedBy = openedBy;
+		this.openedDate = DateHelper.getParsedDate(openedDate);
+		this.changedBy = changedBy;
+		this.changedDate = DateHelper.getParsedDate(changedDate);
+		this.closedBy = closedBy;
+		this.closedDate = DateHelper.getParsedDate(closedDate);
+
 	}
-	
+
+	public AdminUnitTypeSubordination(AdminUnitType adminUnitTypeMaster,
+			AdminUnitType adminUnitTypeSubordinate, String comment) {
+		this.adminUnitTypeMaster = adminUnitTypeMaster;
+		this.adminUnitTypeSubordinate = adminUnitTypeSubordinate;
+
+		if (comment == null || comment.trim().isEmpty()) {
+			this.comment = "";
+		} else {
+			this.comment = comment;
+		}
+	}
+
 	@PreUpdate
 	public void preUpdate() {
-		changedDate = DateHelper.getNow();
+		String username = AccessHelper.getUserName();
+		this.changedDate = DateHelper.getNow();
+		this.changedBy = username;
 	}
 
 	@PrePersist
 	public void prePersist() {
-		openedBy="admin";
-		openedDate = DateHelper.getNow();
-		changedBy="admin";
-		changedDate = DateHelper.getNow();
-		closedBy="admin";
-		closedDate = DateHelper.getFutureDate();
+		
+		String username = AccessHelper.getUserName();
+
+		// if comment is null, add empty string to satisfy DB
+		if (this.comment == null) {
+			this.comment = "";
+		}
+
+		if (this.fromDate == null)
+			this.fromDate = DateHelper.getNow();
+		if (this.toDate == null)
+			this.toDate = DateHelper.getFutureDate();
+		if (this.openedDate == null)
+			this.openedDate = DateHelper.getNow();
+		if (this.changedDate == null)
+			this.changedDate = DateHelper.getNow();
+		if (this.closedDate == null)
+			this.closedDate = DateHelper.getFutureDate();
+
+		this.openedBy = username;
+		this.changedBy = username;
+		this.closedBy = username;
 	}
-
-
-
-//	public Long getAdminUnitTypeID() {
-//		return adminUnitTypeId;
-//	}
-//
-//	public void setAdminUnitTypeID(Long adminUnitTypeId) {
-//		this.adminUnitTypeId = adminUnitTypeId;
-//	}
-
-//	public Long getSubordinateAdminUnitTypeId() {
-//		return subordinateAdminUnitTypeId;
-//	}
-//
-//	public void setSubordinateAdminUnitTypeId(Long subordinateAdminUnitTypeId) {
-//		this.subordinateAdminUnitTypeId = subordinateAdminUnitTypeId;
-//	}
 
 	public String getComment() {
 		return comment;
@@ -171,24 +202,24 @@ public class AdminUnitTypeSubordination {
 		return adminUnitTypeSubordinate;
 	}
 
-	public void setAdminUnitTypeSubordinate(AdminUnitType adminUnitTypeSubordinate) {
+	public void setAdminUnitTypeSubordinate(
+			AdminUnitType adminUnitTypeSubordinate) {
 		this.adminUnitTypeSubordinate = adminUnitTypeSubordinate;
 	}
 
 	@Override
 	public String toString() {
-		// return "AdminUnitType [id=" + id + ", master adminUnitTypeID=" +
-		// adminUnitTypeID +
-		// ", slave subordinateAdminUnitTypeID="+subordinateAdminUnitTypeID+", comment="+comment+"]";
-		return "AdminUnitType [id=" + AdminUnitTypeSubordinationID + ", comment=" + comment + "]";
+		return "AdminUnitType [id=" + AdminUnitTypeSubordinationID
+				+ ", comment=" + comment + "]";
 	}
 
 	public Long getAdminUnitTypeSubordinationID() {
 		return AdminUnitTypeSubordinationID;
 	}
 
-	public void setAdminUnitTypeSubordinationID(Long adminUnitTypeSubordinationID) {
+	public void setAdminUnitTypeSubordinationID(
+			Long adminUnitTypeSubordinationID) {
 		AdminUnitTypeSubordinationID = adminUnitTypeSubordinationID;
 	}
-	
+
 }

@@ -61,7 +61,7 @@ public class AdminUnitTypeService {
 		AdminUnitType sub12 = new AdminUnitType("12", "Vald", "12");
 		AdminUnitType sub2 = new AdminUnitType("2", "Alev", "2");
 		AdminUnitType sub3 = new AdminUnitType("2", "Talu", "2");
-		AdminUnitType sub4 = new AdminUnitType("2", "K�la", "2");
+		AdminUnitType sub4 = new AdminUnitType("2", "Küla", "2");
 		adminUnitTypeRepository.save(master);
 		adminUnitTypeRepository.save(sub1);
 		adminUnitTypeRepository.save(sub11);

@@ -55,14 +55,14 @@ public class AdminUnit {
 	private Date closedDate;
 
 	// one-to-many definitions into AdminUnitSubordination
-	
+
 	// subordinations where this unit is master
 	@OneToMany(mappedBy = "adminUnitMaster", fetch = FetchType.EAGER)
 	private Set<AdminUnitSubordination> adminUnitSubordinationSubordinates;
+
 	// subordinations where this unit is subordinate
 	@OneToMany(mappedBy = "adminUnitSubordinate", fetch = FetchType.EAGER)
 	private Set<AdminUnitSubordination> adminUnitSubordinationMasters;
-	
 
 	public AdminUnit() {
 	}
@@ -72,7 +72,7 @@ public class AdminUnit {
 			String openedBy, String openedDate, String changedBy,
 			String changedDate, String closedBy, String closedDate)
 			throws ParseException {
-		
+
 		this.code = code;
 		this.name = name;
 
@@ -95,9 +95,9 @@ public class AdminUnit {
 
 	public AdminUnit(String code, String name, String comment,
 			Long adminUnitTypeID) {
-		
+
 		String username = AccessHelper.getUserName();
-		
+
 		this.code = code;
 		this.name = name;
 		this.comment = comment;
@@ -119,25 +119,31 @@ public class AdminUnit {
 
 	@PreUpdate
 	public void preUpdate() {
-		changedDate = new Date();
+		String username = AccessHelper.getUserName();
+		this.changedDate = DateHelper.getNow();
+		this.changedBy = username;
 	}
 
 	@PrePersist
 	public void prePersist() {
-		// TODO: do not overwrite existing dates
-		
+
 		String username = AccessHelper.getUserName();
-		
-		if (this.comment == null || this.comment.trim().isEmpty()) {
+
+		// if comment is null, add empty string to satisfy DB
+		if (this.comment == null) {
 			this.comment = "";
 		}
-		
-		this.fromDate = DateHelper.getNow();
-		this.toDate = DateHelper.getFutureDate();
 
-		this.openedDate = DateHelper.getNow();
-		this.changedDate = DateHelper.getNow();
-		this.closedDate = DateHelper.getFutureDate();
+		if (this.fromDate == null)
+			this.fromDate = DateHelper.getNow();
+		if (this.toDate == null)
+			this.toDate = DateHelper.getFutureDate();
+		if (this.openedDate == null)
+			this.openedDate = DateHelper.getNow();
+		if (this.changedDate == null)
+			this.changedDate = DateHelper.getNow();
+		if (this.closedDate == null)
+			this.closedDate = DateHelper.getFutureDate();
 
 		this.openedBy = username;
 		this.changedBy = username;

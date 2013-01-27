@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import border.helper.AccessHelper;
 import border.helper.DateHelper;
 
 @Entity
@@ -14,16 +15,14 @@ public class AdminUnitSubordination {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long adminUnitSubordinationID;
 
-	
 	@ManyToOne
-    @JoinColumn(name="masterAdminUnitID")
-    private AdminUnit adminUnitMaster;
-	
+	@JoinColumn(name = "masterAdminUnitID")
+	private AdminUnit adminUnitMaster;
+
 	@ManyToOne
-    @JoinColumn(name="subordinateAdminUnitID")
-    private AdminUnit adminUnitSubordinate;
-	
-	
+	@JoinColumn(name = "subordinateAdminUnitID")
+	private AdminUnit adminUnitSubordinate;
+
 	@Column(nullable = false)
 	private String comment;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -42,42 +41,86 @@ public class AdminUnitSubordination {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date changedDate;
-	private String closedBy;
+	private String closedBy; // only value from DB schema with NULL allowed
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date closedDate;
 
-	
-	public AdminUnitSubordination(){
-		
+	public AdminUnitSubordination() {
+
 	}
 
-	public AdminUnitSubordination(AdminUnit adminUnitMaster, AdminUnit adminUnitSubordinate, String comment){
+	public AdminUnitSubordination(AdminUnit adminUnitMaster,
+			AdminUnit adminUnitSubordinate, String comment, String fromDate,
+			String toDate, String openedBy, String openedDate,
+			String changedBy, String changedDate, String closedBy,
+			String closedDate) {
+
 		this.adminUnitMaster = adminUnitMaster;
 		this.adminUnitSubordinate = adminUnitSubordinate;
-    	this.comment = comment;
-    	this.fromDate = DateHelper.getNow();
-    	this.toDate = DateHelper.getFutureDate();
-    	this.openedDate = DateHelper.getNow();
-    	this.openedBy = "admin";
-    	this.closedDate = DateHelper.getFutureDate();    	
+
+		if (comment == null || comment.trim().isEmpty()) {
+			this.comment = "";
+		} else {
+			this.comment = comment;
+		}
+
+		this.fromDate = DateHelper.getParsedDate(fromDate);
+		this.toDate = DateHelper.getParsedDate(toDate);
+		this.openedBy = openedBy;
+		this.openedDate = DateHelper.getParsedDate(openedDate);
+		this.changedBy = changedBy;
+		this.changedDate = DateHelper.getParsedDate(changedDate);
+		this.closedBy = closedBy;
+		this.closedDate = DateHelper.getParsedDate(closedDate);
+
 	}
-	
+
+	public AdminUnitSubordination(AdminUnit adminUnitMaster,
+			AdminUnit adminUnitSubordinate, String comment) {
+		this.adminUnitMaster = adminUnitMaster;
+		this.adminUnitSubordinate = adminUnitSubordinate;
+
+		if (comment == null || comment.trim().isEmpty()) {
+			this.comment = "";
+		} else {
+			this.comment = comment;
+		}
+	}
+
 	@PreUpdate
 	public void preUpdate() {
-		changedDate = DateHelper.getNow();
+		String username = AccessHelper.getUserName();
+		this.changedDate = DateHelper.getNow();
+		this.changedBy = username;
 	}
 
 	@PrePersist
 	public void prePersist() {
-		openedBy="admin";
-		openedDate = DateHelper.getNow();
-		changedBy="admin";
-		changedDate = DateHelper.getNow();
-		closedBy="admin";
-		closedDate = DateHelper.getFutureDate();
+		
+		String username = AccessHelper.getUserName();
+
+		// if comment is null, add empty string to satisfy DB
+		if (this.comment == null) {
+			this.comment = "";
+		}
+
+		if (this.fromDate == null)
+			this.fromDate = DateHelper.getNow();
+		if (this.toDate == null)
+			this.toDate = DateHelper.getFutureDate();
+		if (this.openedDate == null)
+			this.openedDate = DateHelper.getNow();
+		if (this.changedDate == null)
+			this.changedDate = DateHelper.getNow();
+		if (this.closedDate == null)
+			this.closedDate = DateHelper.getFutureDate();
+
+		this.openedBy = username;
+		this.changedBy = username;
+		this.closedBy = username;
 	}
-	
+
 	public Long getAdminUnitSubordinationID() {
 		return adminUnitSubordinationID;
 	}
@@ -101,7 +144,7 @@ public class AdminUnitSubordination {
 	public void setAdminUnitSubordinate(AdminUnit adminUnitSubordinate) {
 		this.adminUnitSubordinate = adminUnitSubordinate;
 	}
-	
+
 	public String getComment() {
 		return comment;
 	}
@@ -160,7 +203,8 @@ public class AdminUnitSubordination {
 
 	@Override
 	public String toString() {
-		return "AdminUnit [id=" + adminUnitSubordinationID + ", comment=" + comment + "]";
-	}	
-	
+		return "AdminUnit [id=" + adminUnitSubordinationID + ", comment="
+				+ comment + "]";
+	}
+
 }
