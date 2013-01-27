@@ -72,6 +72,8 @@ public class AdminUnitController {
 		LOGGER.info("Finding data for adminUnitID: " + adminUnitID);
 
 		AdminUnitVM formData = new AdminUnitVM();
+		formData.setUsername(AccessHelper.getUserName());
+		
 		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());
 
 		if (adminUnitID == 0) {

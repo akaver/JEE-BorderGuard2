@@ -14,50 +14,64 @@
 	rel="stylesheet">
 </head>
 <body>
-	<jsp:include page="logout.jsp" />
+	<div style="float: right">
+		<spring:message code="header.label.hello" />
+		${formData.username}! <a href="<c:url value='/logout' />"><spring:message
+				code="header.link.logout" /></a>
+	</div>
 	<jsp:include page="header.jsp" />
-	
+
 	<!-- plain old form, no model connected with it -->
 	<form method="post" action="homeActivityForm">
 		<div>
 			<div class="withMargin">
 				<spring:message code="home.label.chooseAction" />
 				<sec:authorize ifAnyGranted="ROLE_ADMIN">
-				<br> <br> <a href="<c:url value='/populate' />"><spring:message
-						code="home.label.reloadDatabase" /></a><br> <br>
+					<br>
+					<br>
+					<a href="<c:url value='/populate' />"><spring:message
+							code="home.label.reloadDatabase" /></a>
+					<br>
+					<br>
 				</sec:authorize>
 			</div>
 
 			<div class="milContent">
-				<spring:message code="home.label.adminUnitType" />:<br> 
-				<select name="AdminUnitTypeID">
+				<spring:message code="home.label.adminUnitType" />
+				:<br> <select name="AdminUnitTypeID">
 					<c:forEach var="entry" items="${formData.adminUnitTypeList}">
 						<option value="${entry.adminUnitTypeID}">${entry.name}</option>
 					</c:forEach>
-				</select> 
-				
+				</select>
+
 				<!-- Only admin can add and edit -->
-			    <sec:authorize ifAnyGranted="ROLE_ADMIN">
-			        <input type="submit" name="ViewAdminUnitType" value="<spring:message code="home.button.lookChange" />">
-					<input type="submit" name="AddAdminUnitType" value="<spring:message code="home.button.addNew" />">				
-			    </sec:authorize>
-				<input type="submit" name="ReportAdminUnitType" value="<spring:message code="home.button.report" />">
+				<sec:authorize ifAnyGranted="ROLE_ADMIN">
+					<input type="submit" name="ViewAdminUnitType"
+						value="<spring:message code="home.button.lookChange" />">
+					<input type="submit" name="AddAdminUnitType"
+						value="<spring:message code="home.button.addNew" />">
+				</sec:authorize>
+				<input type="submit" name="ReportAdminUnitType"
+					value="<spring:message code="home.button.report" />">
 			</div>
 
 			<div class="milContent">
-				<spring:message code="home.label.adminUnit" />:<br> 
-				<select name="AdminUnitID">
+				<spring:message code="home.label.adminUnit" />
+				:<br> <select name="AdminUnitID">
 					<c:forEach var="entry" items="${formData.adminUnitList}">
 						<option value="${entry.adminUnitID}">${entry.name}</option>
 					</c:forEach>
 				</select>
-				
+
 				<!-- Only admin can add and edit -->
 				<sec:authorize ifAnyGranted="ROLE_ADMIN">
-					<input type="submit" name="ViewAdminUnit" value="<spring:message code="home.button.lookChange" />">
-					<input type="submit" name="AddAdminUnit" value="<spring:message code="home.button.addNew" />"> 
+					<input type="submit" name="ViewAdminUnit"
+						value="<spring:message code="home.button.lookChange" />">
+					<input type="submit" name="AddAdminUnit"
+						value="<spring:message code="home.button.addNew" />">
 				</sec:authorize>
-				<input type="submit" name="ReportAdminUnit" value="<spring:message code="home.button.report" />">
+				<input type="submit" name="ReportAdminUnit"
+					value="<spring:message code="home.button.report" />">
 			</div>
 		</div>
 	</form>

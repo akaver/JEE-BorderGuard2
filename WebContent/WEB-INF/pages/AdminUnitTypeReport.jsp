@@ -33,12 +33,19 @@
 </script>
 </head>
 <body>
-	<jsp:include page="logout.jsp" />
+	<div style="float: right">
+		<spring:message code="header.label.hello" />
+		${username}! <a href="<c:url value='/logout' />"><spring:message
+				code="header.link.logout" /></a>
+	</div>
 	<jsp:include page="header.jsp" />
 	<div id="main" class="withMargin">
-		<p><spring:message code="adminUnitTypeReport.label.title" /></p>
 		<p>
-			<a href="<c:url value='/' />"><spring:message code="adminUnitTypeReport.link.back" /></a>
+			<spring:message code="adminUnitTypeReport.label.title" />
+		</p>
+		<p>
+			<a href="<c:url value='/' />"><spring:message
+					code="adminUnitTypeReport.link.back" /></a>
 		</p>
 		<hr>
 		<!-- here is the magic -->

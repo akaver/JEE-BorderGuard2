@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.google.gson.Gson;
 
+import border.helper.AccessHelper;
 import border.model.AdminUnitType;
 import border.model.AdminUnitTypeJSON;
 import border.service.AdminUnitTypeService;
@@ -35,6 +36,8 @@ public class AdminUnitTypeReportController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
 		LOGGER.info("AdminUnitTypeReport/");
+		
+		model.addAttribute("username", AccessHelper.getUserName());
 
 		return "AdminUnitTypeReport";
 	}

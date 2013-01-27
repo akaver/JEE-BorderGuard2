@@ -27,6 +27,8 @@ public class AdminUnitTypeVM {
 	
 	// list of adminunittypes which are possible new subordinates to adminUnitType
 	private List<AdminUnitType> adminUnitTypesSubordinateListPossible;
+	
+	private String username;
 
 	public AdminUnitType getAdminUnitType() {
 		return adminUnitType;
@@ -106,6 +108,14 @@ public class AdminUnitTypeVM {
 
 	public void setAdminUnitTypeMasterID(Long adminUnitTypeMasterID) {
 		this.adminUnitTypeMasterID = adminUnitTypeMasterID;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	

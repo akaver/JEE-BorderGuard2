@@ -323,6 +323,8 @@ public class AdminUnitTypeController {
 		// load the list of possible new subordinates
 		formData.setAdminUnitTypesSubordinateListPossible(adminUnitTypeService
 				.getPossibleSubordinates(formData.getAdminUnitType()));
+		
+		formData.setUsername(AccessHelper.getUserName());
 
 		return formData;
 	}

@@ -25,6 +25,8 @@ public class AdminUnitReportVM {
 	// some fields for dialog - not to create mess to entity file
 	private String adminUnitTypeName;
 	private String adminUnitMasterName;
+	
+	private String username;
 
 	public AdminUnitType getAdminUnitType() {
 		return adminUnitType;
@@ -80,6 +82,14 @@ public class AdminUnitReportVM {
 
 	public void setAdminUnitMasterName(String adminUnitMasterName) {
 		this.adminUnitMasterName = adminUnitMasterName;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

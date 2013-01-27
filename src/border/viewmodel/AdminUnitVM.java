@@ -34,6 +34,8 @@ public class AdminUnitVM {
 	private List<AdminUnit> adminUnitsSubordinateListPossible;
 	// list of removed subordinates
 	private List<AdminUnit> adminUnitsSubordinateListRemoved;
+	
+	private String username;
 
 	public AdminUnit getAdminUnit() {
 		return adminUnit;
@@ -151,6 +153,14 @@ public class AdminUnitVM {
 
 	public void setAdminUnitMasterID(Long adminUnitMasterID) {
 		this.adminUnitMasterID = adminUnitMasterID;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

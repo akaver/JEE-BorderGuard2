@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import border.service.AdminUnitService;
 import border.service.AdminUnitTypeService;
 import border.viewmodel.AdminUnitReportVM;
+import border.helper.AccessHelper;
 import border.model.*;
 
 @Controller
@@ -71,6 +72,7 @@ public class AdminUnitReportController {
 		LOGGER.info("Finding data for adminUnitTypeID: " + adminUnitTypeID);
 		
 		AdminUnitReportVM formData = new AdminUnitReportVM();
+		formData.setUsername(AccessHelper.getUserName());
 		formData.setSearchDate(initializeDate());
 		formData.setAdminUnitType(adminUnitTypeService.getByID(adminUnitTypeID));
 		formData.setAdminUnitTypeList(adminUnitTypeService.findAll());

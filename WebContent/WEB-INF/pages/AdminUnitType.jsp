@@ -12,9 +12,13 @@
 	rel="stylesheet">
 </head>
 <body>
-	<jsp:include page="logout.jsp" />
+	<div style="float: right">
+		<spring:message code="header.label.hello" />
+		${formData.username}! <a href="<c:url value='/logout' />"><spring:message
+				code="header.link.logout" /></a>
+	</div>
 	<jsp:include page="header.jsp" />
-	
+
 	<div class="withMargin">
 		<form:form method="post" action="AdminUnitTypeForm"
 			name="AdminUnitTypeForm" modelAttribute="formData"
