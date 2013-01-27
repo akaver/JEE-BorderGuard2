@@ -61,7 +61,7 @@ public class AdminUnitTypeService {
 		AdminUnitType sub12 = new AdminUnitType("12", "Vald", "12");
 		AdminUnitType sub2 = new AdminUnitType("2", "Alev", "2");
 		AdminUnitType sub3 = new AdminUnitType("2", "Talu", "2");
-		AdminUnitType sub4 = new AdminUnitType("2", "K¸la", "2");
+		AdminUnitType sub4 = new AdminUnitType("2", "KÔøΩla", "2");
 		adminUnitTypeRepository.save(master);
 		adminUnitTypeRepository.save(sub1);
 		adminUnitTypeRepository.save(sub11);
@@ -77,7 +77,7 @@ public class AdminUnitTypeService {
 		AdminUnitTypeSubordination sub1_sub12 = new AdminUnitTypeSubordination(
 				sub1, sub12, "maakond->vald");
 		AdminUnitTypeSubordination sub12_sub4 = new AdminUnitTypeSubordination(
-				sub12, sub4, "vald->k¸la");
+				sub12, sub4, "vald->k√ºla");
 
 		master_sub1 = adminUnitTypeSubordinationRepository.save(master_sub1);
 		sub1_sub11 = adminUnitTypeSubordinationRepository.save(sub1_sub11);

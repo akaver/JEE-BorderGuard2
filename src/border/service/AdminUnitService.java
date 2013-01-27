@@ -154,16 +154,16 @@ public class AdminUnitService {
 		LOGGER.debug("populateData");
 
 		AdminUnit master = new AdminUnit("Eesti", "Eesti Vabariik",
-				"Kõrgeim haldusüksus, riik", 1L);
+				"KÃµrgeim haldusÃ¼ksus, riik", 1L);
 		AdminUnit sub1 = new AdminUnit("Harjumaa", "Harjumaa maakond", "", 2L);
 		AdminUnit sub11 = new AdminUnit("Tallinn", "Tallinn", "pealinn", 3L);
 		AdminUnit sub12 = new AdminUnit("KiiliVald", "Kiili vald", "", 4L);
 		AdminUnit sub121 = new AdminUnit("KiiliAlev", "Kiili alev", "", 5L);
 		AdminUnit sub122 = new AdminUnit("Luige", "Luige alevik", "", 5L);
 		AdminUnit sub2 = new AdminUnit("Kangru", "Kangru alevik", "", 5L);
-		AdminUnit sub1211 = new AdminUnit("Arusta", "Arusta küla", "", 7L);
-		AdminUnit sub1212 = new AdminUnit("Kurevere", "Kurevere küla", "", 7L);
-		AdminUnit sub3 = new AdminUnit("Karuvere", "Karuvere küla", "", 7L);
+		AdminUnit sub1211 = new AdminUnit("Arusta", "Arusta kÃ¼la", "", 7L);
+		AdminUnit sub1212 = new AdminUnit("Kurevere", "Kurevere kÃ¼la", "", 7L);
+		AdminUnit sub3 = new AdminUnit("Karuvere", "Karuvere kÃ¼la", "", 7L);
 		AdminUnit sub13 = new AdminUnit("KureVald", "Kure vald", "", 4L);
 		adminUnitRepository.save(master);
 		adminUnitRepository.save(sub1);
@@ -188,9 +188,9 @@ public class AdminUnitService {
 		AdminUnitSubordination sub1_sub122 = new AdminUnitSubordination(sub12,
 				sub122, "Kiili vald->Luige alevik");
 		AdminUnitSubordination sub121_sub1211 = new AdminUnitSubordination(
-				sub121, sub1211, "Kiili alev->Arusta küla");
+				sub121, sub1211, "Kiili alev->Arusta kÃ¼la");
 		AdminUnitSubordination sub121_sub1212 = new AdminUnitSubordination(
-				sub121, sub1212, "Kiili alev->Kurevere küla");
+				sub121, sub1212, "Kiili alev->Kurevere kÃ¼la");
 		// AdminUnitSubordination sub1_sub13 = new AdminUnitSubordination(sub1,
 		// sub13, "Harjumaa->Kure vald");
 
